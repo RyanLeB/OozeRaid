@@ -6,7 +6,8 @@ public class MouseCursro : MonoBehaviour
 {
 
     [SerializeField] private Texture2D cursorTexture;
-
+    [SerializeField] private Texture2D cursorTextureClick;
+   
 
     private Vector2 cursorHotSpot;
 
@@ -19,5 +20,17 @@ public class MouseCursro : MonoBehaviour
 
     }
 
-    
+    private void Update()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Cursor.SetCursor(cursorTextureClick, cursorHotSpot, CursorMode.Auto);
+        }
+        else
+        {
+            Cursor.SetCursor(cursorTexture, cursorHotSpot, CursorMode.Auto);
+        }
+    }
+
+
 }

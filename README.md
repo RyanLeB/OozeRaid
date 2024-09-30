@@ -1,2 +1,2 @@
 # OozeRaid
- A Side-Scrolling Tower Defense game
+ A Side-Scrolling Shooter Game

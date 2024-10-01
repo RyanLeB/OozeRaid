@@ -246,8 +246,8 @@ Transform:
   m_GameObject: {fileID: 24330830}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.635, y: -2.96, z: 0}
-  m_LocalScale: {x: 19, y: 1, z: 1}
+  m_LocalPosition: {x: -0.8436, y: -2.96, z: 0}
+  m_LocalScale: {x: 23.74707, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -381,7 +381,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &1365943893
 BoxCollider2D:
@@ -440,7 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 715e931ad69c9834190416a61bfdd976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallMultiplier: 2.5
+  fallMultiplier: 3
   lowJumpMultiplier: 2
 --- !u!1 &1547099411
 GameObject:
@@ -469,8 +469,8 @@ Transform:
   m_GameObject: {fileID: 1547099411}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.89, y: 0.1, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalPosition: {x: 0.32, y: 0.0078, z: 0}
+  m_LocalScale: {x: 5.0739, y: 1.8477111, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1365943891}
@@ -516,7 +516,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 47256b216b1304d44a22688c6022c6d0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dc2fc9a6ad35dcd4483f95dcf8d83917, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -7,9 +7,13 @@ public class PlayerHealth : MonoBehaviour
     private int currentHealth;
     public Slider healthSlider;
 
+    public float damageCooldown = 1f; // ---- Time in seconds between damage ticks ----
+    private float lastDamageTime;
+
     void Start()
     {
         currentHealth = maxHealth;
+        lastDamageTime = -damageCooldown; // Initialize to allow immediate damage
         if (healthSlider != null)
         {
             healthSlider.maxValue = maxHealth;
@@ -17,11 +21,15 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            TakeDamage(10); // ---- Adjust damage value as needed ----
+            if (Time.time >= lastDamageTime + damageCooldown)
+            {
+                TakeDamage(10); // ---- Adjust damage value as needed ----
+                lastDamageTime = Time.time;
+            }
         }
     }
 

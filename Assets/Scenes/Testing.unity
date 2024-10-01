@@ -890,6 +890,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   healthSlider: {fileID: 1418107109}
+  damageCooldown: 0.5
 --- !u!1 &1418107107
 GameObject:
   m_ObjectHideFlags: 0
@@ -1078,7 +1079,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 4125672754926652354, guid: 496ddf985e688564dbb855b87324d747, type: 3}
   firePoint: {fileID: 1547099412}
-  bulletSpeed: 100
+  bulletSpeed: 50
   radius: 1
 --- !u!1 &1585532150
 GameObject:

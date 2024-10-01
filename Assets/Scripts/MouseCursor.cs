@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseCursro : MonoBehaviour
+public class MouseCursor : MonoBehaviour
 {
 
     [SerializeField] private Texture2D cursorTexture;

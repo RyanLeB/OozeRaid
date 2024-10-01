@@ -17,6 +17,11 @@ public class Enemy : MonoBehaviour
     public float flashDuration = 0.1f; // ---- Duration for which the enemy flashes white ----
     private Color originalColor;
 
+    public delegate void EnemyDeathHandler();
+    public event EnemyDeathHandler OnEnemyDeath;
+
+    private bool isDead = false; // ---- Flag to ensure Die() is called only once ----
+
     private void Start()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -29,8 +34,10 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            originalColor = spriteRenderer.color; // Store the original color
+            originalColor = spriteRenderer.color; // ---- Store the original color ----
         }
+
+        Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
     }
 
     private void Update()
@@ -85,16 +92,18 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            TakeDamage(20); // Adjust damage value as needed
-            Destroy(collision.gameObject); // Destroy the bullet on impact
+            Debug.Log($"Enemy {gameObject.GetInstanceID()} hit by bullet.");
+            TakeDamage(20); // ---- Adjust damage value as needed ----
+            Destroy(collision.gameObject); // ---- Destroy the bullet on impact ----
         }
     }
 
     private void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. Current health: {currentHealth}");
         StartCoroutine(FlashWhite());
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !isDead)
         {
             Die();
         }
@@ -106,13 +115,23 @@ public class Enemy : MonoBehaviour
         {
             spriteRenderer.color = Color.white;
             yield return new WaitForSeconds(flashDuration);
-            spriteRenderer.color = originalColor; // Reset to the original color
+            spriteRenderer.color = originalColor; // ---- Reset to the original color ----
         }
     }
 
     private void Die()
     {
-        // Handle enemy death (e.g., play animation, drop loot)
+        if (isDead) return; // ---- Ensure Die() is called only once ----
+        isDead = true;
+
+        // ---- Handle enemy death (e.g., play animation, drop loot) ----
+        Debug.Log($"Enemy {gameObject.GetInstanceID()} died.");
+        if (OnEnemyDeath != null)
+        {
+            Debug.Log($"Invoking OnEnemyDeath event for enemy {gameObject.GetInstanceID()}.");
+            OnEnemyDeath.Invoke();
+        }
         Destroy(gameObject);
     }
 }
+

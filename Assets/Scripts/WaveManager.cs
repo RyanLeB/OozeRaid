@@ -10,12 +10,18 @@ public class WaveManager : MonoBehaviour
     public Transform[] spawnPoints; // ---- Array of spawn points ----
     public float timeBetweenWaves = 5f; // ---- Time between waves ----
     public int enemiesPerWave = 5; // ---- Number of enemies per wave ----
+    private int spawnIndex = 0; // ---- Index to alternate between spawn points ----
+
     public TMP_Text waveText; // ---- UI Text to display the current wave ----
+    public TMP_Text waveCompleteText; // ---- UI Text to display wave complete message ----
+
     private int currentWave = 0;
-    private bool isSpawning = false;
+    private int activeEnemies = 0;
+    
 
     void Start()
     {
+        waveCompleteText.gameObject.SetActive(false); // ---- Hide wave complete text initially ----
         StartCoroutine(StartNextWave());
     }
 
@@ -23,10 +29,11 @@ public class WaveManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(timeBetweenWaves);
             currentWave++;
             UpdateWaveText();
-            StartCoroutine(SpawnWave(currentWave));
+            yield return StartCoroutine(SpawnWave(currentWave));
+            yield return StartCoroutine(CheckWaveComplete());
+            yield return new WaitForSeconds(timeBetweenWaves);
         }
     }
 
@@ -40,21 +47,59 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator SpawnWave(int waveNumber)
     {
-        isSpawning = true;
+        
         int enemiesToSpawn = enemiesPerWave * waveNumber;
+        activeEnemies = enemiesToSpawn;
+        Debug.Log($"Spawning wave {waveNumber} with {enemiesToSpawn} enemies.");
 
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             SpawnEnemy();
-            yield return new WaitForSeconds(1f); // ---- Delay between enemy spawns ----
+            yield return new WaitForSeconds(0.5f); // ---- Delay between enemy spawns ----
         }
 
-        isSpawning = false;
+        
     }
 
     private void SpawnEnemy()
     {
-        int spawnIndex = Random.Range(0, spawnPoints.Length);
-        Instantiate(enemyPrefab, spawnPoints[spawnIndex].position, spawnPoints[spawnIndex].rotation);
+        if (spawnPoints.Length == 0)
+        {
+            Debug.LogError("No spawn points assigned.");
+            return;
+        }
+
+        // ---- Alternate between spawn points ----
+        Transform spawnPoint = spawnPoints[spawnIndex];
+        spawnIndex = (spawnIndex + 1) % spawnPoints.Length;
+
+        GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        Enemy enemyScript = enemy.GetComponent<Enemy>();
+        enemyScript.OnEnemyDeath += HandleEnemyDeath;
+        Debug.Log($"Enemy {enemy.GetInstanceID()} spawned and event subscribed.");
+    }
+
+    private void HandleEnemyDeath()
+    {
+        activeEnemies--;
+        Debug.Log($"Enemy died. Active enemies remaining: {activeEnemies}");
+    }
+
+    private IEnumerator CheckWaveComplete()
+    {
+        while (activeEnemies > 0)
+        {
+            yield return null;
+        }
+
+        if (waveCompleteText != null)
+        {
+            waveCompleteText.gameObject.SetActive(true);
+            waveCompleteText.text = "Wave " + currentWave + " Complete!";
+            yield return new WaitForSeconds(2f); // ---- Display wave complete message for 2 seconds ----
+            waveCompleteText.gameObject.SetActive(false);
+        }
     }
 }
+
+

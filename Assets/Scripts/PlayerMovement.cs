@@ -5,12 +5,16 @@ public class PlayerMovement : MonoBehaviour
     // ---- Movement values ----
     public float speed;
     public float jump;
+    
     float moveVelocity;
-
-
 
     public Rigidbody2D rb;
     bool isGrounded;
+
+    void Start()
+    {
+        
+    }
 
     void Update()
     {
@@ -21,12 +25,8 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump"))
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
-
             }
-
         }
-
-        moveVelocity = 0;
 
         float horizontalInput = Input.GetAxis("Horizontal");
 
@@ -38,17 +38,20 @@ public class PlayerMovement : MonoBehaviour
         {
             moveVelocity = speed; // ---- Move right ----
         }
-
+        else
+        {
+            moveVelocity = 0; // ---- Stop moving ----
+        }
 
         rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
     }
 
-    
     void OnCollisionEnter2D(Collision2D col)
     {
         Debug.Log("Grounded is true");
         isGrounded = true;
     }
+
     void OnCollisionExit2D(Collision2D col)
     {
         Debug.Log("Grounded is false");

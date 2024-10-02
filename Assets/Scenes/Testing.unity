@@ -1959,7 +1959,7 @@ MonoBehaviour:
   timeBetweenWaves: 5
   enemiesPerWave: 5
   waveText: {fileID: 2111534466}
-  waveCompleteText: {fileID: 0}
+  waveCompleteText: {fileID: 1851774259}
 --- !u!1 &2143559967
 GameObject:
   m_ObjectHideFlags: 0

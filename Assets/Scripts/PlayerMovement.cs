@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded == true)
         {
             // ---- jumping ----
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump"))
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
 
@@ -28,17 +28,19 @@ public class PlayerMovement : MonoBehaviour
 
         moveVelocity = 0;
 
-        // ---- Left Right Movement -----
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        float horizontalInput = Input.GetAxis("Horizontal");
+
+        if (horizontalInput < 0)
         {
-            moveVelocity = -speed;
+            moveVelocity = -speed; // ---- Move left ----
         }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        else if (horizontalInput > 0)
         {
-            moveVelocity = speed;
+            moveVelocity = speed; // ---- Move right ----
         }
 
-         rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
+
+        rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
     }
 
     

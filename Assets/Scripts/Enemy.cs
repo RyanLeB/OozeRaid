@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     private int currentHealth;
 
     private Transform playerTransform;
+    private PlayerHealth playerHealth;
     private bool isLunging = false;
     private SpriteRenderer spriteRenderer;
     public float flashDuration = 0.1f; // ---- Duration for which the enemy flashes white ----
@@ -24,7 +25,12 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playerTransform = player.transform;
+            playerHealth = player.GetComponent<PlayerHealth>();
+        }
         currentHealth = maxHealth;
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -50,7 +56,7 @@ public class Enemy : MonoBehaviour
 
     private void MoveTowardsPlayer()
     {
-        if (playerTransform != null)
+        if (playerTransform != null && playerHealth != null && !playerHealth.isDead)
         {
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
@@ -80,6 +86,10 @@ public class Enemy : MonoBehaviour
 
         while (elapsedTime < lungeTime)
         {
+            if (playerTransform == null || playerHealth == null || playerHealth.isDead)
+            {
+                break;
+            }
             transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, lungeSpeed * Time.deltaTime);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -134,4 +144,5 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 }
+
 

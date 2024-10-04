@@ -1,67 +1,75 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    // ---- Enum for the different game states ----
+
+    
     public enum GameState
     {
         MainMenu,
         Game,
-        credits,
+        Credits,
         Pause,
         Controls,
     }
+
     public GameState gameState;
-    public List<GameObject> UiElements;
+    public List<GameObject> uiElements;
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        UiElements = new List<GameObject>();
+        uiElements = new List<GameObject>();
         foreach (Transform child in transform)
         {
-            UiElements.Add(child.gameObject);
+            uiElements.Add(child.gameObject);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        UpdateUIState();
+    }
+
+    void UpdateUIState()
+    {
+        // ---- Deactivate all UI elements ----
+        foreach (var element in uiElements)
+        {
+            element.SetActive(false);
+        }
+
+        // ---- Activate specific UI elements based on the game state ----
         switch (gameState)
         {
             case GameState.MainMenu:
-                for (int i = 0; i < UiElements.Count; i++)
-                {
-                    UiElements[i].SetActive(false);
-                }
-                UiElements[0].SetActive(true);
+                ActivateUIElement(0);
                 break;
             case GameState.Game:
-                for (int i = 0; i < UiElements.Count; i++)
-                {
-                    UiElements[i].SetActive(false);
-                }
+                // ---- No UI elements to activate for the game state ----
                 break;
-            case GameState.credits:
-                UiElements[0].SetActive(false);
-                UiElements[1].SetActive(true);
-                UiElements[2].SetActive(false);
+            case GameState.Credits:
+                ActivateUIElement(1);
                 break;
             case GameState.Pause:
-                for (int i = 0; i < UiElements.Count; i++)
-                {
-                    UiElements[i].SetActive(false);
-                }
-                UiElements[2].SetActive(true);
+                ActivateUIElement(2);
                 break;
             case GameState.Controls:
-                UiElements[0].SetActive(false);
-                UiElements[1].SetActive(false);
-                UiElements[2].SetActive(false);
-                UiElements[3].SetActive(true);
+                ActivateUIElement(3);
                 break;
+        }
+    }
+
+    void ActivateUIElement(int index)
+    {
+        if (index >= 0 && index < uiElements.Count)
+        {
+            uiElements[index].SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning($"UI element at index {index} does not exist.");
         }
     }
 }

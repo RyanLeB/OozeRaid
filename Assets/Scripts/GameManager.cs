@@ -2,108 +2,125 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class GameManager : MonoBehaviour
 {
     public UIManager uIManager;
     public LevelManager levelManager;
-    public static GameManager instance;
-    public bool IsPaused;
-    public bool IsCredits;
-    public bool IsControls;
-    // Start is called before the first frame update
-    void Start()
+    public static GameManager Instance { get; private set; }
+    public bool IsPaused { get; private set; }
+    public bool IsCredits { get; private set; }
+    public bool IsControls { get; private set; }
+
+    void Awake()
     {
-        if (instance != null)
+        if (Instance == null)
         {
-            GameObject.Destroy(this.gameObject);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            GameObject.DontDestroyOnLoad(this.gameObject);
-            instance = this;
+            Destroy(gameObject);
         }
+    }
+
+    void Start()
+    {
         uIManager = FindObjectOfType<UIManager>();
         levelManager = FindObjectOfType<LevelManager>();
+
         if (uIManager == null)
         {
             Debug.LogError("UIManager is null");
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        KeyBinds();
-        UISelection();
+        HandleKeyBinds();
+        UpdateUIState();
     }
-    void KeyBinds()
+
+    void HandleKeyBinds()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && levelManager.currentLevel != "MainMenu" && IsPaused == false)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Pause();
-            Debug.Log("Pause");
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && levelManager.currentLevel != "MainMenu" && IsPaused == true)
-        {
-            Resume();
-            Debug.Log("Game");
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && IsCredits == true)
-        {
-            IsCredits = false;
+            if (levelManager.currentLevel != "MainMenu")
+            {
+                if (IsPaused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
+            }
+            else if (IsCredits)
+            {
+                IsCredits = false;
+            }
         }
     }
+
     void Pause()
     {
         IsPaused = true;
         uIManager.gameState = UIManager.GameState.Pause;
+        Time.timeScale = 0f; // ---- Pause the game ----
     }
+
     public void Resume()
     {
         IsPaused = false;
         uIManager.gameState = UIManager.GameState.Game;
+        Time.timeScale = 1f; // ---- Resume the game ----
     }
+
     public void OnCreditsButtonClicked()
     {
         IsCredits = true;
         ShowCredits();
     }
-    public void Creditsback()
-    {
-        IsCredits = false;
-        IsControls = false;
-    }
+
     public void OnControlsButtonClicked()
     {
         IsControls = true;
         uIManager.gameState = UIManager.GameState.Controls;
     }
-    void UISelection()
+
+    public void CreditsBack()
     {
-        if (levelManager.currentLevel == "MainMenu" && IsCredits == false && IsControls == false)
+        IsCredits = false;
+        IsControls = false;
+    }
+
+    void UpdateUIState()
+    {
+        if (levelManager.currentLevel == "MainMenu" && !IsCredits && !IsControls)
         {
             uIManager.gameState = UIManager.GameState.MainMenu;
             IsPaused = false;
         }
-        else if (levelManager.currentLevel == "Noah's Testing area")
+        else if (levelManager.currentLevel == "Testing")
         {
-            if (IsPaused == true)
+            if (IsPaused)
             {
                 Pause();
             }
-            else if (IsPaused == false)
+            else
             {
                 Resume();
             }
         }
     }
+
     void ShowCredits()
     {
-        if (IsCredits == true)
+        if (IsCredits)
         {
-            levelManager.currentLevel = "Credits";
-            uIManager.gameState = UIManager.GameState.credits;
+            levelManager.LoadLevel("Credits");
+            uIManager.gameState = UIManager.GameState.Credits;
         }
     }
 }

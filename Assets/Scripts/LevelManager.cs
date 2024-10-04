@@ -1,68 +1,74 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.IO;
 
 public class LevelManager : MonoBehaviour
 {
+    // ---- Static reference to the LevelManager script ----
+    public static LevelManager Instance { get; private set; }
+
+    // ---- Variables ----
+    public string currentLevel => SceneManager.GetActiveScene().name;
+    public List<string> LevelList { get; private set; }
 
 
-    //NOTE: All scenes must be added to  the build settings in order for this script to work
-
-
-    //Script call
-    public static LevelManager LevelMan;
-    //Varaiables
-    public string currentLevel;
-    public string NextLevel;
-    public string PreviousLevel;
-    public string sceneName;
-    public int SceneCount;
-    public List<string> levelList;
-
-    // Start is called before the first frame update
     void Start()
     {
-        //Add all levels to list
-        levelList = new List<string>();
-        SceneCount = SceneManager.sceneCountInBuildSettings;
-        for (int i = 0; i < SceneCount; i++)
+        // ---- Add all levels to list ----
+        LevelList = new List<string>();
+        int sceneCount = SceneManager.sceneCountInBuildSettings;
+        for (int i = 0; i < sceneCount; i++)
         {
             string path = SceneUtility.GetScenePathByBuildIndex(i);
-            sceneName = System.IO.Path.GetFileNameWithoutExtension(path);
-            levelList.Add(sceneName);
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(path);
+            LevelList.Add(sceneName);
         }
+    }
 
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        //Display current level name in inspector
-        currentLevel = SceneManager.GetActiveScene().name;
-    }
+    // ---- 
+    // NOTE*
+    // ----
+    // These *LoadNextLevel()* *LoadPreviousLevel()* methods currently aren't being used since the game initially had multiple levels,
+    // this has changed to one level early in development.
+    // ----
+
     public void LoadNextLevel()
     {
-        //Load the next level in the list
-        NextLevel = levelList[levelList.IndexOf(currentLevel) + 1];
-        SceneManager.LoadScene(NextLevel);
+        int currentIndex = LevelList.IndexOf(currentLevel);
+        if (currentIndex >= 0 && currentIndex < LevelList.Count - 1)
+        {
+            string nextLevel = LevelList[currentIndex + 1];
+            SceneManager.LoadScene(nextLevel);
+        }
+        else
+        {
+            Debug.LogWarning("Next level does not exist.");
+        }
     }
+
     public void LoadPreviousLevel()
     {
-        //Load the previous level in the list
-        PreviousLevel = levelList[levelList.IndexOf(currentLevel) - 1];
-        SceneManager.LoadScene(PreviousLevel);
+        int currentIndex = LevelList.IndexOf(currentLevel);
+        if (currentIndex > 0)
+        {
+            string previousLevel = LevelList[currentIndex - 1];
+            SceneManager.LoadScene(previousLevel);
+        }
+        else
+        {
+            Debug.LogWarning("Previous level does not exist.");
+        }
     }
+
     public void LoadLevel(string levelName)
     {
-        //Load a specific level
-        levelName = currentLevel;
         SceneManager.LoadScene(levelName);
     }
+
+
     public void Quit()
     {
-        //Quit the game
+        // ---- Quits the game ----
         Application.Quit();
     }
 }

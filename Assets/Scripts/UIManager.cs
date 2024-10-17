@@ -4,8 +4,6 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     // ---- Enum for the different game states ----
-
-    
     public enum GameState
     {
         MainMenu,
@@ -15,7 +13,20 @@ public class UIManager : MonoBehaviour
         Controls,
     }
 
-    public GameState gameState;
+    private GameState _gameState;
+    public GameState gameState
+    {
+        get => _gameState;
+        set
+        {
+            if (_gameState != value)
+            {
+                _gameState = value;
+                UpdateUIState();
+            }
+        }
+    }
+
     public List<GameObject> uiElements;
 
     void Start()
@@ -25,11 +36,6 @@ public class UIManager : MonoBehaviour
         {
             uiElements.Add(child.gameObject);
         }
-    }
-
-    void Update()
-    {
-        UpdateUIState();
     }
 
     void UpdateUIState()
@@ -52,11 +58,9 @@ public class UIManager : MonoBehaviour
             case GameState.Credits:
                 ActivateUIElement(1);
                 break;
-            case GameState.Pause:
-                ActivateUIElement(2);
-                break;
+            
             case GameState.Controls:
-                ActivateUIElement(3);
+                ActivateUIElement(2);
                 break;
         }
     }

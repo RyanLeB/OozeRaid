@@ -1388,6 +1388,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1365943890}
   idleSprite: {fileID: 21300000, guid: f4381b237a11afc44be3f3b643e54f10, type: 3}
   movingSprite: {fileID: 21300000, guid: 513f9a58a6815c043bf955a6f42b1d65, type: 3}
+  movingBackwardsSprite: {fileID: 21300000, guid: edf37051f40f8e34395afd3e6dd70e29, type: 3}
   rb: {fileID: 1365943892}
 --- !u!212 &1365943890
 SpriteRenderer:

@@ -70,6 +70,11 @@ public class Enemy : MonoBehaviour
                 transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, speed * Time.deltaTime);
             }
         }
+
+        else
+        {
+            return;
+        }
     }
 
     private IEnumerator LungeTowardsPlayer()
@@ -78,24 +83,27 @@ public class Enemy : MonoBehaviour
 
         // ---- Stop for a second ----
         yield return new WaitForSeconds(stopDuration);
-
-        // ---- Lunge towards the player ----
-        Vector2 direction = (playerTransform.position - transform.position).normalized;
-        float lungeTime = lungeDistance / lungeSpeed;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < lungeTime)
+        if (playerTransform != null && playerHealth != null && !playerHealth.isDead)
         {
-            if (playerTransform == null || playerHealth == null || playerHealth.isDead)
-            {
-                break;
-            }
-            transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, lungeSpeed * Time.deltaTime);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+            Vector2 direction = (playerTransform.position - transform.position).normalized;
+            float lungeTime = lungeDistance / lungeSpeed;
+            float elapsedTime = 0f;
 
-        isLunging = false;
+            while (elapsedTime < lungeTime)
+            {
+                if (playerTransform == null || playerHealth == null || playerHealth.isDead)
+                {
+                    break;
+                }
+                transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, lungeSpeed * Time.deltaTime);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            isLunging = false;
+        }
+            // ---- Lunge towards the player ----
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

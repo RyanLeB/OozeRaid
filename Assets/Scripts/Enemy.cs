@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour
 
     private bool isDead = false;
 
+    [SerializeField] private GameObject impactEffectPrefab; // Add this line
+
     private void Start()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -113,8 +115,24 @@ public class Enemy : MonoBehaviour
             {
                 TakeDamage(playerGun.GetDamage());
             }
+
+            // Get the point of impact
+            Vector2 pointOfImpact = collision.ClosestPoint(transform.position);
+
+            // Instantiate and play the particle effect at the point of impact
+            GameObject impactEffect = Instantiate(impactEffectPrefab, pointOfImpact, Quaternion.identity);
+
+            // Start the coroutine to destroy the particle effect after a delay
+            StartCoroutine(DestroyImpactEffectAfterDelay(impactEffect, 2f)); // Adjust the delay as needed
+
             Destroy(collision.gameObject);
         }
+    }
+
+    private IEnumerator DestroyImpactEffectAfterDelay(GameObject impactEffect, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(impactEffect);
     }
 
     public void TakeDamage(int damage)

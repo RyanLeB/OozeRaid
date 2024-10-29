@@ -104,6 +104,9 @@ MonoBehaviour:
   lungeSpeed: 5
   lungeDistance: 2
   stopDuration: 1
+  maxHealth: 100
+  flashDuration: 0.1
+  impactEffectPrefab: {fileID: 903128982715103230, guid: fb515ea5f72929b4d8d29f9f42a46d9c, type: 3}
 --- !u!50 &-6413569469985207286
 Rigidbody2D:
   serializedVersion: 4

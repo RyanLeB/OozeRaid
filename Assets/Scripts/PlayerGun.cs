@@ -12,6 +12,7 @@ public class PlayerGun : MonoBehaviour
     public int damage = 10;
 
     [SerializeField] private GameObject slimePiecePrefab;
+    [SerializeField] private GameObject impactEffectPrefab;
     [SerializeField] private Sprite recoilSprite;
     private Sprite originalSprite;
     private Transform playerTransform;
@@ -24,6 +25,7 @@ public class PlayerGun : MonoBehaviour
     
     // ---- This stores the original fire point, so when the gun gets flipped, the fire point isn't adjusted ----
     private Vector3 originalFirePointPosition;
+    
     
 
     void Start()

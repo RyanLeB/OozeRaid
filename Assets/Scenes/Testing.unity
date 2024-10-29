@@ -1281,6 +1281,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950812974}
   m_CullTransparentMesh: 1
+--- !u!1 &986263518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 986263519}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &986263519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986263518}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.158, y: 0.06, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1547099412}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1317416082
 GameObject:
   m_ObjectHideFlags: 0
@@ -1664,7 +1695,7 @@ GameObject:
   - component: {fileID: 1547099414}
   m_Layer: 0
   m_Name: OozeGun
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1678,10 +1709,11 @@ Transform:
   m_GameObject: {fileID: 1547099411}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.32, y: 0.0078, z: 0}
-  m_LocalScale: {x: 5.0739, y: 1, z: 1}
+  m_LocalPosition: {x: 0.674, y: 0.0078, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 986263519}
   m_Father: {fileID: 1365943891}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1547099413
@@ -1725,7 +1757,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: dc2fc9a6ad35dcd4483f95dcf8d83917, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9151a94c4c0bcce4ba8f5f25a4f2fa68, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1749,9 +1781,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 4125672754926652354, guid: 496ddf985e688564dbb855b87324d747, type: 3}
-  firePoint: {fileID: 1547099412}
-  bulletSpeed: 50
-  radius: 1
+  firePoint: {fileID: 986263519}
+  bulletSpeed: 25
+  radius: 0.7
+  damage: 10
+  slimePiecePrefab: {fileID: 2501505787857439881, guid: 79bf30bd718fa964786770a6f275070f, type: 3}
+  recoilSprite: {fileID: 21300000, guid: 3f2b2f4b0da89b249985b6a0dcc678bd, type: 3}
 --- !u!1 &1550925389
 GameObject:
   m_ObjectHideFlags: 0
@@ -2532,6 +2567,7 @@ GameObject:
   - component: {fileID: 2026140582}
   - component: {fileID: 2026140581}
   - component: {fileID: 2026140584}
+  - component: {fileID: 2026140585}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2628,6 +2664,20 @@ MonoBehaviour:
   sensitivity: 0.05
   maxOffset: 0.3
   smoothSpeed: 0.05
+--- !u!114 &2026140585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026140580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd9d1fd43b0cf5846b4002c60c91a405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.1
+  shakeMagnitude: 0.3
 --- !u!1 &2052022399
 GameObject:
   m_ObjectHideFlags: 0
@@ -2787,8 +2837,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04d26565fad7f2741be51cbed5a49bf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursorTexture: {fileID: 2800000, guid: 77724f034082a08448fa42cdb400b114, type: 3}
-  cursorTextureClick: {fileID: 2800000, guid: c19e6a6e6ad6e9b428caf6425e1ec9ee, type: 3}
+  cursorTexture: {fileID: 2800000, guid: f85f1d30dfcd03b4b8b4cf954a7a9798, type: 3}
+  cursorTextureClick: {fileID: 2800000, guid: f85f1d30dfcd03b4b8b4cf954a7a9798, type: 3}
 --- !u!4 &2065759036
 Transform:
   m_ObjectHideFlags: 0

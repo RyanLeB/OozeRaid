@@ -38,6 +38,18 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void IncreaseMaxHealth(int amount)
+    {
+        maxHealth += amount;
+        currentHealth += amount; 
+        if (healthSlider != null)
+        {
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = currentHealth;
+        }
+    }
+
+
     void TakeDamage(int damage)
     {
         if (isDead) return; // ---- Exit if the player is dead ----

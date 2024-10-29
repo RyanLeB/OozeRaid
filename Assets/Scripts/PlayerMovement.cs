@@ -91,4 +91,12 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Grounded is false");
         isGrounded = false;
     }
+
+
+    public void IncreaseSpeed(float amount)
+    {
+        speed += amount;
+    }
+
+
 }

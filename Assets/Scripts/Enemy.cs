@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 2f; // ---- Speed at which the enemy moves ----
-    public float lungeSpeed = 5f; // ---- Speed at which the enemy lunges ----
-    public float lungeDistance = 2f; // ----- Distance at which the enemy lunges ----
-    public float stopDuration = 1f; // ---- Duration for which the enemy stops before lunging ----
-    public int maxHealth = 100; // ---- Maximum health of the enemy ----
+    public float speed = 2f;
+    public float lungeSpeed = 5f;
+    public float lungeDistance = 2f;
+    public float stopDuration = 1f;
+    public int maxHealth = 100;
     private int currentHealth;
 
     private Transform playerTransform;
     private PlayerHealth playerHealth;
+    private PlayerGun playerGun;
     private bool isLunging = false;
     private SpriteRenderer spriteRenderer;
-    public float flashDuration = 0.1f; // ---- Duration for which the enemy flashes white ----
+    public float flashDuration = 0.1f;
     private Color originalColor;
 
     public delegate void EnemyDeathHandler();
     public event EnemyDeathHandler OnEnemyDeath;
 
-    private bool isDead = false; // ---- Flag to ensure Die() is called only once ----
+    private bool isDead = false;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class Enemy : MonoBehaviour
         {
             playerTransform = player.transform;
             playerHealth = player.GetComponent<PlayerHealth>();
+            playerGun = player.GetComponentInChildren<PlayerGun>(); // Assuming the gun is a child of the player
         }
         currentHealth = maxHealth;
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -40,7 +42,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            originalColor = spriteRenderer.color; // ---- Store the original color ----
+            originalColor = spriteRenderer.color;
         }
 
         Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
@@ -70,7 +72,6 @@ public class Enemy : MonoBehaviour
                 transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, speed * Time.deltaTime);
             }
         }
-
         else
         {
             return;
@@ -81,7 +82,6 @@ public class Enemy : MonoBehaviour
     {
         isLunging = true;
 
-        // ---- Stop for a second ----
         yield return new WaitForSeconds(stopDuration);
         if (playerTransform != null && playerHealth != null && !playerHealth.isDead)
         {
@@ -102,8 +102,6 @@ public class Enemy : MonoBehaviour
 
             isLunging = false;
         }
-            // ---- Lunge towards the player ----
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -111,12 +109,15 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet"))
         {
             Debug.Log($"Enemy {gameObject.GetInstanceID()} hit by bullet.");
-            TakeDamage(20); // ---- Adjust damage value as needed ----
-            Destroy(collision.gameObject); // ---- Destroy the bullet on impact ----
+            if (playerGun != null)
+            {
+                TakeDamage(playerGun.GetDamage());
+            }
+            Destroy(collision.gameObject);
         }
     }
 
-    private void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. Current health: {currentHealth}");
@@ -133,16 +134,15 @@ public class Enemy : MonoBehaviour
         {
             spriteRenderer.color = Color.white;
             yield return new WaitForSeconds(flashDuration);
-            spriteRenderer.color = originalColor; // ---- Reset to the original color ----
+            spriteRenderer.color = originalColor;
         }
     }
 
     private void Die()
     {
-        if (isDead) return; // ---- Ensure Die() is called only once ----
+        if (isDead) return;
         isDead = true;
 
-        // ---- Handle enemy death (e.g., play animation, drop loot) ----
         Debug.Log($"Enemy {gameObject.GetInstanceID()} died.");
         if (OnEnemyDeath != null)
         {
@@ -152,5 +152,3 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 }
-
-

@@ -55,11 +55,11 @@ public class UIManager : MonoBehaviour
             case GameState.Game:
                 // ---- No UI elements to activate for the game state ----
                 break;
-            case GameState.Credits:
+            case GameState.Controls:
                 ActivateUIElement(1);
                 break;
             
-            case GameState.Controls:
+            case GameState.Credits:
                 ActivateUIElement(2);
                 break;
         }

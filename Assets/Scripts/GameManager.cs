@@ -11,6 +11,11 @@ public class GameManager : MonoBehaviour
     public bool IsCredits { get; private set; }
     public bool IsControls { get; private set; }
 
+    
+    
+    public ResultsScreen resultsScreen;
+    public GameObject player;
+
     void Awake()
     {
         if (Instance == null)
@@ -99,11 +104,16 @@ public class GameManager : MonoBehaviour
     {
         if (levelManager.currentLevel == "MainMenu" && !IsCredits && !IsControls)
         {
+            ResetGame(); // ---- Reset the game state ----
+            player.SetActive(false);
             uIManager.gameState = UIManager.GameState.MainMenu;
             IsPaused = false;
         }
         else if (levelManager.currentLevel == "Testing")
         {
+             
+            player.SetActive(true);
+            EnablePlayerScripts();
             if (IsPaused)
             {
                 Pause();
@@ -114,7 +124,37 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
+    
+    void EnablePlayerScripts()
+    {
+        MonoBehaviour[] scripts = player.GetComponentsInChildren<MonoBehaviour>();
+        foreach (MonoBehaviour script in scripts)
+        {
+            script.enabled = true;
+        }
+    }
+    
+    
+    public void ResetGame()
+    {
+        if (resultsScreen != null)
+        {
+            resultsScreen.gameObject.SetActive(false);
+            resultsScreen.canvasGroup.alpha = 0;
+        }
+        Time.timeScale = 1f; // Resume the game
+        IsPaused = false;
+        
+        // Reset player health
+        PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.ResetHealth();
+        }
+    }
+    
+    
+    
     void ShowCredits()
     {
         if (IsCredits)

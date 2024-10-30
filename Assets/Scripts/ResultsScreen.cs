@@ -10,6 +10,8 @@ public class ResultsScreen : MonoBehaviour
     public TMP_Text currencyText;
     public CanvasGroup canvasGroup;
 
+
+
     void Start()
     {
         gameObject.SetActive(false);
@@ -21,8 +23,9 @@ public class ResultsScreen : MonoBehaviour
         gameObject.SetActive(true);
         waveText.text = "Wave: " + wave;
         timeText.text = "Time: " + time.ToString("F2") + "s";
-        currencyText.text = "Blobs Collected: " + currency;
-
-        canvasGroup.DOFade(1, 1f).SetEase(Ease.InOutQuad);
+        currencyText.text = "Blobs: " + currency;
+        canvasGroup.alpha = 1; 
+        canvasGroup.DOFade(1, 1f).SetEase(Ease.InOutQuad).SetUpdate(true); // Use unscaledTime
     }
+
 }

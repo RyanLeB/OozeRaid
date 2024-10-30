@@ -15,8 +15,8 @@ public class WaveManager : MonoBehaviour
     public TMP_Text waveText; // ---- UI Text to display the current wave ----
     public TMP_Text waveCompleteText; // ---- UI Text to display wave complete message ----
 
-    private int currentWave = 0;
-    private int activeEnemies = 0;
+    public int currentWave = 0;
+    public int activeEnemies = 0;
     
 
     void Start()

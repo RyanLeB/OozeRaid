@@ -16,13 +16,12 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
     bool isGrounded;
 
-    void Start()
-    {
-        
-    }
+    
 
     void Update()
     {
+        if (GetComponent<PlayerHealth>().isDead) return; // ---- Exit if the player is dead ----
+
         // ---- Grounded? ----
         if (isGrounded == true)
         {
@@ -57,27 +56,25 @@ public class PlayerMovement : MonoBehaviour
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 directionToMouse = mousePosition - transform.position;
 
-        // Determine the appropriate sprite based on movement direction and mouse position
+        // ---- Determine the appropriate sprite based on movement direction and mouse position ----
         if (moveVelocity != 0)
         {
             if ((moveVelocity < 0 && directionToMouse.x > 0) || (moveVelocity > 0 && directionToMouse.x < 0))
             {
-                spriteRenderer.sprite = movingBackwardsSprite; // Change to moving backward sprite
+                spriteRenderer.sprite = movingBackwardsSprite; // ---- Change to moving backward sprite ----
             }
             else
             {
-                spriteRenderer.sprite = movingSprite; // Change to moving sprite
+                spriteRenderer.sprite = movingSprite; // ---- Change to moving sprite ----
             }
         }
         else
         {
-            spriteRenderer.sprite = idleSprite; // Change to idle sprite
+            spriteRenderer.sprite = idleSprite; // ---- Change to idle sprite ----
         }
 
-        // Set the flipX based on the mouse position
+        // --- Set the flipX based on the mouse position ---- 
         spriteRenderer.flipX = directionToMouse.x < transform.position.x;
-
-
     }
 
     void OnCollisionEnter2D(Collision2D col)

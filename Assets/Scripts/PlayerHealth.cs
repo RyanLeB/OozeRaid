@@ -13,6 +13,10 @@ public class PlayerHealth : MonoBehaviour
 
     public bool isDead = false; // ---- Flag to indicate if the player is dead ----
 
+    // Player currency reference 
+    private PlayerCurrency playerCurrency;
+    
+    
     void Start()
     {
         currentHealth = maxHealth;
@@ -22,6 +26,8 @@ public class PlayerHealth : MonoBehaviour
             healthSlider.maxValue = maxHealth;
             healthSlider.value = currentHealth;
         }
+        results = FindObjectOfType<ResultsScreen>();
+        playerCurrency = GetComponent<PlayerCurrency>();
     }
 
     void OnTriggerStay2D(Collider2D collision)
@@ -36,8 +42,37 @@ public class PlayerHealth : MonoBehaviour
                 lastDamageTime = Time.time;
             }
         }
+        else if (collision.gameObject.CompareTag("Blob"))
+        {
+            CollectBlob(collision.gameObject);
+        }
     }
-
+    
+    
+    void CollectBlob(GameObject blob)
+    {
+        playerCurrency.AddRandomCurrency();
+        BlobCollect blobScript = blob.GetComponent<BlobCollect>();
+        if (blobScript != null)
+        {
+            blobScript.StartCoroutine(blobScript.AnimateBlob());
+        }
+        else
+        {
+            Destroy(blob); // Destroy the blob object if no Blob script is found
+        }
+    }
+    
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth;
+        }
+        isDead = false;
+    }
+    
     public void IncreaseMaxHealth(int amount)
     {
         maxHealth += amount;
@@ -50,6 +85,18 @@ public class PlayerHealth : MonoBehaviour
     }
 
 
+    void DisablePlayerScripts()
+    {
+        MonoBehaviour[] scripts = GetComponentsInChildren<MonoBehaviour>();
+        foreach (MonoBehaviour script in scripts)
+        {
+            if (script != this) // ---- Ensure not to disable the PlayerHealth script itself ----
+            {
+                script.enabled = false;
+            }
+        }
+    }
+    
     void TakeDamage(int damage)
     {
         if (isDead) return; // ---- Exit if the player is dead ----
@@ -73,19 +120,29 @@ public class PlayerHealth : MonoBehaviour
 
         isDead = true; // ---- Set the flag to indicate the player is dead ----
 
-        // ---- Handle player death (e.g., restart level, show game over screen) ----
+        // ---- Handle player death ----
         Debug.Log("Player Died");
 
         // ---- Show results screen ----
+        ResultsScreen results = GameManager.Instance.resultsScreen;
         if (results != null)
         {
-            int wave = 10; // 
-            float time = 145.5f; 
-            int currency = 1500; 
+            Debug.Log("Showing results screen");
+            int wave = FindObjectOfType<WaveManager>().currentWave; // ---- Get the current wave ----
+            float time = Time.timeSinceLevelLoad; // ---- Get the elapsed time since the level started ----
+            int currency = playerCurrency.currency; // ---- Amount of blobs collected ----
             results.ShowResults(wave, time, currency);
+            Debug.Log("Results screen shown");
+            results.gameObject.SetActive(true); // ---- Enable the results screen ----
+            results.canvasGroup.alpha = 1; 
+            DisablePlayerScripts(); // ---- Disable player scripts to prevent further input ----
+            Time.timeScale = 0f; // ---- Pause the game ----
         }
-
-        // ---- Example: Destroy the player object ----
-        Destroy(gameObject);
     }
+
+        
+        
+
+
 }
+

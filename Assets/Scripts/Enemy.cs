@@ -24,17 +24,23 @@ public class Enemy : MonoBehaviour
 
     private bool isDead = false;
 
-    [SerializeField] private GameObject impactEffectPrefab; // Add this line
-
+    [SerializeField] private GameObject impactEffectPrefab;
+    [SerializeField] private GameObject blobPrefab;
+    
+    
     private void Start()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        if (GameManager.Instance != null)
         {
-            playerTransform = player.transform;
-            playerHealth = player.GetComponent<PlayerHealth>();
-            playerGun = player.GetComponentInChildren<PlayerGun>(); // Assuming the gun is a child of the player
+            playerTransform = GameManager.Instance.player.transform;
+            playerHealth = GameManager.Instance.player.GetComponent<PlayerHealth>();
+            playerGun = GameManager.Instance.player.GetComponentInChildren<PlayerGun>(); // Assuming the gun is a child of the player
         }
+        else
+        {
+            Debug.LogError("GameManager instance is null.");
+        }
+
         currentHealth = maxHealth;
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -167,6 +173,10 @@ public class Enemy : MonoBehaviour
             Debug.Log($"Invoking OnEnemyDeath event for enemy {gameObject.GetInstanceID()}.");
             OnEnemyDeath.Invoke();
         }
+
+        // Instantiate a blob at the enemy's position
+        Instantiate(blobPrefab, transform.position, Quaternion.identity);
+
         Destroy(gameObject);
     }
 }

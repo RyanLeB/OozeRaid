@@ -65,7 +65,7 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
         while (time < transitionDuration)
         {
             buttonText.rectTransform.localScale = Vector3.Lerp(initialScale, targetScaleVector, time / transitionDuration);
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             yield return null;
         }
 

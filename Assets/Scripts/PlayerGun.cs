@@ -76,6 +76,7 @@ public class PlayerGun : MonoBehaviour
         firePoint.localPosition = flipY ? new Vector3(originalFirePointPosition.x, -originalFirePointPosition.y, originalFirePointPosition.z) : originalFirePointPosition;
     }
 
+    
     void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
@@ -101,10 +102,17 @@ public class PlayerGun : MonoBehaviour
         Vector2 forceDirection = new Vector2(Mathf.Cos(randomAngle * Mathf.Deg2Rad), Mathf.Sin(randomAngle * Mathf.Deg2Rad)).normalized;
 
         slimeRb.AddForce(forceDirection * bulletSpeed * 0.5f, ForceMode2D.Impulse);
+
+        // ---- Apply random rotation to the slime piece ----
+        float randomTorque = Random.Range(-10f, 10f);
+        slimeRb.AddTorque(randomTorque, ForceMode2D.Impulse);
+
         // ---- Start the coroutine to destroy the slime piece after a delay ----
         StartCoroutine(DestroySlimePieceAfterDelay(slimePiece, 5f));
     }
 
+    
+    // ---- Reset the sprite back to the original ----
     void ResetSprite()
     {
         spriteRenderer.sprite = originalSprite;
@@ -121,6 +129,8 @@ public class PlayerGun : MonoBehaviour
         return damage;
     }
     
+    
+    // ---- Coroutine to destroy the slime piece after a delay ----
     private IEnumerator DestroySlimePieceAfterDelay(GameObject slimePiece, float delay)
     {
         yield return new WaitForSeconds(delay);

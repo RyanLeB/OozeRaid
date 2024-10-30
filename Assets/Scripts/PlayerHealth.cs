@@ -3,9 +3,17 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
+    
+    // ---- Also includes the PlayerCurrency script for ease since there is always trigger checks ----
+    
+    
+    
+    // ---- Health variables ----
     public int maxHealth = 100;
     private int currentHealth;
     public Slider healthSlider;
+    
+    // ---- Results screen reference ----
     public ResultsScreen results;
 
     public float damageCooldown = 1f; // ---- Time in seconds between damage ticks ----
@@ -13,7 +21,7 @@ public class PlayerHealth : MonoBehaviour
 
     public bool isDead = false; // ---- Flag to indicate if the player is dead ----
 
-    // Player currency reference 
+    // ---- Player currency reference ---- 
     private PlayerCurrency playerCurrency;
     
     
@@ -48,7 +56,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
     
-    
+    // ---- Collect blob and add currency ----
     void CollectBlob(GameObject blob)
     {
         playerCurrency.AddRandomCurrency();
@@ -59,7 +67,7 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
-            Destroy(blob); // Destroy the blob object if no Blob script is found
+            Destroy(blob); 
         }
     }
     

@@ -122,6 +122,64 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &16865965
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 16865966}
+  - component: {fileID: 16865967}
+  m_Layer: 5
+  m_Name: MovementUpgradeImages
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &16865966
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16865965}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 599564092}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &16865967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16865965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efddf9bef78d414f8747920ad8afc96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blankImages:
+  - {fileID: 689345813}
+  - {fileID: 631098922}
+  - {fileID: 265975780}
+  - {fileID: 84687202}
+  fillImages:
+  - {fileID: 1856262718}
+  - {fileID: 564274848}
+  - {fileID: 195213869}
+  - {fileID: 938026283}
 --- !u!1 &23458360
 GameObject:
   m_ObjectHideFlags: 0
@@ -1663,7 +1721,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &195213868
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1939,6 +1997,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219470568}
   m_CullTransparentMesh: 1
+--- !u!1 &229708182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 229708183}
+  - component: {fileID: 229708184}
+  m_Layer: 5
+  m_Name: HealthUpgradeImages
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &229708183
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229708182}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 599564092}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &229708184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229708182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efddf9bef78d414f8747920ad8afc96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blankImages:
+  - {fileID: 960652790}
+  - {fileID: 1720556083}
+  - {fileID: 267715429}
+  - {fileID: 1353279148}
+  fillImages:
+  - {fileID: 700401415}
+  - {fileID: 340241520}
+  - {fileID: 346694049}
+  - {fileID: 1498131519}
 --- !u!1 &231354061
 GameObject:
   m_ObjectHideFlags: 0
@@ -2490,7 +2606,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &294413660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2718,7 +2834,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &340241519
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2793,7 +2909,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &346694048
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3606,7 +3722,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &564274847
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3681,7 +3797,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &564714801
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3957,6 +4073,9 @@ RectTransform:
   - {fileID: 1977122398}
   - {fileID: 165103666}
   - {fileID: 558877672}
+  - {fileID: 1407550829}
+  - {fileID: 16865966}
+  - {fileID: 229708183}
   m_Father: {fileID: 725774493}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4561,36 +4680,12 @@ MonoBehaviour:
   maxHealthUpgrades: 4
   maxSpeedUpgrades: 4
   maxDamageUpgrades: 4
-  healthBlankImages:
-  - {fileID: 960652790}
-  - {fileID: 1720556083}
-  - {fileID: 267715429}
-  - {fileID: 1353279148}
-  healthFillImages:
-  - {fileID: 700401415}
-  - {fileID: 340241520}
-  - {fileID: 346694049}
-  - {fileID: 1498131519}
-  speedBlankImages:
-  - {fileID: 689345813}
-  - {fileID: 631098922}
-  - {fileID: 265975780}
-  - {fileID: 84687202}
-  speedFillImages:
-  - {fileID: 1856262718}
-  - {fileID: 564274848}
-  - {fileID: 195213869}
-  - {fileID: 938026283}
-  damageBlankImages:
-  - {fileID: 884688264}
-  - {fileID: 1394430858}
-  - {fileID: 1375414311}
-  - {fileID: 1409077989}
-  damageFillImages:
-  - {fileID: 564714802}
-  - {fileID: 1200143769}
-  - {fileID: 1512773070}
-  - {fileID: 294413661}
+  healthUpgradeCost: 200
+  speedUpgradeCost: 200
+  damageUpgradeCost: 200
+  healthUpgradeImages: {fileID: 229708184}
+  speedUpgradeImages: {fileID: 16865967}
+  damageUpgradeImages: {fileID: 1407550830}
   healthUpgradeLevel: {fileID: 2128740044}
   speedUpgradeLevel: {fileID: 278590127}
   damageUpgradeLevel: {fileID: 681062711}
@@ -5022,7 +5117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &700401414
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6890,7 +6985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &938026282
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7798,7 +7893,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1200143768
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8994,6 +9089,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1394430856}
   m_CullTransparentMesh: 1
+--- !u!1 &1407550828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1407550829}
+  - component: {fileID: 1407550830}
+  m_Layer: 5
+  m_Name: BulletUpgradeImages
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1407550829
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407550828}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 599564092}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1407550830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407550828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efddf9bef78d414f8747920ad8afc96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blankImages:
+  - {fileID: 884688264}
+  - {fileID: 1394430858}
+  - {fileID: 1375414311}
+  - {fileID: 1409077989}
+  fillImages:
+  - {fileID: 564714802}
+  - {fileID: 1200143769}
+  - {fileID: 1512773070}
+  - {fileID: 294413661}
 --- !u!1 &1409077987
 GameObject:
   m_ObjectHideFlags: 0
@@ -9161,7 +9314,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1498131518
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9236,7 +9389,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1512773069
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11493,7 +11646,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1856262717
 RectTransform:
   m_ObjectHideFlags: 0

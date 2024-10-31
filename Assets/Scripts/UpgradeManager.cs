@@ -1,78 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeManager : MonoBehaviour
 {
-    // ---- Buttons ----
+    // ---- Button references ----
     
-    public Button healthUpgradeButton; 
-    public Button speedUpgradeButton; 
+    public Button healthUpgradeButton;
+    public Button speedUpgradeButton;
     public Button damageUpgradeButton;
+
     
-    
-    // ---- Progress bar & Upgrades bought---- 
-    
-    public Slider progressBar; 
-    public int totalUpgrades = 10; 
-    private int upgradesBought = 0; 
-    
-    
-    // ---- Player references ----
-    
-    public PlayerHealth playerHealth; 
-    public PlayerMovement playerMovement; 
-    public PlayerGun playerGun; 
+    // ---- Reference to the player components ----
+    public PlayerUpgrades playerUpgrades;
+    public PlayerHealth playerHealth;
+    public PlayerMovement playerMovement;
+    public PlayerGun playerGun;
 
     void Start()
     {
-        // ---- Initialize the progress bar ----
-        progressBar.maxValue = totalUpgrades;
-        progressBar.value = upgradesBought;
-
-        //  ---- Button listeners ---- 
         healthUpgradeButton.onClick.AddListener(OnHealthUpgradeButtonClicked);
         speedUpgradeButton.onClick.AddListener(OnSpeedUpgradeButtonClicked);
         damageUpgradeButton.onClick.AddListener(OnDamageUpgradeButtonClicked);
     }
 
     
-    // ---- Increase player health ----
+    // ---- Button click events ----
     void OnHealthUpgradeButtonClicked()
     {
-        if (upgradesBought < totalUpgrades)
+        if (playerUpgrades.CanBuyHealthUpgrade())
         {
-            upgradesBought++;
-            progressBar.value = upgradesBought;
+            playerUpgrades.BuyHealthUpgrade();
             playerHealth.IncreaseMaxHealth(25);
         }
     }
 
-    
-    
-    // ---- Increase player speed ----
     void OnSpeedUpgradeButtonClicked()
     {
-        if (upgradesBought < totalUpgrades)
+        if (playerUpgrades.CanBuySpeedUpgrade())
         {
-            upgradesBought++;
-            progressBar.value = upgradesBought;
+            playerUpgrades.BuySpeedUpgrade();
             playerMovement.IncreaseSpeed(1f);
         }
     }
 
-    
-    
-    // ---- Increase player damage ----
     void OnDamageUpgradeButtonClicked()
     {
-        if (upgradesBought < totalUpgrades)
+        if (playerUpgrades.CanBuyDamageUpgrade())
         {
-            upgradesBought++;
-            progressBar.value = upgradesBought;
-            playerGun.IncreaseDamage(10);
+            playerUpgrades.BuyDamageUpgrade();
+            playerGun.IncreaseDamage(15);
         }
     }
 }
-

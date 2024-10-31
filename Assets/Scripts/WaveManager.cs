@@ -6,6 +6,8 @@ using TMPro;
 
 public class WaveManager : MonoBehaviour
 {
+    // ---- This script is responsible for spawning waves of enemies ----
+    
     public GameObject enemyPrefab; // ---- The enemy prefab to spawn ----
     public Transform[] spawnPoints; // ---- Array of spawn points ----
     public float timeBetweenWaves = 5f; // ---- Time between waves ----
@@ -41,7 +43,7 @@ public class WaveManager : MonoBehaviour
     {
         if (waveText != null)
         {
-            waveText.text = "Wave: " + currentWave;
+            waveText.text = "Wave: " + currentWave + " / " + "20";
         }
     }
 

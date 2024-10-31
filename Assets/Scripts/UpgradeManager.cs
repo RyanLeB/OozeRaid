@@ -3,14 +3,13 @@ using UnityEngine.UI;
 
 public class UpgradeManager : MonoBehaviour
 {
-    // ---- Button references ----
+    // ---- Buttons for each upgrade type ----
     
     public Button healthUpgradeButton;
     public Button speedUpgradeButton;
     public Button damageUpgradeButton;
 
-    
-    // ---- Reference to the player components ----
+    // ---- References to other scripts ----
     public PlayerUpgrades playerUpgrades;
     public PlayerHealth playerHealth;
     public PlayerMovement playerMovement;
@@ -24,7 +23,7 @@ public class UpgradeManager : MonoBehaviour
     }
 
     
-    // ---- Button click events ----
+    // ---- Methods to handle button clicks ----
     void OnHealthUpgradeButtonClicked()
     {
         if (playerUpgrades.CanBuyHealthUpgrade())
@@ -48,7 +47,7 @@ public class UpgradeManager : MonoBehaviour
         if (playerUpgrades.CanBuyDamageUpgrade())
         {
             playerUpgrades.BuyDamageUpgrade();
-            playerGun.IncreaseDamage(15);
+            playerGun.IncreaseDamage(8);
         }
     }
 }

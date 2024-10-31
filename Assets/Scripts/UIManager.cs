@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     {
         MainMenu,
         Game,
-        Credits,
+        Upgrades,
         Pause,
         Controls,
     }
@@ -58,10 +58,10 @@ public class UIManager : MonoBehaviour
             case GameState.Controls:
                 ActivateUIElement(1);
                 break;
-            
-            case GameState.Credits:
+            case GameState.Upgrades:
                 ActivateUIElement(2);
                 break;
+            
         }
     }
 

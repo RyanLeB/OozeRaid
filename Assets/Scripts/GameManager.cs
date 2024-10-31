@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public LevelManager levelManager;
     public static GameManager Instance { get; private set; }
     public bool IsPaused { get; private set; }
-    public bool IsCredits { get; private set; }
+    public bool IsUpgrades { get; private set; }
     public bool IsControls { get; private set; }
 
     
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         HandleKeyBinds();
-        UpdateUIState();
+        
     }
 
     void HandleKeyBinds()
@@ -61,9 +61,9 @@ public class GameManager : MonoBehaviour
                     Pause();
                 }
             }
-            else if (IsCredits)
+            else if (IsUpgrades)
             {
-                IsCredits = false;
+                IsUpgrades = false;
             }
         }
     }
@@ -81,11 +81,18 @@ public class GameManager : MonoBehaviour
         uIManager.gameState = UIManager.GameState.Game;
         Time.timeScale = 1f; // ---- Resume the game ----
     }
-
-    public void OnCreditsButtonClicked()
+    
+    
+    public void BackToMainMenu()
     {
-        IsCredits = true;
-        ShowCredits();
+        IsControls = false;
+        uIManager.gameState = UIManager.GameState.MainMenu;
+    }
+    
+    public void OnUpgradesButtonClicked()
+    {
+        IsUpgrades = true;
+        ShowUpgrades();
     }
 
     public void OnControlsButtonClicked()
@@ -96,13 +103,13 @@ public class GameManager : MonoBehaviour
 
     public void CreditsBack()
     {
-        IsCredits = false;
+        IsUpgrades = false;
         IsControls = false;
     }
 
     void UpdateUIState()
     {
-        if (levelManager.currentLevel == "MainMenu" && !IsCredits && !IsControls)
+        if (levelManager.currentLevel == "MainMenu" && !IsUpgrades && !IsControls)
         {
             ResetGame(); // ---- Reset the game state ----
             player.SetActive(false);
@@ -123,6 +130,17 @@ public class GameManager : MonoBehaviour
                 Resume();
             }
         }
+        
+        else if (levelManager.currentLevel == "Upgrades")
+        {
+            IsUpgrades = true;
+            ResetGame(); // ---- Reset the game state ----
+            player.SetActive(false);
+            uIManager.gameState = UIManager.GameState.MainMenu;
+            IsPaused = false;
+        
+        
+        }
     }
     
     void EnablePlayerScripts()
@@ -142,10 +160,10 @@ public class GameManager : MonoBehaviour
             resultsScreen.gameObject.SetActive(false);
             resultsScreen.canvasGroup.alpha = 0;
         }
-        Time.timeScale = 1f; // Resume the game
+        Time.timeScale = 1f; // ---- Resume the game ----
         IsPaused = false;
         
-        // Reset player health
+        // ---- Reset player health ----
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
@@ -155,12 +173,26 @@ public class GameManager : MonoBehaviour
     
     
     
-    void ShowCredits()
+    public void PlayGame()
     {
-        if (IsCredits)
-        {
-            levelManager.LoadLevel("Credits");
-            uIManager.gameState = UIManager.GameState.Credits;
-        }
+        
+        ResetGame();
+        levelManager.LoadLevel("Testing");
+        player.SetActive(true);
+        EnablePlayerScripts();
+        uIManager.gameState = UIManager.GameState.Game;
+        
+    }
+    
+    public void ShowUpgrades()
+    {
+        
+        levelManager.LoadLevel("Upgrades");
+        resultsScreen.gameObject.SetActive(false);
+        IsUpgrades = true;
+        ResetGame(); // ---- Reset the game state ----
+        player.SetActive(false);
+        uIManager.gameState = UIManager.GameState.Upgrades;
+        IsPaused = false;
     }
 }

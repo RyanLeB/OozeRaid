@@ -1,72 +1,68 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class PlayerUpgrades : MonoBehaviour
 {
     public int totalUpgrades = 10;
     public int upgradesBought = 0;
-    public Slider progressBar;
 
-    // Counters for each upgrade type
     public int healthUpgradesBought = 0;
     public int speedUpgradesBought = 0;
     public int damageUpgradesBought = 0;
 
-    // Limits for each upgrade type
     public int maxHealthUpgrades = 4;
     public int maxSpeedUpgrades = 4;
     public int maxDamageUpgrades = 4;
 
-    void Start()
+    public UpgradeImage healthUpgradeImages;
+    public UpgradeImage speedUpgradeImages;
+    public UpgradeImage damageUpgradeImages;
+
+    public TMP_Text healthUpgradeLevel;
+    public TMP_Text speedUpgradeLevel;
+    public TMP_Text damageUpgradeLevel;
+
+    public void Start()
     {
-        if (progressBar != null)
-        {
-            progressBar.maxValue = totalUpgrades;
-            progressBar.value = upgradesBought;
-        }
+        healthUpgradeImages.Start();
+        speedUpgradeImages.Start();
+        damageUpgradeImages.Start();
+
+        UpdateUpgradeTexts();
+        UpdateUpgradeImages();
     }
 
-    // ---- Increment the number of upgrades bought ----
     public void IncrementUpgradesBought()
     {
         if (upgradesBought < totalUpgrades)
         {
             upgradesBought++;
-            if (progressBar != null)
-            {
-                progressBar.value = upgradesBought;
-            }
         }
     }
 
-    // ---- Can the player buy a health upgrade? ----
     public bool CanBuyHealthUpgrade()
     {
         return healthUpgradesBought < maxHealthUpgrades;
     }
-    
-    // ---- Can the player buy a speed upgrade? ----
+
     public bool CanBuySpeedUpgrade()
     {
         return speedUpgradesBought < maxSpeedUpgrades;
     }
 
-    
-    // ---- Can the player buy a damage upgrade? ----
     public bool CanBuyDamageUpgrade()
     {
         return damageUpgradesBought < maxDamageUpgrades;
     }
 
-    
-    // ---- Buy an upgrade for each type ----
-    
     public void BuyHealthUpgrade()
     {
         if (CanBuyHealthUpgrade())
         {
             healthUpgradesBought++;
             IncrementUpgradesBought();
+            UpdateUpgradeTexts();
+            UpdateUpgradeImages();
         }
     }
 
@@ -76,6 +72,8 @@ public class PlayerUpgrades : MonoBehaviour
         {
             speedUpgradesBought++;
             IncrementUpgradesBought();
+            UpdateUpgradeTexts();
+            UpdateUpgradeImages();
         }
     }
 
@@ -85,6 +83,31 @@ public class PlayerUpgrades : MonoBehaviour
         {
             damageUpgradesBought++;
             IncrementUpgradesBought();
+            UpdateUpgradeTexts();
+            UpdateUpgradeImages();
         }
+    }
+
+    private void UpdateUpgradeTexts()
+    {
+        if (healthUpgradeLevel != null)
+        {
+            healthUpgradeLevel.text = RomanNumeralConverter.ToRoman(healthUpgradesBought);
+        }
+        if (speedUpgradeLevel != null)
+        {
+            speedUpgradeLevel.text = RomanNumeralConverter.ToRoman(speedUpgradesBought);
+        }
+        if (damageUpgradeLevel != null)
+        {
+            damageUpgradeLevel.text = RomanNumeralConverter.ToRoman(damageUpgradesBought);
+        }
+    }
+
+    private void UpdateUpgradeImages()
+    {
+        healthUpgradeImages.UpdateImages(healthUpgradesBought);
+        speedUpgradeImages.UpdateImages(speedUpgradesBought);
+        damageUpgradeImages.UpdateImages(damageUpgradesBought);
     }
 }

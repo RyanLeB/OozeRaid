@@ -10,6 +10,7 @@ public class PlayerGun : MonoBehaviour
     public float bulletSpeed = 20f;
     public float radius = 0.5f; // ---- Radius of the arc around the player ----
     public int damage = 10;
+    public float bulletLifetime = 5f; // ---- Lifetime of the bullet in seconds ----
 
     [SerializeField] private GameObject slimePiecePrefab;
     [SerializeField] private GameObject impactEffectPrefab;
@@ -26,8 +27,6 @@ public class PlayerGun : MonoBehaviour
     // ---- This stores the original fire point, so when the gun gets flipped, the fire point isn't adjusted ----
     private Vector3 originalFirePointPosition;
     
-    
-
     void Start()
     {
         playerTransform = transform.parent; // ---- Assuming the gun is a child of the player ----
@@ -76,12 +75,14 @@ public class PlayerGun : MonoBehaviour
         firePoint.localPosition = flipY ? new Vector3(originalFirePointPosition.x, -originalFirePointPosition.y, originalFirePointPosition.z) : originalFirePointPosition;
     }
 
-    
     void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = firePoint.right * bulletSpeed;
+
+        // ---- Destroy the bullet after a few seconds ----
+        Destroy(bullet, bulletLifetime);
 
         // ---- Trigger camera shake ----
         if (cameraShake != null)
@@ -111,7 +112,6 @@ public class PlayerGun : MonoBehaviour
         StartCoroutine(DestroySlimePieceAfterDelay(slimePiece, 5f));
     }
 
-    
     // ---- Reset the sprite back to the original ----
     void ResetSprite()
     {
@@ -128,14 +128,11 @@ public class PlayerGun : MonoBehaviour
     {
         return damage;
     }
-    
-    
+
     // ---- Coroutine to destroy the slime piece after a delay ----
     private IEnumerator DestroySlimePieceAfterDelay(GameObject slimePiece, float delay)
     {
         yield return new WaitForSeconds(delay);
         Destroy(slimePiece);
     }
-    
-    
 }

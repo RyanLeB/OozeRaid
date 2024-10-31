@@ -139,8 +139,11 @@ public class PlayerHealth : MonoBehaviour
             int wave = FindObjectOfType<WaveManager>().currentWave; // ---- Get the current wave ----
             float time = Time.timeSinceLevelLoad; // ---- Get the elapsed time since the level started ----
             int currency = playerCurrency.currency; // ---- Amount of blobs collected ----
+            
             results.ShowResults(wave, time, currency);
             Debug.Log("Results screen shown");
+            
+            
             results.gameObject.SetActive(true); // ---- Enable the results screen ----
             results.canvasGroup.alpha = 1; 
             DisablePlayerScripts(); // ---- Disable player scripts to prevent further input ----

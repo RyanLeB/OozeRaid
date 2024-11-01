@@ -4680,9 +4680,9 @@ MonoBehaviour:
   maxHealthUpgrades: 4
   maxSpeedUpgrades: 4
   maxDamageUpgrades: 4
-  healthUpgradeCost: 200
-  speedUpgradeCost: 200
-  damageUpgradeCost: 200
+  healthUpgradeCost: 3000
+  speedUpgradeCost: 3000
+  damageUpgradeCost: 3000
   healthUpgradeImages: {fileID: 229708184}
   speedUpgradeImages: {fileID: 16865967}
   damageUpgradeImages: {fileID: 1407550830}

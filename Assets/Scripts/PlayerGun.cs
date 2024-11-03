@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerGun : MonoBehaviour
 {
@@ -11,22 +11,35 @@ public class PlayerGun : MonoBehaviour
     public float radius = 0.5f; // ---- Radius of the arc around the player ----
     public int damage = 10;
     public float bulletLifetime = 5f; // ---- Lifetime of the bullet in seconds ----
+    public float fireRate = 0.2f; // ---- Time between shots ----
+    private bool isFiring = false;
+    private Coroutine firingCoroutine;
+
+    // ---- Ability variables ----
+    public float abilityFireRate = 0.05f; // ---- Fire rate during ability ----
+    public float abilityDuration = 5f; // ---- Duration of the ability ----
+    public float abilityCooldown = 30f; // ---- Cooldown time for the ability ----
+    private bool isAbilityActive = false;
+    private bool isAbilityOnCooldown = false;
+
+    // ---- UI elements ----
+    public Slider cooldownSlider;
 
     [SerializeField] private GameObject slimePiecePrefab;
     [SerializeField] private GameObject impactEffectPrefab;
     [SerializeField] private Sprite recoilSprite;
     private Sprite originalSprite;
     private Transform playerTransform;
-    
+
     // ---- Variables for the gun's sprite ----
     private SpriteRenderer spriteRenderer;
 
     // ---- camera shake effect ----
     private CameraShake cameraShake;
-    
+
     // ---- This stores the original fire point, so when the gun gets flipped, the fire point isn't adjusted ----
     private Vector3 originalFirePointPosition;
-    
+
     void Start()
     {
         playerTransform = transform.parent; // ---- Assuming the gun is a child of the player ----
@@ -34,14 +47,42 @@ public class PlayerGun : MonoBehaviour
         cameraShake = Camera.main.GetComponent<CameraShake>();
         originalSprite = spriteRenderer.sprite;
         originalFirePointPosition = firePoint.localPosition; // Store the original local position
+
+        // Initialize the cooldown slider
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.maxValue = abilityCooldown;
+            cooldownSlider.value = abilityCooldown;
+        }
     }
 
     void Update()
     {
         Aim();
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !isFiring)
         {
-            Shoot();
+            isFiring = true;
+            firingCoroutine = StartCoroutine(FireContinuously());
+        }
+        if (Input.GetButtonUp("Fire1"))
+        {
+            isFiring = false;
+            if (firingCoroutine != null)
+            {
+                StopCoroutine(firingCoroutine);
+            }
+        }
+
+        // ---- Check for ability activation ----
+        if (Input.GetKeyDown(KeyCode.E) && !isAbilityOnCooldown)
+        {
+            StartCoroutine(ActivateAbility());
+        }
+
+        // Update the cooldown slider
+        if (isAbilityOnCooldown && cooldownSlider != null)
+        {
+            cooldownSlider.value += Time.deltaTime;
         }
     }
 
@@ -87,7 +128,7 @@ public class PlayerGun : MonoBehaviour
         // ---- Trigger camera shake ----
         if (cameraShake != null)
         {
-            StartCoroutine(cameraShake.Shake(0.1f, 0.5f));
+            StartCoroutine(cameraShake.Shake(0.1f, 0.3f));
         }
 
         // ---- Change the sprite to simulate recoil ----
@@ -110,6 +151,35 @@ public class PlayerGun : MonoBehaviour
 
         // ---- Start the coroutine to destroy the slime piece after a delay ----
         StartCoroutine(DestroySlimePieceAfterDelay(slimePiece, 5f));
+    }
+
+    // ---- Coroutine to fire continuously while the player is holding the fire button ----
+    IEnumerator FireContinuously()
+    {
+        while (isFiring)
+        {
+            Shoot();
+            yield return new WaitForSeconds(isAbilityActive ? abilityFireRate : fireRate);
+        }
+    }
+
+    // ---- Coroutine to activate the ability ----
+    IEnumerator ActivateAbility()
+    {
+        isAbilityActive = true;
+        isAbilityOnCooldown = true;
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.value = 0;
+        }
+        yield return new WaitForSeconds(abilityDuration);
+        isAbilityActive = false;
+        yield return new WaitForSeconds(abilityCooldown - abilityDuration);
+        isAbilityOnCooldown = false;
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.value = abilityCooldown;
+        }
     }
 
     // ---- Reset the sprite back to the original ----

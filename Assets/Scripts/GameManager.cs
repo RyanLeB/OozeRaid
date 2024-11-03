@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        HandleKeyBinds();
+        // HandleKeyBinds();
         
     }
 

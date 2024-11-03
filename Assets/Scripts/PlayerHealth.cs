@@ -1,18 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
-    
-    // ---- Also includes the PlayerCurrency script for ease since there is always trigger checks ----
-    
-    
-    
     // ---- Health variables ----
     public int maxHealth = 100;
     private int currentHealth;
     public Slider healthSlider;
-    
+
     // ---- Results screen reference ----
     public ResultsScreen results;
 
@@ -23,8 +19,13 @@ public class PlayerHealth : MonoBehaviour
 
     // ---- Player currency reference ---- 
     private PlayerCurrency playerCurrency;
-    
-    
+
+    // ---- Hit effect variables ----
+    private SpriteRenderer spriteRenderer;
+    public Color hitColor = Color.red;
+    public float hitEffectDuration = 0.1f;
+    private Color originalColor;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -36,6 +37,13 @@ public class PlayerHealth : MonoBehaviour
         }
         results = FindObjectOfType<ResultsScreen>();
         playerCurrency = GetComponent<PlayerCurrency>();
+
+        // ---- Initialize hit effect variables ----
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            originalColor = spriteRenderer.color;
+        }
     }
 
     void OnTriggerStay2D(Collider2D collision)
@@ -55,7 +63,7 @@ public class PlayerHealth : MonoBehaviour
             CollectBlob(collision.gameObject);
         }
     }
-    
+
     // ---- Collect blob and add currency ----
     void CollectBlob(GameObject blob)
     {
@@ -70,7 +78,7 @@ public class PlayerHealth : MonoBehaviour
             Destroy(blob); 
         }
     }
-    
+
     public void ResetHealth()
     {
         currentHealth = maxHealth;
@@ -80,7 +88,7 @@ public class PlayerHealth : MonoBehaviour
         }
         isDead = false;
     }
-    
+
     public void IncreaseMaxHealth(int amount)
     {
         maxHealth += amount;
@@ -91,7 +99,6 @@ public class PlayerHealth : MonoBehaviour
             healthSlider.value = currentHealth;
         }
     }
-
 
     void DisablePlayerScripts()
     {
@@ -104,7 +111,7 @@ public class PlayerHealth : MonoBehaviour
             }
         }
     }
-    
+
     void TakeDamage(int damage)
     {
         if (isDead) return; // ---- Exit if the player is dead ----
@@ -120,6 +127,9 @@ public class PlayerHealth : MonoBehaviour
         {
             healthSlider.value = currentHealth;
         }
+
+        // ---- Trigger hit effect ----
+        StartCoroutine(HitEffect());
     }
 
     void Die()
@@ -143,7 +153,6 @@ public class PlayerHealth : MonoBehaviour
             results.ShowResults(wave, time, currency);
             Debug.Log("Results screen shown");
             
-            
             results.gameObject.SetActive(true); // ---- Enable the results screen ----
             results.canvasGroup.alpha = 1; 
             DisablePlayerScripts(); // ---- Disable player scripts to prevent further input ----
@@ -151,9 +160,14 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-        
-        
-
-
+    // ---- Coroutine to handle the hit effect ----
+    IEnumerator HitEffect()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = hitColor;
+            yield return new WaitForSeconds(hitEffectDuration);
+            spriteRenderer.color = originalColor;
+        }
+    }
 }
-

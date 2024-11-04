@@ -170,6 +170,13 @@ public class GameManager : MonoBehaviour
             playerHealth.ResetHealth();
             playerHealth.ResetSpriteColor();
         }
+        
+        // ---- Reset player gun ability ----
+        PlayerGun playerGun = player.GetComponentInChildren<PlayerGun>();
+        if (playerGun != null)
+        {
+            playerGun.ResetAbility();
+        }
     }
     
     

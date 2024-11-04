@@ -188,6 +188,18 @@ public class PlayerGun : MonoBehaviour
         spriteRenderer.sprite = originalSprite;
     }
 
+    // ---- Method to reset the ability ----
+    public void ResetAbility()
+    {
+        isAbilityActive = false;
+        isAbilityOnCooldown = false;
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.value = abilityCooldown;
+        }
+    }
+    
+    
     public void IncreaseDamage(int amount)
     {
         damage += amount;

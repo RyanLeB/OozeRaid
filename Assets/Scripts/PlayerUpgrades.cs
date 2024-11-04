@@ -36,6 +36,9 @@ public class PlayerUpgrades : MonoBehaviour
 
     private PlayerCurrency playerCurrency;
 
+    
+    
+    
     public void Start()
     {
         playerCurrency = GetComponent<PlayerCurrency>();
@@ -44,7 +47,7 @@ public class PlayerUpgrades : MonoBehaviour
         healthUpgradeImages.Start();
         speedUpgradeImages.Start();
         damageUpgradeImages.Start();
-
+        Debug.Log(Application.persistentDataPath);
 
         UpdateUpgradeTexts();
         UpdateUpgradeImages();

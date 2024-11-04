@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public bool IsControls { get; private set; }
 
     
-    
+    public GameObject panel;
     public ResultsScreen resultsScreen;
     public GameObject player;
 
@@ -168,6 +168,7 @@ public class GameManager : MonoBehaviour
         if (playerHealth != null)
         {
             playerHealth.ResetHealth();
+            playerHealth.ResetSpriteColor();
         }
     }
     
@@ -183,6 +184,33 @@ public class GameManager : MonoBehaviour
         uIManager.gameState = UIManager.GameState.Game;
         
     }
+
+    public void MainMenu()
+    {
+        levelManager.LoadLevel("MainMenu");
+        player.SetActive(false);
+        uIManager.gameState = UIManager.GameState.MainMenu;
+        IsPaused = false;
+    }
+    
+    
+    // ---- Method to activate the panel ----
+    public void ActivatePanel()
+    {
+        if (panel != null)
+        {
+            panel.SetActive(true);
+        }
+    }
+
+    // ---- Method to deactivate the panel ---- 
+    public void DeactivatePanel()
+    {
+        if (panel != null)
+        {
+            panel.SetActive(false);
+        }
+    }
     
     public void ShowUpgrades()
     {
@@ -194,5 +222,7 @@ public class GameManager : MonoBehaviour
         player.SetActive(false);
         uIManager.gameState = UIManager.GameState.Upgrades;
         IsPaused = false;
+        
+        player.GetComponent<PlayerUpgrades>().SaveData();
     }
 }

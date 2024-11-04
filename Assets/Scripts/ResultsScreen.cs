@@ -21,11 +21,18 @@ public class ResultsScreen : MonoBehaviour
     public void ShowResults(int wave, float time, int currency)
     {
         gameObject.SetActive(true);
-        waveText.text = "Wave: " + wave;
+        if (wave == 16)
+        {
+            waveText.text = "You've beaten the game!";
+        }
+        else
+        {
+            waveText.text = "Wave: " + wave;
+        }
         timeText.text = "Time: " + time.ToString("F2") + "s";
         currencyText.text = "Blobs: " + currency;
         canvasGroup.alpha = 1; 
-        canvasGroup.DOFade(1, 1f).SetEase(Ease.InOutQuad).SetUpdate(true); // Use unscaledTime
+        canvasGroup.DOFade(1, 1f).SetEase(Ease.InOutQuad).SetUpdate(true); // ---- Use unscaledTime ----
     }
 
 }

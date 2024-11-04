@@ -137,7 +137,7 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return; // ---- Exit if the player is already dead ----
 
         isDead = true; // ---- Set the flag to indicate the player is dead ----
-
+        spriteRenderer.color = originalColor; // ---- Reset the sprite color ----
         // ---- Handle player death ----
         Debug.Log("Player Died");
 
@@ -170,4 +170,14 @@ public class PlayerHealth : MonoBehaviour
             spriteRenderer.color = originalColor;
         }
     }
+    
+    public void ResetSpriteColor()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = originalColor; // ---- Reset the sprite color to the original color ----
+        }
+    }
+    
+    
 }

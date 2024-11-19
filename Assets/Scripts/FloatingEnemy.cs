@@ -42,7 +42,7 @@ public class FloatingEnemy : MonoBehaviour
         {
             playerTransform = GameManager.Instance.player.transform;
             playerHealth = GameManager.Instance.player.GetComponent<PlayerHealth>();
-            playerGun = GameManager.Instance.player.GetComponentInChildren<PlayerGun>(); // Assuming the gun is a child of the player
+            playerGun = GameManager.Instance.player.GetComponentInChildren<PlayerGun>(); 
         }
         else
         {
@@ -64,7 +64,7 @@ public class FloatingEnemy : MonoBehaviour
 
         Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
 
-        // Start the shooting coroutine
+        // ---- Start the shooting coroutine ----
         StartCoroutine(ShootAtPlayer());
     }
 
@@ -106,7 +106,7 @@ public class FloatingEnemy : MonoBehaviour
             GameObject impactEffect = Instantiate(impactEffectPrefab, pointOfImpact, Quaternion.identity);
 
             // ---- Start the coroutine to destroy the particle effect after a delay ----
-            StartCoroutine(DestroyImpactEffectAfterDelay(impactEffect, 2f)); // Adjust the delay as needed
+            StartCoroutine(DestroyImpactEffectAfterDelay(impactEffect, 2f)); 
 
             Destroy(collision.gameObject);
         }

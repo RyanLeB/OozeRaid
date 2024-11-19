@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class UpgradeImage : MonoBehaviour
 {
+    // ---- Arrays for the blank and filled upgrade images ----
+    
     public Image[] blankImages;
     public Image[] fillImages;
 

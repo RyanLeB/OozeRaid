@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
         {
             playerTransform = GameManager.Instance.player.transform;
             playerHealth = GameManager.Instance.player.GetComponent<PlayerHealth>();
-            playerGun = GameManager.Instance.player.GetComponentInChildren<PlayerGun>(); // Assuming the gun is a child of the player
+            playerGun = GameManager.Instance.player.GetComponentInChildren<PlayerGun>(); 
             
         }
         else
@@ -106,20 +106,20 @@ public class Enemy : MonoBehaviour
                 Vector2 direction = (playerTransform.position - transform.position).normalized;
                 transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, speed * Time.deltaTime);
 
-                // Play the move animation
+                // ---- Play the move animation ----
                 if (animator != null)
                 {
                     animator.SetBool("isMoving", true);
                 }
 
-                // Flip the sprite based on the direction
+                // ---- Flip the sprite based on the direction ----
                 if (direction.x > 0)
                 {
-                    spriteRenderer.flipX = false; // Face right
+                    spriteRenderer.flipX = false; // ---- Face right ----
                 }
                 else if (direction.x < 0)
                 {
-                    spriteRenderer.flipX = true; // Face left
+                    spriteRenderer.flipX = true; // ---- Face left ----
                 }
             }
         }
@@ -169,11 +169,11 @@ public class Enemy : MonoBehaviour
 
                 if (direction.x > 0)
                 {
-                    spriteRenderer.flipX = false; // Face right
+                    spriteRenderer.flipX = false; // ---- Face right ----
                 }
                 else if (direction.x < 0)
                 {
-                    spriteRenderer.flipX = true; // Face left
+                    spriteRenderer.flipX = true; // ---- Face left ----
                 }
 
                 elapsedTime += Time.deltaTime;

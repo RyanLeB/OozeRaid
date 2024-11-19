@@ -53,7 +53,7 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
         {
             StopCoroutine(scaleCoroutine);
         }
-        scaleCoroutine = StartCoroutine(ScaleTo(1f)); // Scale back to original size
+        scaleCoroutine = StartCoroutine(ScaleTo(1f)); // ---- Scale back to original size ----
     }
 
     private IEnumerator ScaleTo(float targetScale)

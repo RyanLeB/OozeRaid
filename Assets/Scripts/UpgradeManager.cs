@@ -17,6 +17,7 @@ public class UpgradeManager : MonoBehaviour
 
     void Start()
     {
+        // ---- Add listeners to the buttons ----
         healthUpgradeButton.onClick.AddListener(OnHealthUpgradeButtonClicked);
         speedUpgradeButton.onClick.AddListener(OnSpeedUpgradeButtonClicked);
         damageUpgradeButton.onClick.AddListener(OnDamageUpgradeButtonClicked);

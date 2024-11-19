@@ -5,6 +5,7 @@ using System.IO;
 
 public class PlayerUpgrades : MonoBehaviour
 {
+    // ---- Variables to keep track of upgrades ----
     public int totalUpgrades = 10;
     public int upgradesBought = 0;
 
@@ -69,7 +70,7 @@ public class PlayerUpgrades : MonoBehaviour
         return Mathf.RoundToInt(baseCost * Mathf.Pow(1.5f, currentTier));
     }
     
-    
+    // ---- Check if the player can buy an upgrade ----
     public bool CanBuyHealthUpgrade()
     {
         int cost = CalculateUpgradeCost(healthUpgradeCost, healthUpgradesBought);
@@ -88,7 +89,7 @@ public class PlayerUpgrades : MonoBehaviour
         return damageUpgradesBought < maxDamageUpgrades && playerCurrency.GetCurrency() >= cost;
     }
 
-    
+    // ---- Buy an upgrade ----
     public void BuyHealthUpgrade()
     {
         if (CanBuyHealthUpgrade())
@@ -133,7 +134,8 @@ public class PlayerUpgrades : MonoBehaviour
             SaveData();
         }
     }
-
+    
+    // ---- Update the upgrade texts ----
     private void UpdateUpgradeTexts()
     {
         if (healthUpgradeLevel != null)
@@ -150,7 +152,7 @@ public class PlayerUpgrades : MonoBehaviour
         }
     }
 
-    
+    // ---- Update the upgrade prices ----
     private void UpdateUpgradePrices()
     {
         if (healthUpgradePriceText != null)
@@ -187,7 +189,7 @@ public class PlayerUpgrades : MonoBehaviour
             }
         }
     }
-    
+    // ---- Update the upgrade images ----
     private void UpdateUpgradeImages()
     {
         healthUpgradeImages.UpdateImages(healthUpgradesBought);
@@ -195,7 +197,7 @@ public class PlayerUpgrades : MonoBehaviour
         damageUpgradeImages.UpdateImages(damageUpgradesBought);
     }
     
-    
+    // ---- Save the player data ----
     public void SaveData()
     {
         PlayerData data = new PlayerData
@@ -211,6 +213,7 @@ public class PlayerUpgrades : MonoBehaviour
         File.WriteAllText(Application.persistentDataPath + "/playerData.json", json);
     }
 
+    // ---- Load the player data ----
     public void LoadData()
     {
         string path = Application.persistentDataPath + "/playerData.json";
@@ -234,6 +237,8 @@ public class PlayerUpgrades : MonoBehaviour
         }
     }
     
+    
+    // ---- Apply the upgrades to the player ----
     private void ApplyUpgrades()
     {
         PlayerHealth playerHealth = GetComponent<PlayerHealth>();

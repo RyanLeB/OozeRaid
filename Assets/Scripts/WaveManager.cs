@@ -15,7 +15,7 @@ public class WaveManager : MonoBehaviour
     public Transform[] floatingEnemySpawnPoints; // ---- Array of spawn points for floating enemies ----
     public Transform dragonSpawnPoint; // ---- Spawn point for the dragon enemy ----
     
-    public float timeBetweenWaves = 5f; // ---- Time between waves ----
+    public float timeBetweenWaves = 2f; // ---- Time between waves ----
     public int enemiesPerWave = 5; // ---- Number of enemies per wave ----
     private int _spawnIndex = 0; // ---- Index to alternate between spawn points ----
 

@@ -2370,7 +2370,7 @@ MonoBehaviour:
   - {fileID: 1651767311}
   - {fileID: 881227579}
   dragonSpawnPoint: {fileID: 1697759576}
-  timeBetweenWaves: 5
+  timeBetweenWaves: 1
   enemiesPerWave: 5
   waveText: {fileID: 2111534466}
   waveCompleteText: {fileID: 1851774259}

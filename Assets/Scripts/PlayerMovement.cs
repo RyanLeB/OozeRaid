@@ -77,6 +77,8 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer.flipX = directionToMouse.x < transform.position.x;
     }
 
+    
+    // ---- Check if the player is grounded ----
     void OnCollisionEnter2D(Collision2D col)
     {
         Debug.Log("Grounded is true");

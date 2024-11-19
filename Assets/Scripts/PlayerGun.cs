@@ -42,13 +42,13 @@ public class PlayerGun : MonoBehaviour
 
     void Start()
     {
-        playerTransform = transform.parent; // ---- Assuming the gun is a child of the player ----
+        playerTransform = transform.parent; 
         spriteRenderer = GetComponent<SpriteRenderer>();
         cameraShake = Camera.main.GetComponent<CameraShake>();
         originalSprite = spriteRenderer.sprite;
-        originalFirePointPosition = firePoint.localPosition; // Store the original local position
+        originalFirePointPosition = firePoint.localPosition; // ---- Store the original local position ----
 
-        // Initialize the cooldown slider
+        // ---- Initialize the cooldown slider ----
         if (cooldownSlider != null)
         {
             cooldownSlider.maxValue = abilityCooldown;
@@ -79,7 +79,7 @@ public class PlayerGun : MonoBehaviour
             StartCoroutine(ActivateAbility());
         }
 
-        // Update the cooldown slider
+        // ---- Update the cooldown slider ----
         if (isAbilityOnCooldown && cooldownSlider != null)
         {
             cooldownSlider.value += Time.deltaTime;

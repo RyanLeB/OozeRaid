@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MouseCursor : MonoBehaviour
 {
-
+    // ---- Cursor textures ----
     [SerializeField] private Texture2D cursorTexture;
     [SerializeField] private Texture2D cursorTextureClick;
    
@@ -20,6 +20,8 @@ public class MouseCursor : MonoBehaviour
 
     }
 
+    
+    // Update is called once per frame
     private void Update()
     {
         if (Input.GetMouseButton(0))

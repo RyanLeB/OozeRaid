@@ -32,33 +32,33 @@ public class LevelManager : MonoBehaviour
     // this has changed to one level early in development.
     // ----
 
-    public void LoadNextLevel()
-    {
-        int currentIndex = LevelList.IndexOf(currentLevel);
-        if (currentIndex >= 0 && currentIndex < LevelList.Count - 1)
-        {
-            string nextLevel = LevelList[currentIndex + 1];
-            SceneManager.LoadScene(nextLevel);
-        }
-        else
-        {
-            Debug.LogWarning("Next level does not exist.");
-        }
-    }
+    // public void LoadNextLevel()
+    // {
+    //     int currentIndex = LevelList.IndexOf(currentLevel);
+    //     if (currentIndex >= 0 && currentIndex < LevelList.Count - 1)
+    //     {
+    //         string nextLevel = LevelList[currentIndex + 1];
+    //         SceneManager.LoadScene(nextLevel);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("Next level does not exist.");
+    //     }
+    // }
 
-    public void LoadPreviousLevel()
-    {
-        int currentIndex = LevelList.IndexOf(currentLevel);
-        if (currentIndex > 0)
-        {
-            string previousLevel = LevelList[currentIndex - 1];
-            SceneManager.LoadScene(previousLevel);
-        }
-        else
-        {
-            Debug.LogWarning("Previous level does not exist.");
-        }
-    }
+    // public void LoadPreviousLevel()
+    // {
+    //     int currentIndex = LevelList.IndexOf(currentLevel);
+    //     if (currentIndex > 0)
+    //     {
+    //         string previousLevel = LevelList[currentIndex - 1];
+    //         SceneManager.LoadScene(previousLevel);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("Previous level does not exist.");
+    //     }
+    // }
 
     public void LoadLevel(string levelName)
     {

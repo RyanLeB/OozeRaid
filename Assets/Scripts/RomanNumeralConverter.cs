@@ -2,6 +2,8 @@
 
 public static class RomanNumeralConverter
 {
+    // ---- Array of Roman numerals for the upgrade screen ----
+    
     private static readonly string[] RomanNumerals = { "I", "II", "III", "IV" };
 
     public static string ToRoman(int number)

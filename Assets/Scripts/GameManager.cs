@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    
+    
     public UIManager uIManager;
     public LevelManager levelManager;
     public static GameManager Instance { get; private set; }
-    public bool IsPaused { get; private set; }
-    public bool IsUpgrades { get; private set; }
-    public bool IsControls { get; private set; }
+    private bool IsPaused;
+    private bool IsUpgrades;
+    private bool IsControls;
 
     
     public GameObject panel;
     public ResultsScreen resultsScreen;
     public GameObject player;
 
+    // ---- Singleton pattern to ensure only one instance of the GameManager ----
     void Awake()
     {
         if (Instance == null)
@@ -46,27 +49,27 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void HandleKeyBinds()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (levelManager.currentLevel != "MainMenu")
-            {
-                if (IsPaused)
-                {
-                    Resume();
-                }
-                else
-                {
-                    Pause();
-                }
-            }
-            else if (IsUpgrades)
-            {
-                IsUpgrades = false;
-            }
-        }
-    }
+    // void HandleKeyBinds()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Escape))
+    //     {
+    //         if (levelManager.currentLevel != "MainMenu")
+    //         {
+    //             if (IsPaused)
+    //             {
+    //                 Resume();
+    //             }
+    //             else
+    //             {
+    //                 Pause();
+    //             }
+    //         }
+    //         else if (IsUpgrades)
+    //         {
+    //             IsUpgrades = false;
+    //         }
+    //     }
+    // }
 
     void Pause()
     {
@@ -143,6 +146,7 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    // ---- Used to re-enable player scripts when the game is played----
     void EnablePlayerScripts()
     {
         MonoBehaviour[] scripts = player.GetComponentsInChildren<MonoBehaviour>();

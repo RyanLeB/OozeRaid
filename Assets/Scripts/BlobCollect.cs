@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 public class BlobCollect : MonoBehaviour
 {
-    public float moveAwayDistance = 1f; // Distance to move away from the player
-    public float moveDuration = 0.5f; // Duration of the move away animation
-    public float returnDuration = 0.5f; // Duration of the return animation
+    public float moveAwayDistance = 1f; // ---- Distance to move away from the player ----
+    public float moveDuration = 0.5f; // ---- Duration of the move away animation ----
+    public float returnDuration = 0.5f; // ---- Duration of the return animation ----
 
     private Transform playerTransform;
 
@@ -19,7 +19,7 @@ public class BlobCollect : MonoBehaviour
          Vector3 originalPosition = transform.position;
          Vector3 moveAwayPosition = originalPosition + (originalPosition - playerTransform.position).normalized * moveAwayDistance;
 
-         // Move away from the player
+         // ---- Move away from the player ----
          float elapsedTime = 0f;
          while (elapsedTime < moveDuration)
          {
@@ -28,7 +28,7 @@ public class BlobCollect : MonoBehaviour
              yield return null;
          }
 
-         // Move back to the player
+         // ---- Move back to the player ----
          elapsedTime = 0f;
          while (elapsedTime < returnDuration)
          {
@@ -37,7 +37,7 @@ public class BlobCollect : MonoBehaviour
              yield return null;
          }
 
-         // Destroy the blob after reaching the player
+         // ---- Destroy the blob after reaching the player ----
          Destroy(gameObject);
      }
  }

@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 4125672754926652354, guid: 63204891026e4da4dae4cf376371d312, type: 3}
-  shootInterval: 3
+  shootInterval: 0.5
   maxHealth: 50
   flashDuration: 0.1
   floatingDamageNumberPrefab: {fileID: 7948968451385930361, guid: 3025ff5d7c1590d40b93720ee2821a25, type: 3}

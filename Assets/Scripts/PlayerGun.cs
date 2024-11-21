@@ -44,6 +44,9 @@ public class PlayerGun : MonoBehaviour
 
     // ---- This stores the original fire point, so when the gun gets flipped, the fire point isn't adjusted ----
     private Vector3 originalFirePointPosition;
+    
+    // ---- Reference to the player upgrades script ----
+    private PlayerUpgrades playerUpgrades;
 
     void Start()
     {
@@ -52,7 +55,9 @@ public class PlayerGun : MonoBehaviour
         cameraShake = Camera.main.GetComponent<CameraShake>();
         originalSprite = spriteRenderer.sprite;
         originalFirePointPosition = firePoint.localPosition; // ---- Store the original local position ----
-
+        playerUpgrades = GetComponentInParent<PlayerUpgrades>();
+        
+        
         // ---- Initialize the cooldown slider ----
         if (cooldownSlider != null)
         {
@@ -64,22 +69,31 @@ public class PlayerGun : MonoBehaviour
     void Update()
     {
         Aim();
-        if (Input.GetButtonDown("Fire1") && !isFiring)
+        if (playerUpgrades.isHoldToClickUnlocked)
         {
-            isFiring = true;
-            firingCoroutine = StartCoroutine(FireContinuously());
-        }
-        if (Input.GetButtonUp("Fire1"))
-        {
-            isFiring = false;
-            if (firingCoroutine != null)
+            if (Input.GetButtonDown("Fire1") && !isFiring)
             {
-                StopCoroutine(firingCoroutine);
+                isFiring = true;
+                firingCoroutine = StartCoroutine(FireContinuously());
+            }
+            if (Input.GetButtonUp("Fire1"))
+            {
+                isFiring = false;
+                if (firingCoroutine != null)
+                {
+                    StopCoroutine(firingCoroutine);
+                }
+            }
+        }
+        else
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Shoot();
             }
         }
 
-        // ---- Check for ability activation ----
-        if (Input.GetKeyDown(KeyCode.E) && !isAbilityOnCooldown)
+        if (playerUpgrades.isAbilityUnlocked && Input.GetKeyDown(KeyCode.E) && !isAbilityOnCooldown)
         {
             StartCoroutine(ActivateAbility());
         }
@@ -163,6 +177,12 @@ public class PlayerGun : MonoBehaviour
         }
     }
 
+    // ---- Increase Crit Rate ----
+    public void IncreaseCritRate(float amount)
+    {
+        critChance += amount;
+    }
+    
     // ---- Coroutine to activate the ability ----
     IEnumerator ActivateAbility()
     {

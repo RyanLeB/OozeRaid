@@ -9,4 +9,7 @@
         public int damageUpgradesBought;
         public int upgradesBought;
         public int currency;
+        public bool isHoldToClickUnlocked;
+        public bool isAbilityUnlocked;
+        public int critRateUpgradesBought;
     }

@@ -6,38 +6,60 @@ using System.IO;
 public class PlayerUpgrades : MonoBehaviour
 {
     // ---- Variables to keep track of upgrades ----
+    [Header("Total Upgrades")]
     public int totalUpgrades = 10;
     public int upgradesBought = 0;
-
+    
+    [Header("Number of upgrades bought")]
     public int healthUpgradesBought = 0;
     public int speedUpgradesBought = 0;
     public int damageUpgradesBought = 0;
+    public int critRateUpgradesBought = 0;
 
+    
+    [Header("Max number of upgrades")]
     public int maxHealthUpgrades = 4;
     public int maxSpeedUpgrades = 4;
     public int maxDamageUpgrades = 4;
+    public int maxCritRateUpgrades = 4;
 
+    [Header("Upgrade costs")]
     public int healthUpgradeCost = 3000;
     public int speedUpgradeCost = 3000;
     public int damageUpgradeCost = 3000;
+    public int critRateUpgradeCost = 4000;
+    public int holdToClickUpgradeCost = 5000;
+    public int abilityUpgradeCost = 8000;
 
+    
+    [Header("Upgrade Images")]
     public UpgradeImage healthUpgradeImages;
     public UpgradeImage speedUpgradeImages;
     public UpgradeImage damageUpgradeImages;
+    public UpgradeImage critRateUpgradeImages;
 
+    [Header("Upgrade Texts")]
     public TMP_Text healthUpgradeLevel;
     public TMP_Text speedUpgradeLevel;
     public TMP_Text damageUpgradeLevel;
+    public TMP_Text critRateUpgradeLevel;
     
-    
+    [Header("Price Texts")]
     public TMP_Text healthUpgradePriceText;
     public TMP_Text speedUpgradePriceText;
     public TMP_Text damageUpgradePriceText;
+    public TMP_Text critRateUpgradePriceText;
     
-
+    
+    
+    
     private PlayerCurrency playerCurrency;
 
-    
+    // ---- Unlockable upgrades ----
+    [Header("Unlockables")]
+    public bool isHoldToClickUnlocked = false;
+    public bool isAbilityUnlocked = false;
+
     
     
     public void Start()
@@ -135,6 +157,66 @@ public class PlayerUpgrades : MonoBehaviour
         }
     }
     
+    
+    public bool CanBuyHoldToClickUpgrade()
+    {
+        return !isHoldToClickUnlocked && playerCurrency.GetCurrency() >= holdToClickUpgradeCost;
+    }
+
+    public bool CanBuyAbilityUpgrade()
+    {
+        return !isAbilityUnlocked && playerCurrency.GetCurrency() >= abilityUpgradeCost;
+    }
+
+    public void BuyHoldToClickUpgrade()
+    {
+        if (CanBuyHoldToClickUpgrade())
+        {
+            playerCurrency.AddCurrency(-holdToClickUpgradeCost);
+            isHoldToClickUnlocked = true;
+            SaveData();
+        }
+    }
+
+    public void BuyAbilityUpgrade()
+    {
+        if (CanBuyAbilityUpgrade())
+        {
+            playerCurrency.AddCurrency(-abilityUpgradeCost);
+            isAbilityUnlocked = true;
+            SaveData();
+        }
+    }
+    
+    public bool CanBuyCritRateUpgrade()
+    {
+        int cost = CalculateUpgradeCost(critRateUpgradeCost, critRateUpgradesBought);
+        return critRateUpgradesBought < maxCritRateUpgrades && playerCurrency.GetCurrency() >= cost;
+    }
+
+    public void BuyCritRateUpgrade()
+    {
+        if (CanBuyCritRateUpgrade())
+        {
+            int cost = CalculateUpgradeCost(critRateUpgradeCost, critRateUpgradesBought);
+            playerCurrency.AddCurrency(-cost);
+            critRateUpgradesBought++;
+            IncrementUpgradesBought();
+            UpdateUpgradeTexts();
+            UpdateUpgradeImages();
+            UpdateUpgradePrices();
+            SaveData();
+        }
+    }
+    
+    // ---- Checks if player can afford when hovering the purchase button ----
+    public bool CanAffordUpgrade(int cost)
+    {
+        return playerCurrency.GetCurrency() >= cost;
+    }
+    
+    
+    
     // ---- Update the upgrade texts ----
     private void UpdateUpgradeTexts()
     {
@@ -149,6 +231,11 @@ public class PlayerUpgrades : MonoBehaviour
         if (damageUpgradeLevel != null)
         {
             damageUpgradeLevel.text = RomanNumeralConverter.ToRoman(damageUpgradesBought);
+        }
+        
+        if (critRateUpgradeLevel != null)
+        {
+            critRateUpgradeLevel.text = RomanNumeralConverter.ToRoman(critRateUpgradesBought);
         }
     }
 
@@ -188,6 +275,18 @@ public class PlayerUpgrades : MonoBehaviour
                 damageUpgradePriceText.text = CalculateUpgradeCost(damageUpgradeCost, damageUpgradesBought).ToString();
             }
         }
+        
+        if (critRateUpgradePriceText != null)
+        {
+            if (critRateUpgradesBought >= maxCritRateUpgrades)
+            {
+                critRateUpgradePriceText.text = "MAX";
+            }
+            else
+            {
+                critRateUpgradePriceText.text = CalculateUpgradeCost(critRateUpgradeCost, critRateUpgradesBought).ToString();
+            }
+        }
     }
     // ---- Update the upgrade images ----
     private void UpdateUpgradeImages()
@@ -195,6 +294,7 @@ public class PlayerUpgrades : MonoBehaviour
         healthUpgradeImages.UpdateImages(healthUpgradesBought);
         speedUpgradeImages.UpdateImages(speedUpgradesBought);
         damageUpgradeImages.UpdateImages(damageUpgradesBought);
+        critRateUpgradeImages.UpdateImages(critRateUpgradesBought);
     }
     
     // ---- Save the player data ----
@@ -206,7 +306,10 @@ public class PlayerUpgrades : MonoBehaviour
             speedUpgradesBought = speedUpgradesBought,
             damageUpgradesBought = damageUpgradesBought,
             upgradesBought = upgradesBought,
-            currency = GetComponent<PlayerCurrency>().currency
+            currency = GetComponent<PlayerCurrency>().currency,
+            isHoldToClickUnlocked = isHoldToClickUnlocked,
+            isAbilityUnlocked = isAbilityUnlocked, 
+            critRateUpgradesBought = critRateUpgradesBought
         };
 
         string json = JsonUtility.ToJson(data);
@@ -227,7 +330,9 @@ public class PlayerUpgrades : MonoBehaviour
             damageUpgradesBought = data.damageUpgradesBought;
             upgradesBought = data.upgradesBought;
             GetComponent<PlayerCurrency>().currency = data.currency;
-            
+            isHoldToClickUnlocked = data.isHoldToClickUnlocked;
+            isAbilityUnlocked = data.isAbilityUnlocked;
+            critRateUpgradesBought = data.critRateUpgradesBought;
             ApplyUpgrades();
             
             
@@ -261,6 +366,11 @@ public class PlayerUpgrades : MonoBehaviour
         if (playerGun != null)
         {
             playerGun.IncreaseDamage(damageUpgradesBought * 8); 
+        }
+        
+        if (playerGun != null)
+        {
+            playerGun.IncreaseCritRate(critRateUpgradesBought * 0.05f); // Apply crit rate upgrade
         }
     }
     

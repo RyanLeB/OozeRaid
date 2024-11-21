@@ -22,6 +22,8 @@ public class FloatingDamageManager : MonoBehaviour
 
     public void ShowFloatingDamage(int damage, Vector3 position, bool isCrit)
     {
+        Debug.Log($"ShowFloatingDamage called with damage: {damage}, position: {position}, isCrit: {isCrit}");
+
         if (floatingDamageNumberPrefab == null)
         {
             Debug.LogError("FloatingDamageNumberPrefab is not assigned.");
@@ -38,7 +40,7 @@ public class FloatingDamageManager : MonoBehaviour
             return;
         }
 
-        textMesh.text = isCrit ? $"<color=red>{damage}!</color>" : damage.ToString();
+        textMesh.text = isCrit ? $"<color=red>{damage} Crit!</color>" : damage.ToString();
         StartCoroutine(BounceAndFadeOut(floatingDamageNumber));
     }
 

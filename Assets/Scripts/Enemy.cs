@@ -217,6 +217,8 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage, bool isCrit)
     {
+        Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
+
         currentHealth -= damage;
         Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
 

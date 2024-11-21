@@ -7,7 +7,7 @@ public class FloatingEnemy : MonoBehaviour
 {
     // ---- Variables for enemy movement and health ----
     public GameObject projectilePrefab; // ---- The projectile prefab to shoot ----
-    public float shootInterval = 3f; // ---- Time interval between shots ----
+    public float shootInterval = 0.5f; // ---- Time interval between shots ----
     public int maxHealth = 50;
     private int currentHealth;
 
@@ -115,8 +115,10 @@ public class FloatingEnemy : MonoBehaviour
 
     public void TakeDamage(int damage, bool isCrit)
     {
+        Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
+
         currentHealth -= damage;
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. Current health: {currentHealth}");
+        Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
 
         ShowFloatingDamage(damage, transform.position, isCrit);
 

@@ -132,8 +132,16 @@ public class DragonEnemy : MonoBehaviour
 
     public void TakeDamage(int damage, bool isCrit)
     {
+        Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
+
         currentHealth -= damage;
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. Current health: {currentHealth}");
+        Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
+
+        // ---- Update the health slider ----
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth;
+        }
 
         ShowFloatingDamage(damage, transform.position, isCrit);
 

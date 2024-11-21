@@ -15,6 +15,11 @@ public class PlayerGun : MonoBehaviour
     private bool isFiring = false;
     private Coroutine firingCoroutine;
 
+    // ---- Crit Values ----
+    public float critChance = 0.1f; // ---- Base Chance of a critical hit ----
+    public float critMultiplier = 2f; // ---- Multiplier for critical hits ----
+    
+    
     // ---- Ability variables ----
     public float abilityFireRate = 0.05f; // ---- Fire rate during ability ----
     public float abilityDuration = 5f; // ---- Duration of the ability ----
@@ -122,34 +127,29 @@ public class PlayerGun : MonoBehaviour
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = firePoint.right * bulletSpeed;
 
-        // ---- Destroy the bullet after a few seconds ----
+        var (damage, isCrit) = GetDamage();
+        //Debug.Log($"Bullet Damage: {damage}, IsCrit: {isCrit}");
+
         Destroy(bullet, bulletLifetime);
 
-        // ---- Trigger camera shake ----
         if (cameraShake != null)
         {
             StartCoroutine(cameraShake.Shake(0.1f, 0.3f));
         }
 
-        // ---- Change the sprite to simulate recoil ----
         spriteRenderer.sprite = recoilSprite;
-        Invoke("ResetSprite", 0.1f); // ---- Revert back to the original sprite after 0.1 seconds ----
+        Invoke("ResetSprite", 0.1f);
 
-        // ---- Instantiate and apply force to the slime piece ----
         GameObject slimePiece = Instantiate(slimePiecePrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D slimeRb = slimePiece.GetComponent<Rigidbody2D>();
 
-        // ---- Generate a random angle and calculate the direction ----
         float randomAngle = Random.Range(0f, 180f);
         Vector2 forceDirection = new Vector2(Mathf.Cos(randomAngle * Mathf.Deg2Rad), Mathf.Sin(randomAngle * Mathf.Deg2Rad)).normalized;
 
         slimeRb.AddForce(forceDirection * bulletSpeed * 0.5f, ForceMode2D.Impulse);
-
-        // ---- Apply random rotation to the slime piece ----
         float randomTorque = Random.Range(-10f, 10f);
         slimeRb.AddTorque(randomTorque, ForceMode2D.Impulse);
 
-        // ---- Start the coroutine to destroy the slime piece after a delay ----
         StartCoroutine(DestroySlimePieceAfterDelay(slimePiece, 5f));
     }
 
@@ -206,9 +206,13 @@ public class PlayerGun : MonoBehaviour
     }
 
     // ---- Getter method for the damage value ----
-    public int GetDamage()
+    public (int damage, bool isCrit) GetDamage()
     {
-        return damage;
+        float randomValue = Random.value;
+        bool isCrit = randomValue < critChance;
+        int finalDamage = isCrit ? Mathf.RoundToInt(damage * critMultiplier) : damage;
+        //Debug.Log($"Random Value: {randomValue}, Crit Chance: {critChance}, IsCrit: {isCrit}");
+        return (finalDamage, isCrit);
     }
 
     // ---- Coroutine to destroy the slime piece after a delay ----

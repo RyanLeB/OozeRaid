@@ -96,18 +96,13 @@ public class FloatingEnemy : MonoBehaviour
             Debug.Log($"Enemy {gameObject.GetInstanceID()} hit by bullet.");
             if (playerGun != null)
             {
-                TakeDamage(playerGun.GetDamage());
+                var (damage, isCrit) = playerGun.GetDamage();
+                TakeDamage(damage, isCrit);
             }
 
-            // ---- Get the point of impact ----
             Vector2 pointOfImpact = collision.ClosestPoint(transform.position);
-
-            // ---- Instantiate and play the particle effect at the point of impact ----
             GameObject impactEffect = Instantiate(impactEffectPrefab, pointOfImpact, Quaternion.identity);
-
-            // ---- Start the coroutine to destroy the particle effect after a delay ----
-            StartCoroutine(DestroyImpactEffectAfterDelay(impactEffect, 2f)); 
-
+            StartCoroutine(DestroyImpactEffectAfterDelay(impactEffect, 2f));
             Destroy(collision.gameObject);
         }
     }
@@ -118,12 +113,14 @@ public class FloatingEnemy : MonoBehaviour
         Destroy(impactEffect);
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, bool isCrit)
     {
         currentHealth -= damage;
         Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. Current health: {currentHealth}");
+
+        ShowFloatingDamage(damage, transform.position, isCrit);
+
         StartCoroutine(FlashWhite());
-        ShowFloatingDamage(damage, transform.position); 
         if (currentHealth <= 0 && !isDead)
         {
             Die();
@@ -131,60 +128,9 @@ public class FloatingEnemy : MonoBehaviour
     }
 
     
-    public void ShowFloatingDamage(int damage, Vector3 position)
+    public void ShowFloatingDamage(int damage, Vector3 position, bool isCrit)
     {
-        if (floatingDamageNumberPrefab == null)
-        {
-            Debug.LogError("FloatingDamageNumberPrefab is not assigned.");
-            return;
-        }
-
-        // ---- Instantiate the floating damage number prefab directly above the enemy ----
-        GameObject floatingDamageNumber = Instantiate(floatingDamageNumberPrefab, position + Vector3.up * 1.5f, Quaternion.identity, transform);
-
-        // ---- Adjust the scale of the prefab ----
-        floatingDamageNumber.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-
-        // ---- Get the TextMeshPro component ----
-        TextMeshPro textMesh = floatingDamageNumber.GetComponentInChildren<TextMeshPro>();
-        if (textMesh == null)
-        {
-            Debug.LogError("TextMeshPro component not found on FloatingDamageNumberPrefab.");
-            return;
-        }
-
-        // ---- Set the damage text ----
-        textMesh.text = damage.ToString();
-
-        // ---- Start the bounce and fade out coroutine ----
-        StartCoroutine(BounceAndFadeOut(floatingDamageNumber));
-    }
-
-    private IEnumerator BounceAndFadeOut(GameObject floatingDamageNumber)
-    {
-        TextMeshPro textMesh = floatingDamageNumber.GetComponent<TextMeshPro>();
-        Color originalColor = textMesh.color;
-        float duration = .5f; // ---- Duration of the fade out ----
-        float bounceHeight = 0.8f; //  ---- Height of the bounce ----
-        float elapsedTime = 0f;
-
-        Vector3 originalPosition = floatingDamageNumber.transform.position;
-
-        while (elapsedTime < duration)
-        {
-            // ---- Calculate the bounce effect ----
-            float bounce = Mathf.Sin(Mathf.PI * elapsedTime / duration) * bounceHeight;
-            floatingDamageNumber.transform.position = originalPosition + Vector3.up * bounce;
-
-            // ---- Fade out effect ----
-            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration);
-            textMesh.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        Destroy(floatingDamageNumber);
+        FloatingDamageManager.Instance.ShowFloatingDamage(damage, position, isCrit);
     }
     
     

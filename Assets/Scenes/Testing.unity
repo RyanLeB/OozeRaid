@@ -279,7 +279,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c806645f5bf1ec3459ab14292a3bbc85, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 797d97869f0b8d848b7493763058ea7a, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.165
   m_Pitch: 1
@@ -1119,7 +1119,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9d9307b8240521a4b9bdac3124b8de99, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b25625f48e752ec4684d467b5c37bf3a, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.201
   m_Pitch: 1
@@ -1434,7 +1434,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8f712efdfa42a7147841bdc784f865ea, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 44c02a10a8bfb3844937f492a789cfd1, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.201
   m_Pitch: 1
@@ -2378,7 +2378,7 @@ MonoBehaviour:
   firstHalfWaves: {fileID: 90508139}
   secondHalfWaves: {fileID: 1435142892}
   finalHalfWaves: {fileID: 956653236}
-  currentWave: 0
+  currentWave: 7
   activeEnemies: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

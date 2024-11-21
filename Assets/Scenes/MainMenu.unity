@@ -7248,7 +7248,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 137079834}
   m_HandleRect: {fileID: 0}
@@ -8414,7 +8414,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 687159c991a5b0a42a3f4439a6960c0e, type: 3}
+  m_audioClip: {fileID: 8300000, guid: bb50ef0cb90f298428e1a0e6ad27b225, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.198
   m_Pitch: 1

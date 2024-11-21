@@ -206,6 +206,12 @@ public class PlayerUpgrades : MonoBehaviour
             UpdateUpgradeImages();
             UpdateUpgradePrices();
             SaveData();
+            
+            PlayerGun playerGun = GetComponentInChildren<PlayerGun>();
+            if (playerGun != null)
+            {
+                playerGun.IncreaseCritRate(0.05f); // ---- 5% increase in crit rate ----
+            }
         }
     }
     

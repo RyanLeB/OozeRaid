@@ -3554,7 +3554,7 @@ MonoBehaviour:
   firstHalfWaves: {fileID: 90508139}
   secondHalfWaves: {fileID: 1435142892}
   finalHalfWaves: {fileID: 956653236}
-  currentWave: 7
+  currentWave: 0
   activeEnemies: 0
 --- !u!1 &2140469921
 GameObject:

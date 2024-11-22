@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.8586268, y: 1.2481424, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 6, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 753427969e0e5e8489a84078064d112e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0057c78ca73fc50438b9dd2abc6aef80, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -111,8 +111,8 @@ MonoBehaviour:
   impactEffectPrefab: {fileID: 903128982715103230, guid: fb515ea5f72929b4d8d29f9f42a46d9c, type: 3}
   blobPrefab: {fileID: 2319307832083268943, guid: f0e523291d8681341b1bac345db6df4e, type: 3}
   animator: {fileID: 5751088050112935114}
-  lungeReadySprite: {fileID: 21300000, guid: 0ba7f19feb1bd3c4bb1ce31d1a262473, type: 3}
-  lungingSprite: {fileID: 21300000, guid: f716ace8e2cf344488be7860d10653ee, type: 3}
+  lungeReadySprite: {fileID: 21300000, guid: fa33d244edd5d3a4db51090f7edff0f9, type: 3}
+  lungingSprite: {fileID: 21300000, guid: 98b137d0ae6045845a2bd3b4b5958b6e, type: 3}
 --- !u!50 &-6413569469985207286
 Rigidbody2D:
   serializedVersion: 4
@@ -172,18 +172,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.023843825, y: 0.0051094443}
+  m_Offset: {x: -0.012697563, y: 0.013360769}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.64, y: 0.64}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7411244, y: 0.5129051}
+  m_Size: {x: 0.49358615, y: 0.34080708}
   m_EdgeRadius: 0
 --- !u!58 &3991076272811735328
 CircleCollider2D:

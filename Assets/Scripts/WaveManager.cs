@@ -6,37 +6,45 @@ using UnityEngine.Serialization;
 
 public class WaveManager : MonoBehaviour
 {
-    public GameObject enemyPrefab; // ---- The enemy prefab to spawn ----
+    public GameObject enemyPrefab;
     private List<FloatingEnemy> _activeFloatingEnemies = new List<FloatingEnemy>();
-    public GameObject floatingEnemyPrefab; // ---- The floating enemy prefab to spawn ----
-    public GameObject dragonEnemyPrefab; // ---- The dragon enemy prefab to spawn ----
-    
-    public Transform[] spawnPoints; // ---- Array of spawn points for normal enemies ----
-    public Transform[] floatingEnemySpawnPoints; // ---- Array of spawn points for floating enemies ----
-    public Transform dragonSpawnPoint; // ---- Spawn point for the dragon enemy ----
-    
-    public float timeBetweenWaves = 2f; // ---- Time between waves ----
-    public int enemiesPerWave = 5; // ---- Number of enemies per wave ----
-    private int _spawnIndex = 0; // ---- Index to alternate between spawn points ----
+    public GameObject floatingEnemyPrefab;
+    public GameObject dragonEnemyPrefab;
 
-    public TMP_Text waveText; // ---- UI Text to display the current wave ----
-    public TMP_Text waveCompleteText; // ---- UI Text to display wave complete message ----
-    public SpriteRenderer backgroundImage; // ---- Reference to the background image ----
-    
-    
-    
-    
-    public AudioSource firstHalfWaves; // ---- Audio source for first half of waves (0-10)----
-    public AudioSource secondHalfWaves; // ---- Audio source for second half of waves (11-20)----
-    public AudioSource finalHalfWaves; // ---- Audio source for final fight (16)----
-    
+    public Transform[] spawnPoints;
+    public Transform[] floatingEnemySpawnPoints;
+    public Transform dragonSpawnPoint;
+
+    public float timeBetweenWaves = 2f;
+    public int enemiesPerWave = 5;
+    private int _spawnIndex = 0;
+
+    private List<int> _availableFloatingEnemySpawnPoints = new List<int>(); // ---- List of available spawn points for floating enemies ----
+
+    public TMP_Text waveText;
+    public TMP_Text waveCompleteText;
+    public SpriteRenderer backgroundImage;
+
+    public AudioSource firstHalfWaves;
+    public AudioSource secondHalfWaves;
+    public AudioSource finalHalfWaves;
+
     public int currentWave = 0;
     public int activeEnemies = 0;
 
     void Start()
     {
-        waveCompleteText.gameObject.SetActive(false); // ---- Hide wave complete text initially ----
+        waveCompleteText.gameObject.SetActive(false);
         StartCoroutine(StartNextWave());
+
+        
+        for (int i = 0; i < floatingEnemySpawnPoints.Length; i++)
+        {
+            _availableFloatingEnemySpawnPoints.Add(i);
+        }
+
+        
+        StartCoroutine(CheckForAvailableSpawnPoints());
     }
 
     private IEnumerator StartNextWave()
@@ -48,20 +56,18 @@ public class WaveManager : MonoBehaviour
             if (currentWave == 8)
             {
                 ChangeBackgroundColorToRed();
-                firstHalfWaves.Stop(); // ---- Stop the first half of waves audio ----
-                secondHalfWaves.Play(); // ---- Play the second half of waves audio ----
-                
+                firstHalfWaves.Stop();
+                secondHalfWaves.Play();
             }
             if (currentWave == 16)
             {
                 ChangeBackgroundColorToPurple();
-                secondHalfWaves.Stop(); // ---- Stop the second half of waves audio ----
-                finalHalfWaves.Play(); // ---- Play the final fight audio ----
+                secondHalfWaves.Stop();
+                finalHalfWaves.Play();
                 SpawnDragonEnemy();
-                yield break; // ---- Stop spawning other waves ----
+                yield break;
             }
-            
-            
+
             yield return StartCoroutine(SpawnWave(currentWave));
             yield return StartCoroutine(CheckWaveComplete());
             yield return new WaitForSeconds(timeBetweenWaves);
@@ -74,13 +80,12 @@ public class WaveManager : MonoBehaviour
         {
             waveText.text = "Wave: " + currentWave + " / " + "15";
         }
-        
+
         if (currentWave == 16)
         {
             waveText.text = "Wave: " + " ???";
             waveText.color = Color.red;
         }
-        
     }
 
     private void ChangeBackgroundColorToRed()
@@ -98,13 +103,11 @@ public class WaveManager : MonoBehaviour
             backgroundImage.color = Color.magenta;
         }
     }
-    
-    
+
     private IEnumerator SpawnWave(int waveNumber)
     {
         int enemiesToSpawn = enemiesPerWave * waveNumber;
         activeEnemies = enemiesToSpawn;
-        //Debug.Log($"Spawning wave {waveNumber} with {enemiesToSpawn} enemies.");
 
         for (int i = 0; i < enemiesToSpawn; i++)
         {
@@ -113,36 +116,28 @@ public class WaveManager : MonoBehaviour
             {
                 SpawnFloatingEnemy();
             }
-            yield return new WaitForSeconds(0.5f); // ---- Delay between enemy spawns ----
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
     private void SpawnFloatingEnemy()
     {
-        if (floatingEnemySpawnPoints.Length == 0)
+        if (_availableFloatingEnemySpawnPoints.Count == 0)
         {
-            //Debug.LogError("No floating enemy spawn points assigned.");
             return;
         }
 
-        // ---- Check if there are fewer than 2 active floating enemies ----
-        if (_activeFloatingEnemies.Count >= 2)
-        {
-            //Debug.Log("There are already 2 active floating enemies. Skipping spawn.");
-            return;
-        }
+        int spawnIndex = _availableFloatingEnemySpawnPoints[Random.Range(0, _availableFloatingEnemySpawnPoints.Count)];
+        _availableFloatingEnemySpawnPoints.Remove(spawnIndex);
 
-        // ---- Spawn the floating enemy at a random floating enemy spawn point ----
-        Transform spawnPoint = floatingEnemySpawnPoints[Random.Range(0, floatingEnemySpawnPoints.Length)];
+        Transform spawnPoint = floatingEnemySpawnPoints[spawnIndex];
         GameObject floatingEnemy = Instantiate(floatingEnemyPrefab, spawnPoint.position, spawnPoint.rotation);
         FloatingEnemy floatingEnemyScript = floatingEnemy.GetComponent<FloatingEnemy>();
-        floatingEnemyScript.OnEnemyDeath += HandleEnemyDeath;
-        _activeFloatingEnemies.Add(floatingEnemyScript); // ---- Add to the list of active floating enemies ----
-        activeEnemies++; // ---- Increment activeEnemies count ----
-        //Debug.Log($"Floating enemy {floatingEnemy.GetInstanceID()} spawned and event subscribed.");
+        floatingEnemyScript.OnEnemyDeath += () => HandleEnemyDeath(spawnIndex);
+        _activeFloatingEnemies.Add(floatingEnemyScript);
+        activeEnemies++;
     }
 
-    
     private void SpawnDragonEnemy()
     {
         if (dragonSpawnPoint == null)
@@ -151,60 +146,51 @@ public class WaveManager : MonoBehaviour
             return;
         }
 
-        // ---- Spawn the dragon enemy at the dragon spawn point ----
         GameObject dragonEnemy = Instantiate(dragonEnemyPrefab, dragonSpawnPoint.position, dragonSpawnPoint.rotation);
         DragonEnemy dragonEnemyScript = dragonEnemy.GetComponent<DragonEnemy>();
         dragonEnemyScript.OnEnemyDeath += HandleDragonEnemyDeath;
-        activeEnemies++; // ---- Increment activeEnemies count ----
-        //Debug.Log($"Dragon enemy {dragonEnemy.GetInstanceID()} spawned and event subscribed.");
+        activeEnemies++;
     }
-    
-    
+
     private void SpawnEnemy()
     {
         if (spawnPoints.Length == 0)
         {
-            //Debug.LogError("No spawn points assigned.");
             return;
         }
 
-        // ---- Alternate between spawn points ----
         Transform spawnPoint = spawnPoints[_spawnIndex];
         _spawnIndex = (_spawnIndex + 1) % spawnPoints.Length;
 
         GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
         Enemy enemyScript = enemy.GetComponent<Enemy>();
-        enemyScript.OnEnemyDeath += HandleEnemyDeath;
-        //Debug.Log($"Enemy {enemy.GetInstanceID()} spawned and event subscribed.");
+        enemyScript.OnEnemyDeath += HandleRegularEnemyDeath;
     }
 
-    private void HandleEnemyDeath()
+    private void HandleRegularEnemyDeath()
     {
         activeEnemies--;
-        //Debug.Log($"Enemy died. Active enemies remaining: {activeEnemies}");
-
-        // ---- Remove from the list of active floating enemies if it is a floating enemy ----
-        _activeFloatingEnemies.RemoveAll(fe => fe == null);
     }
 
-    
+    private void HandleEnemyDeath(int spawnIndex)
+    {
+        activeEnemies--;
+        _activeFloatingEnemies.RemoveAll(fe => fe == null);
+        StartCoroutine(MakeSpawnPointAvailable(spawnIndex, 2f)); // ---- Make the spawn point available after 2 seconds ----
+    }
+
     private void HandleDragonEnemyDeath()
     {
         activeEnemies--;
-        //Debug.Log($"Dragon enemy died. Active enemies remaining: {activeEnemies}");
 
         ResultsScreen results = GameManager.Instance.resultsScreen;
         PlayerCurrency playerCurrency = GameManager.Instance.player.GetComponent<PlayerCurrency>();
         if (results != null)
         {
-            results.ShowResults(currentWave, Time.timeSinceLevelLoad, playerCurrency.GetCurrency()); 
+            results.ShowResults(currentWave, Time.timeSinceLevelLoad, playerCurrency.GetCurrency());
         }
-        
-        
     }
-    
-    
-    
+
     private IEnumerator CheckWaveComplete()
     {
         while (activeEnemies > 0)
@@ -216,8 +202,27 @@ public class WaveManager : MonoBehaviour
         {
             waveCompleteText.gameObject.SetActive(true);
             waveCompleteText.text = "Wave " + currentWave + " Complete!";
-            yield return new WaitForSeconds(2f); // ---- Display wave complete message for 2 seconds ----
+            yield return new WaitForSeconds(2f);
             waveCompleteText.gameObject.SetActive(false);
+        }
+    }
+
+    
+    private IEnumerator MakeSpawnPointAvailable(int spawnIndex, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _availableFloatingEnemySpawnPoints.Add(spawnIndex); 
+    }
+    
+    private IEnumerator CheckForAvailableSpawnPoints()
+    {
+        while (true)
+        {
+            if (_availableFloatingEnemySpawnPoints.Count > 0 && _activeFloatingEnemies.Count < 2)
+            {
+                SpawnFloatingEnemy();
+            }
+            yield return new WaitForSeconds(0.5f); // ---- Checks for spawn every 1.5 seconds ----
         }
     }
 }

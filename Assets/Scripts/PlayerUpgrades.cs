@@ -371,12 +371,8 @@ public class PlayerUpgrades : MonoBehaviour
 
         if (playerGun != null)
         {
-            playerGun.IncreaseDamage(damageUpgradesBought * 8); 
-        }
-        
-        if (playerGun != null)
-        {
-            playerGun.IncreaseCritRate(critRateUpgradesBought * 0.05f); // Apply crit rate upgrade
+            playerGun.IncreaseDamage(damageUpgradesBought * 8);
+            playerGun.IncreaseCritRate(critRateUpgradesBought * 0.05f); // ---- 5% increase in crit rate ----
         }
     }
     

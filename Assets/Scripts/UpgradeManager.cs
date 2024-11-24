@@ -16,6 +16,8 @@ public class UpgradeManager : MonoBehaviour
 
     public TMP_Text hoverMessageText;
 
+    public GameObject upgradePanel;
+    
     // ---- References to other scripts ----
     public PlayerUpgrades playerUpgrades;
 
@@ -30,6 +32,21 @@ public class UpgradeManager : MonoBehaviour
         critRateUpgradeButton.onClick.AddListener(OnCritRateUpgradeButtonClicked);
     }
 
+    
+    void Update()
+    {
+        if (upgradePanel.activeSelf)
+        {
+            UpdateButtonTexts();
+            UpdateUpgradeTexts();
+            UpdateUpgradeImages();
+            UpdateUpgradePrices();
+        }
+    }
+    
+    
+    
+    
     public void OnHealthUpgradeButtonClicked()
     {
         if (playerUpgrades.CanBuyHealthUpgrade())
@@ -154,5 +171,28 @@ public class UpgradeManager : MonoBehaviour
         }
     }
     
+    private void UpdateUpgradeTexts()
+    {
+        if (playerUpgrades != null)
+        {
+            playerUpgrades.UpdateUpgradeTexts();
+        }
+    }
+
+    private void UpdateUpgradeImages()
+    {
+        if (playerUpgrades != null)
+        {
+            playerUpgrades.UpdateUpgradeImages();
+        }
+    }
+
+    private void UpdateUpgradePrices()
+    {
+        if (playerUpgrades != null)
+        {
+            playerUpgrades.UpdateUpgradePrices();
+        }
+    }
     
 }

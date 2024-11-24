@@ -179,7 +179,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 15905c57a78e90e4faec09df2ff74982, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0aa0859ba047f1242b835be7d1d24159, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5595,7 +5595,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 15905c57a78e90e4faec09df2ff74982, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0aa0859ba047f1242b835be7d1d24159, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6233,7 +6233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 15905c57a78e90e4faec09df2ff74982, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0aa0859ba047f1242b835be7d1d24159, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7305,7 +7305,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 795234e4e51a89249a008fbeaed89704, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 51cdae62d5c98f04490f12e4ccd0167e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12288,6 +12288,7 @@ MonoBehaviour:
   abilityUpgradeButton: {fileID: 1081781934}
   critRateUpgradeButton: {fileID: 537959134}
   hoverMessageText: {fileID: 213696337}
+  upgradePanel: {fileID: 725774489}
   playerUpgrades: {fileID: 635616212}
 --- !u!1 &1039369961
 GameObject:
@@ -12727,7 +12728,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 15905c57a78e90e4faec09df2ff74982, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0aa0859ba047f1242b835be7d1d24159, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -16219,7 +16220,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 15905c57a78e90e4faec09df2ff74982, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0aa0859ba047f1242b835be7d1d24159, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -16369,7 +16370,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 15905c57a78e90e4faec09df2ff74982, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0aa0859ba047f1242b835be7d1d24159, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -21873,7 +21874,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 15905c57a78e90e4faec09df2ff74982, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0aa0859ba047f1242b835be7d1d24159, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

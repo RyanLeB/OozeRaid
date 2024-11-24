@@ -153,6 +153,7 @@ public class PlayerUpgrades : MonoBehaviour
             UpdateUpgradeTexts();
             UpdateUpgradeImages();
             UpdateUpgradePrices();
+            ApplyUpgrades();
             SaveData();
         }
     }
@@ -224,7 +225,7 @@ public class PlayerUpgrades : MonoBehaviour
     
     
     // ---- Update the upgrade texts ----
-    private void UpdateUpgradeTexts()
+    public void UpdateUpgradeTexts()
     {
         if (healthUpgradeLevel != null)
         {
@@ -246,7 +247,7 @@ public class PlayerUpgrades : MonoBehaviour
     }
 
     // ---- Update the upgrade prices ----
-    private void UpdateUpgradePrices()
+    public void UpdateUpgradePrices()
     {
         if (healthUpgradePriceText != null)
         {
@@ -295,7 +296,7 @@ public class PlayerUpgrades : MonoBehaviour
         }
     }
     // ---- Update the upgrade images ----
-    private void UpdateUpgradeImages()
+    public void UpdateUpgradeImages()
     {
         healthUpgradeImages.UpdateImages(healthUpgradesBought);
         speedUpgradeImages.UpdateImages(speedUpgradesBought);

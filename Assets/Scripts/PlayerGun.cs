@@ -168,12 +168,13 @@ public class PlayerGun : MonoBehaviour
     }
 
     // ---- Coroutine to fire continuously while the player is holding the fire button ----
-    IEnumerator FireContinuously()
+    private IEnumerator FireContinuously()
     {
         while (isFiring)
         {
+            //Debug.Log($"Firing with rate: {(isAbilityActive ? abilityFireRate : fireRate)}");
             Shoot();
-            yield return new WaitForSeconds(isAbilityActive ? abilityFireRate : fireRate);
+            yield return new WaitForSecondsRealtime(isAbilityActive ? abilityFireRate : fireRate);
         }
     }
 

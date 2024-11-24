@@ -8,7 +8,7 @@ public class DragonEnemy : MonoBehaviour
 {
     // ---- Variables for enemy movement and health ----
     public GameObject projectilePrefab; // ---- The projectile prefab to shoot ----
-    public float shootInterval = 3f; // ---- Time interval between shots ----
+    public float shootInterval = .5f; // ---- Time interval between shots ----
     public int maxHealth = 5000;
     private int currentHealth;
 
@@ -20,7 +20,8 @@ public class DragonEnemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public float flashDuration = 0.1f;
     private Color originalColor;
-
+    
+    
     // ---- Floating Damage Numbers ----
     [SerializeField] private GameObject floatingDamageNumberPrefab;
 
@@ -36,8 +37,11 @@ public class DragonEnemy : MonoBehaviour
     [SerializeField] private GameObject blobPrefab;
 
     private Sprite originalSprite;
+    public Sprite attackingSprite;
     
     public Slider healthSlider;
+    
+    public Transform mouthTransform;
 
     private void Start()
     {
@@ -74,6 +78,8 @@ public class DragonEnemy : MonoBehaviour
             healthSlider.value = currentHealth;
         }
 
+        
+        
         // ---- Start the shooting coroutine ----
         StartCoroutine(ShootAtPlayer());
     }
@@ -82,29 +88,197 @@ public class DragonEnemy : MonoBehaviour
     {
         while (true)
         {
+            
             yield return new WaitForSeconds(shootInterval);
-            Shoot();
-        }
-    }
-
-    private void Shoot()
-    {
-        if (playerTransform != null)
-        {
-            Vector2 direction = (playerTransform.position - transform.position).normalized;
-            float spreadAngle = 15f; // ---- Adjust the spread ----
-
-            for (int i = -1; i <= 2; i++)
+            int pattern = Random.Range(0, 4); // ---- Randomly select a shooting pattern ----
+            switch (pattern)
             {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + (i * spreadAngle);
-                Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-                GameObject projectile = Instantiate(projectilePrefab, transform.position, rotation);
-                Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-                rb.velocity = rotation * Vector2.right * 5f; // ---- Adjust the speed ---- 
-                Destroy(projectile, 5f); // ---- Destroy the projectile after 5 seconds ----
+                case 0:
+                    StartCoroutine(ShootCircularPattern());
+                    break;
+                case 1:
+                    StartCoroutine(ShootSpiralPattern());
+                    break;
+                case 2:
+                    ShootExplodingPattern();
+                    break;
+                case 3:
+                    StartCoroutine(ShootZigzagPattern());
+                    break;
+                case 4:
+                    StartCoroutine(ShootHelixPattern());
+                    break;
+                
             }
+            yield return new WaitForSeconds(0.1f);
+            
         }
     }
+
+    private IEnumerator ShootCircularPattern()
+    {
+        int numProjectiles = 12;
+        float angleStep = 360f / numProjectiles;
+
+        spriteRenderer.sprite = attackingSprite;
+        for (int i = 0; i < numProjectiles; i++)
+        {
+            float angle = i * angleStep;
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            GameObject projectile = Instantiate(projectilePrefab, mouthTransform.position, rotation);
+            Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+            rb.velocity = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * 5f;
+            
+            Destroy(projectile, 5f);
+            yield return new WaitForSeconds(0.05f);
+        }
+        spriteRenderer.sprite = originalSprite;
+    }
+
+    
+    
+    private IEnumerator ShootSpiralPattern()
+    {
+        int numProjectiles = 12;
+        float angleStep = 30f;
+        float currentAngle = 0f;
+
+        spriteRenderer.sprite = attackingSprite;
+        for (int i = 0; i < numProjectiles; i++)
+        {
+            float angle = currentAngle + (i * angleStep);
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            GameObject projectile = Instantiate(projectilePrefab, mouthTransform.position, rotation);
+            Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+            rb.velocity = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * 5f;
+            Destroy(projectile, 5f);
+            currentAngle += 5f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        spriteRenderer.sprite = originalSprite;
+    }
+
+    
+    private void ShootExplodingPattern()
+    {
+        GameObject projectile = Instantiate(projectilePrefab, mouthTransform.position, Quaternion.identity);
+        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.left * 5f;
+
+        StartCoroutine(ExplodeProjectile(projectile));
+    }
+
+    private IEnumerator ExplodeProjectile(GameObject projectile)
+    {
+        spriteRenderer.sprite = attackingSprite;
+        yield return new WaitForSeconds(1f);
+        Vector3 position = projectile.transform.position;
+        Destroy(projectile);
+
+        int numFragments = 8;
+        float angleStep = 360f / numFragments;
+
+        for (int i = 0; i < numFragments; i++)
+        {
+            float angle = i * angleStep;
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            GameObject fragment = Instantiate(projectilePrefab, position, rotation);
+            Rigidbody2D rb = fragment.GetComponent<Rigidbody2D>();
+            rb.velocity = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * 5f;
+            StartCoroutine(ChangeColorOverTime(fragment));
+            StartCoroutine(SecondaryExplodeProjectile(fragment));
+            Destroy(fragment, 5f);
+        }
+        spriteRenderer.sprite = originalSprite;
+    }
+    
+    private IEnumerator SecondaryExplodeProjectile(GameObject projectile)
+    {
+        yield return new WaitForSeconds(1f);
+        Vector3 position = projectile.transform.position;
+        Destroy(projectile);
+
+        int numFragments = 4;
+        float angleStep = 360f / numFragments;
+
+        for (int i = 0; i < numFragments; i++)
+        {
+            float angle = i * angleStep;
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            GameObject fragment = Instantiate(projectilePrefab, position, rotation);
+            Rigidbody2D rb = fragment.GetComponent<Rigidbody2D>();
+            rb.velocity = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * 5f;
+            StartCoroutine(ChangeColorOverTime(fragment));
+            Destroy(fragment, 5f);
+        }
+    }
+    
+    private IEnumerator ShootHelixPattern()
+    {
+        int numProjectiles = 20;
+        float angleStep = 18f;
+        float radius = 1f;
+
+        spriteRenderer.sprite = attackingSprite;
+        for (int i = 0; i < numProjectiles; i++)
+        {
+            float angle = i * angleStep;
+            float x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
+            float y = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
+            Vector3 position = mouthTransform.position + new Vector3(x, y, 0);
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            GameObject projectile = Instantiate(projectilePrefab, position, rotation);
+            Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+            rb.velocity = new Vector2(x, y).normalized * 5f;
+
+            StartCoroutine(ChangeColorOverTime(projectile));
+            Destroy(projectile, 5f);
+            yield return new WaitForSeconds(0.1f);
+        }
+        spriteRenderer.sprite = originalSprite;
+    }
+    
+    
+    private IEnumerator ChangeColorOverTime(GameObject projectile)
+    {
+        SpriteRenderer sr = projectile.GetComponent<SpriteRenderer>();
+        float duration = 1f;
+        float elapsedTime = 0f;
+        Color originalColor = sr.color;
+        Color targetColor = Color.magenta;
+
+        while (elapsedTime < duration)
+        {
+            sr.color = Color.Lerp(originalColor, targetColor, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        sr.color = targetColor;
+    }
+    
+    private IEnumerator ShootZigzagPattern()
+    {
+        int numProjectiles = 15;
+        float zigzagAmplitude = 100f;
+        float zigzagFrequency = 10f;
+
+        spriteRenderer.sprite = attackingSprite;
+        for (int i = 0; i < numProjectiles; i++)
+        {
+            float angle = Mathf.Sin(i * zigzagFrequency) * zigzagAmplitude;
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            GameObject projectile = Instantiate(projectilePrefab, mouthTransform.position, rotation);
+            Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+            rb.velocity = new Vector2(-5f, Mathf.Sin(angle * Mathf.Deg2Rad) * 5f);
+            
+            
+            StartCoroutine(ChangeColorOverTime(projectile));
+            Destroy(projectile, 5f);
+            yield return new WaitForSeconds(0.1f);
+        }
+        spriteRenderer.sprite = originalSprite;
+    }
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

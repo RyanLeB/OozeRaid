@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    
-    
     public UIManager uIManager;
     public LevelManager levelManager;
+    public AudioManager audioManager;
+
     public static GameManager Instance { get; private set; }
     private bool IsPaused;
     private bool IsUpgrades;
     private bool IsControls;
 
-    
     public GameObject panel;
     public ResultsScreen resultsScreen;
     public GameObject player;
 
+    public bool isDragonDead = false;
+    
+    
     // ---- Singleton pattern to ensure only one instance of the GameManager ----
     void Awake()
     {
@@ -36,40 +38,20 @@ public class GameManager : MonoBehaviour
     {
         uIManager = FindObjectOfType<UIManager>();
         levelManager = FindObjectOfType<LevelManager>();
+        audioManager = FindObjectOfType<AudioManager>();
 
         if (uIManager == null)
         {
             Debug.LogError("UIManager is null");
         }
+
+        audioManager.PlayMusic("MainMenu");
     }
 
     void Update()
     {
         // HandleKeyBinds();
-        
     }
-
-    // void HandleKeyBinds()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.Escape))
-    //     {
-    //         if (levelManager.currentLevel != "MainMenu")
-    //         {
-    //             if (IsPaused)
-    //             {
-    //                 Resume();
-    //             }
-    //             else
-    //             {
-    //                 Pause();
-    //             }
-    //         }
-    //         else if (IsUpgrades)
-    //         {
-    //             IsUpgrades = false;
-    //         }
-    //     }
-    // }
 
     void Pause()
     {
@@ -84,14 +66,13 @@ public class GameManager : MonoBehaviour
         uIManager.gameState = UIManager.GameState.Game;
         Time.timeScale = 1f; // ---- Resume the game ----
     }
-    
-    
+
     public void BackToMainMenu()
     {
         IsControls = false;
         uIManager.gameState = UIManager.GameState.MainMenu;
     }
-    
+
     public void OnUpgradesButtonClicked()
     {
         IsUpgrades = true;
@@ -115,14 +96,15 @@ public class GameManager : MonoBehaviour
         if (levelManager.currentLevel == "MainMenu" && !IsUpgrades && !IsControls)
         {
             ResetGame(); // ---- Reset the game state ----
+            audioManager.PlayMusic("MainMenu");
             player.SetActive(false);
             uIManager.gameState = UIManager.GameState.MainMenu;
             IsPaused = false;
         }
         else if (levelManager.currentLevel == "Testing")
         {
-             
             player.SetActive(true);
+            
             EnablePlayerScripts();
             if (IsPaused)
             {
@@ -133,19 +115,17 @@ public class GameManager : MonoBehaviour
                 Resume();
             }
         }
-        
         else if (levelManager.currentLevel == "Upgrades")
         {
             IsUpgrades = true;
             ResetGame(); // ---- Reset the game state ----
+            audioManager.PlayMusic("Shop");
             player.SetActive(false);
             uIManager.gameState = UIManager.GameState.MainMenu;
             IsPaused = false;
-        
-        
         }
     }
-    
+
     // ---- Used to re-enable player scripts when the game is played----
     void EnablePlayerScripts()
     {
@@ -155,8 +135,7 @@ public class GameManager : MonoBehaviour
             script.enabled = true;
         }
     }
-    
-    
+
     public void ResetGame()
     {
         if (resultsScreen != null)
@@ -166,7 +145,7 @@ public class GameManager : MonoBehaviour
         }
         Time.timeScale = 1f; // ---- Resume the game ----
         IsPaused = false;
-        
+
         // ---- Reset player health ----
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
         if (playerHealth != null)
@@ -174,26 +153,31 @@ public class GameManager : MonoBehaviour
             playerHealth.ResetHealth();
             playerHealth.ResetSpriteColor();
         }
-        
+
         // ---- Reset player gun ability ----
         PlayerGun playerGun = player.GetComponentInChildren<PlayerGun>();
         if (playerGun != null)
         {
             playerGun.ResetAbility();
+            playerGun.GetComponent<SpriteRenderer>().enabled = true;
         }
+        
+        SpriteRenderer playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
+        if (playerSpriteRenderer != null)
+        {
+            playerSpriteRenderer.enabled = true;
+        }
+        
     }
-    
-    
-    
+
     public void PlayGame()
     {
-        
         ResetGame();
         levelManager.LoadLevel("Testing");
         player.SetActive(true);
         EnablePlayerScripts();
         uIManager.gameState = UIManager.GameState.Game;
-        
+        audioManager.PlayMusic("FirstPhase");
     }
 
     public void MainMenu()
@@ -203,8 +187,7 @@ public class GameManager : MonoBehaviour
         uIManager.gameState = UIManager.GameState.MainMenu;
         IsPaused = false;
     }
-    
-    
+
     // ---- Method to activate the panel ----
     public void ActivatePanel()
     {
@@ -214,7 +197,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // ---- Method to deactivate the panel ---- 
+    // ---- Method to deactivate the panel ----
     public void DeactivatePanel()
     {
         if (panel != null)
@@ -222,10 +205,28 @@ public class GameManager : MonoBehaviour
             panel.SetActive(false);
         }
     }
+
+    public void DestroyAllBullets()
+    {
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject bullet in bullets)
+        {
+            Destroy(bullet);
+        }
+    }
+    
+    public void DeactivateAllEnemies()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            enemy.SetActive(false);
+        }
+    }
+    
     
     public void ShowUpgrades()
     {
-        
         levelManager.LoadLevel("Upgrades");
         resultsScreen.gameObject.SetActive(false);
         IsUpgrades = true;
@@ -233,7 +234,8 @@ public class GameManager : MonoBehaviour
         player.SetActive(false);
         uIManager.gameState = UIManager.GameState.Upgrades;
         IsPaused = false;
-        
+        audioManager.PlayMusic("Shop");
+
         player.GetComponent<PlayerUpgrades>().SaveData();
     }
 }

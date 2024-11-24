@@ -56,6 +56,22 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
         scaleCoroutine = StartCoroutine(ScaleTo(1f)); // ---- Scale back to original size ----
     }
 
+    
+    public void OnButtonClick()
+    {
+        if (buttonText != null)
+        {
+            buttonText.color = originalColor;
+        }
+
+        if (scaleCoroutine != null)
+        {
+            StopCoroutine(scaleCoroutine);
+        }
+        buttonText.rectTransform.localScale = originalScale; // ---- Reset to original scale immediately ----
+    }
+    
+    
     private IEnumerator ScaleTo(float targetScale)
     {
         Vector3 targetScaleVector = originalScale * targetScale;

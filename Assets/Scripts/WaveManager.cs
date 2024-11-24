@@ -18,16 +18,15 @@ public class WaveManager : MonoBehaviour
     public float timeBetweenWaves = 2f;
     public int enemiesPerWave = 5;
     private int _spawnIndex = 0;
-
+    private bool gameCompleted = false;
+    
+    
     private List<int> _availableFloatingEnemySpawnPoints = new List<int>(); // ---- List of available spawn points for floating enemies ----
 
     public TMP_Text waveText;
     public TMP_Text waveCompleteText;
     public SpriteRenderer backgroundImage;
 
-    public AudioSource firstHalfWaves;
-    public AudioSource secondHalfWaves;
-    public AudioSource finalHalfWaves;
 
     public int currentWave = 0;
     public int activeEnemies = 0;
@@ -37,12 +36,12 @@ public class WaveManager : MonoBehaviour
         waveCompleteText.gameObject.SetActive(false);
         StartCoroutine(StartNextWave());
 
+        StartCoroutine(CheckForAvailableSpawnPoints());
         
+    }
         
 
         
-        StartCoroutine(CheckForAvailableSpawnPoints());
-    }
 
     private IEnumerator StartNextWave()
     {
@@ -53,8 +52,8 @@ public class WaveManager : MonoBehaviour
             if (currentWave == 8 && currentWave <= 15)
             {
                 ChangeBackgroundColorToRed();
-                firstHalfWaves.Stop();
-                secondHalfWaves.Play();
+                GameManager.Instance.audioManager.PlayMusic("SecondPhase");
+                
                 
                 for (int i = 0; i < floatingEnemySpawnPoints.Length; i++)
                 {
@@ -64,8 +63,8 @@ public class WaveManager : MonoBehaviour
             if (currentWave == 16)
             {
                 ChangeBackgroundColorToPurple();
-                secondHalfWaves.Stop();
-                finalHalfWaves.Play();
+                GameManager.Instance.audioManager.PlayMusic("ThirdPhase");
+                
                 SpawnDragonEnemy();
                 yield break;
             }
@@ -135,7 +134,7 @@ public class WaveManager : MonoBehaviour
         Transform spawnPoint = floatingEnemySpawnPoints[spawnIndex];
         GameObject floatingEnemy = Instantiate(floatingEnemyPrefab, spawnPoint.position, spawnPoint.rotation);
         FloatingEnemy floatingEnemyScript = floatingEnemy.GetComponent<FloatingEnemy>();
-        floatingEnemyScript.OnEnemyDeath += () => HandleEnemyDeath(spawnIndex);
+        floatingEnemyScript.OnEnemyDeath += () => HandleFloatingEnemyDeath(spawnIndex);
         _activeFloatingEnemies.Add(floatingEnemyScript);
         activeEnemies++;
     }
@@ -148,12 +147,24 @@ public class WaveManager : MonoBehaviour
             return;
         }
 
+        // Clear any existing bullets at the dragon's spawn point
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(dragonSpawnPoint.position, 1f);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("Enemy"))
+            {
+                Destroy(collider.gameObject);
+            }
+        }
+
         GameObject dragonEnemy = Instantiate(dragonEnemyPrefab, dragonSpawnPoint.position, dragonSpawnPoint.rotation);
         DragonEnemy dragonEnemyScript = dragonEnemy.GetComponent<DragonEnemy>();
         dragonEnemyScript.OnEnemyDeath += HandleDragonEnemyDeath;
         activeEnemies++;
     }
 
+    
+    
     private void SpawnEnemy()
     {
         if (spawnPoints.Length == 0)
@@ -174,7 +185,7 @@ public class WaveManager : MonoBehaviour
         activeEnemies--;
     }
 
-    private void HandleEnemyDeath(int spawnIndex)
+    private void HandleFloatingEnemyDeath(int spawnIndex)
     {
         activeEnemies--;
         _activeFloatingEnemies.RemoveAll(fe => fe == null);
@@ -184,12 +195,25 @@ public class WaveManager : MonoBehaviour
     private void HandleDragonEnemyDeath()
     {
         activeEnemies--;
-
+        GameManager.Instance.isDragonDead = true;
+        
+        GameManager.Instance.DestroyAllBullets();
         ResultsScreen results = GameManager.Instance.resultsScreen;
         PlayerCurrency playerCurrency = GameManager.Instance.player.GetComponent<PlayerCurrency>();
         if (results != null)
         {
             results.ShowResults(currentWave, Time.timeSinceLevelLoad, playerCurrency.GetCurrency());
+        }
+        gameCompleted = true;
+
+        
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(dragonSpawnPoint.position, 1f);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("Enemy"))
+            {
+                Destroy(collider.gameObject);
+            }
         }
     }
 
@@ -220,11 +244,16 @@ public class WaveManager : MonoBehaviour
     {
         while (true)
         {
+            if (gameCompleted) // ---- Stop spawning if the game is completed ----
+            {
+                yield break;
+            }
+
             if (_availableFloatingEnemySpawnPoints.Count > 0 && _activeFloatingEnemies.Count < 2)
             {
                 SpawnFloatingEnemy();
             }
-            yield return new WaitForSeconds(0.5f); // ---- Checks for spawn every 1.5 seconds ----
+            yield return new WaitForSeconds(0.5f); // ---- Checks for spawn every 0.5 seconds ----
         }
     }
 }

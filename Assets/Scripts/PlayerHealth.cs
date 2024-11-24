@@ -138,6 +138,7 @@ public class PlayerHealth : MonoBehaviour
 
         isDead = true; // ---- Set the flag to indicate the player is dead ----
         spriteRenderer.color = originalColor; // ---- Reset the sprite color ----
+        
         // ---- Handle player death ----
         Debug.Log("Player Died");
 
@@ -153,10 +154,9 @@ public class PlayerHealth : MonoBehaviour
             results.ShowResults(wave, time, currency);
             Debug.Log("Results screen shown");
             
-            results.gameObject.SetActive(true); // ---- Enable the results screen ----
-            results.canvasGroup.alpha = 1; 
+            
             DisablePlayerScripts(); // ---- Disable player scripts to prevent further input ----
-            Time.timeScale = 0f; // ---- Pause the game ----
+             
         }
     }
 

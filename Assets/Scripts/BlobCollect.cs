@@ -36,7 +36,7 @@ public class BlobCollect : MonoBehaviour
              elapsedTime += Time.deltaTime;
              yield return null;
          }
-
+        GameManager.Instance.audioManager.PlaySFXWithRandomPitch("BlobPickup", 0.4f, 1.5f); // ---- Play the blob pickup sound ----
          // ---- Destroy the blob after reaching the player ----
          Destroy(gameObject);
      }

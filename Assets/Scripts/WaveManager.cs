@@ -38,10 +38,7 @@ public class WaveManager : MonoBehaviour
         StartCoroutine(StartNextWave());
 
         
-        for (int i = 0; i < floatingEnemySpawnPoints.Length; i++)
-        {
-            _availableFloatingEnemySpawnPoints.Add(i);
-        }
+        
 
         
         StartCoroutine(CheckForAvailableSpawnPoints());
@@ -53,11 +50,16 @@ public class WaveManager : MonoBehaviour
         {
             currentWave++;
             UpdateWaveText();
-            if (currentWave == 8)
+            if (currentWave == 8 && currentWave <= 15)
             {
                 ChangeBackgroundColorToRed();
                 firstHalfWaves.Stop();
                 secondHalfWaves.Play();
+                
+                for (int i = 0; i < floatingEnemySpawnPoints.Length; i++)
+                {
+                    _availableFloatingEnemySpawnPoints.Add(i);
+                }
             }
             if (currentWave == 16)
             {

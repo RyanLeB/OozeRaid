@@ -3133,7 +3133,7 @@ MonoBehaviour:
   waveText: {fileID: 2111534466}
   waveCompleteText: {fileID: 1851774259}
   backgroundImage: {fileID: 641499740}
-  currentWave: 15
+  currentWave: 0
   activeEnemies: 0
 --- !u!1 &2140469921
 GameObject:

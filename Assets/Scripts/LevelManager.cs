@@ -6,7 +6,10 @@ public class LevelManager : MonoBehaviour
 {
     // ---- Static reference to the LevelManager script ----
     public static LevelManager Instance { get; private set; }
-
+ 
+    
+    
+    
     // ---- Variables ----
     public string currentLevel => SceneManager.GetActiveScene().name;
     public List<string> LevelList { get; private set; }
@@ -14,6 +17,9 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        
+        
+        
         // ---- Add all levels to list ----
         LevelList = new List<string>();
         int sceneCount = SceneManager.sceneCountInBuildSettings;

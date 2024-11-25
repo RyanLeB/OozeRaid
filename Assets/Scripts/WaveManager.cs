@@ -206,6 +206,11 @@ public class WaveManager : MonoBehaviour
         }
         gameCompleted = true;
 
+        GameManager.Instance.player.GetComponent<PlayerHealth>().isDead = true;
+        GameManager.Instance.player.GetComponent<PlayerHealth>().ResetSpriteColor();
+        GameManager.Instance.player.GetComponent<PlayerMovement>().enabled = false;
+        GameManager.Instance.player.GetComponentInChildren<PlayerGun>().enabled = false;
+        
         
         Collider2D[] colliders = Physics2D.OverlapCircleAll(dragonSpawnPoint.position, 1f);
         foreach (Collider2D collider in colliders)

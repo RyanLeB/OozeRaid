@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
     public UIManager uIManager;
     public LevelManager levelManager;
     public AudioManager audioManager;
-
+    public LoadingScreen loadingScreen;
+    
     public static GameManager Instance { get; private set; }
     private bool IsPaused;
     private bool IsUpgrades;
@@ -16,7 +17,10 @@ public class GameManager : MonoBehaviour
     public GameObject panel;
     public ResultsScreen resultsScreen;
     public GameObject player;
-
+    
+    
+    
+    
     public bool isDragonDead = false;
     
     
@@ -39,10 +43,17 @@ public class GameManager : MonoBehaviour
         uIManager = FindObjectOfType<UIManager>();
         levelManager = FindObjectOfType<LevelManager>();
         audioManager = FindObjectOfType<AudioManager>();
+        loadingScreen = FindObjectOfType<LoadingScreen>();
+        
 
         if (uIManager == null)
         {
             Debug.LogError("UIManager is null");
+        }
+        
+        if (loadingScreen == null)
+        {
+            Debug.LogError("LoadingScreen is not assigned and could not be found in the scene.");
         }
 
         audioManager.PlayMusic("MainMenu");
@@ -173,21 +184,42 @@ public class GameManager : MonoBehaviour
     public void PlayGame()
     {
         ResetGame();
-        levelManager.LoadLevel("Testing");
-        player.SetActive(true);
-        EnablePlayerScripts();
+        LoadLevel("Testing");
+        
+        
         uIManager.gameState = UIManager.GameState.Game;
         audioManager.PlayMusic("FirstPhase");
     }
 
     public void MainMenu()
     {
-        levelManager.LoadLevel("MainMenu");
+        LoadLevel("MainMenu");
         player.SetActive(false);
         uIManager.gameState = UIManager.GameState.MainMenu;
         IsPaused = false;
     }
 
+    
+    public void LoadLevel(string levelName)
+    {
+        if (loadingScreen != null)
+        {
+            loadingScreen.LoadScene(levelName, () =>
+            {
+                if (levelName == "Testing")
+                {
+                    player.SetActive(true);
+                    EnablePlayerScripts();
+                }
+            });
+        }
+        else
+        {
+            Debug.LogError("LoadingScreen is not assigned in the GameManager.");
+        }
+    }
+    
+    
     // ---- Method to activate the panel ----
     public void ActivatePanel()
     {
@@ -227,7 +259,7 @@ public class GameManager : MonoBehaviour
     
     public void ShowUpgrades()
     {
-        levelManager.LoadLevel("Upgrades");
+        LoadLevel("Upgrades");
         resultsScreen.gameObject.SetActive(false);
         IsUpgrades = true;
         ResetGame(); // ---- Reset the game state ----

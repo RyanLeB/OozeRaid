@@ -344,6 +344,14 @@ public class DragonEnemy : MonoBehaviour
             {
                 var (damage, isCrit) = playerGun.GetDamage();
                 TakeDamage(damage, isCrit);
+                if (isCrit)
+                {
+                    GameManager.Instance.audioManager.PlaySFX("enemyCrit");
+                }
+                else
+                {
+                    GameManager.Instance.audioManager.PlaySFX("enemyHurt");
+                }
             }
 
             Vector2 pointOfImpact = collision.ClosestPoint(transform.position);
@@ -405,7 +413,7 @@ public class DragonEnemy : MonoBehaviour
         // ---- Set the flag to indicate the enemy is dead ----
         if (isDead) return;
         isDead = true;
-
+        GameManager.Instance.audioManager.PlaySFX("enemyDeath");
         Debug.Log($"Enemy {gameObject.GetInstanceID()} died.");
         if (OnEnemyDeath != null)
         {

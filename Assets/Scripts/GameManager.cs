@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public GameObject panel;
     public ResultsScreen resultsScreen;
     public GameObject player;
-    
+    public GameObject tutorialPanel;
     
     
     
@@ -181,14 +181,38 @@ public class GameManager : MonoBehaviour
         
     }
 
+    // ---- Tutorial ----
+    
+    void ShowTutorialPanel()
+    {
+        if (tutorialPanel != null)
+        {
+            tutorialPanel.SetActive(true);
+        }
+    }
+
+    public void HideTutorialPanel()
+    {
+        if (tutorialPanel != null)
+        {
+            tutorialPanel.SetActive(false);
+            StartGame(); // Start the game after hiding the panel
+        }
+    }
+    
+    
+    
     public void PlayGame()
     {
-        ResetGame();
-        LoadLevel("Testing");
-        
-        
-        uIManager.gameState = UIManager.GameState.Game;
-        audioManager.PlayMusic("FirstPhase");
+        if (PlayerPrefs.GetInt("FirstTimePlaying", 1) == 1)
+        {
+            ShowTutorialPanel();
+            PlayerPrefs.SetInt("FirstTimePlaying", 0); 
+        }
+        else
+        {
+            StartGame();
+        }
     }
 
     public void MainMenu()
@@ -217,6 +241,14 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("LoadingScreen is not assigned in the GameManager.");
         }
+    }
+    
+    void StartGame()
+    {
+        ResetGame();
+        LoadLevel("Testing");
+        uIManager.gameState = UIManager.GameState.Game;
+        audioManager.PlayMusic("FirstPhase");
     }
     
     

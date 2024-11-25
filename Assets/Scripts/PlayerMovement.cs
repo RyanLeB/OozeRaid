@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump"))
             {
                 rb.velocity = new Vector2(rb.velocity.x, jump);
+                GameManager.Instance.audioManager.PlaySFX("jump");
             }
         }
 

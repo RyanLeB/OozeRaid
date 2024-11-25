@@ -35,6 +35,8 @@ public class PlayerGun : MonoBehaviour
     [SerializeField] private Sprite recoilSprite;
     private Sprite originalSprite;
     private Transform playerTransform;
+    public GameObject superShotHUD; 
+    public Image superShotReadyImage; 
 
     // ---- Variables for the gun's sprite ----
     private SpriteRenderer spriteRenderer;
@@ -63,6 +65,11 @@ public class PlayerGun : MonoBehaviour
         {
             cooldownSlider.maxValue = abilityCooldown;
             cooldownSlider.value = abilityCooldown;
+        }
+        
+        if (playerUpgrades.isAbilityUnlocked)
+        {
+            superShotHUD.SetActive(true);
         }
     }
 
@@ -93,6 +100,16 @@ public class PlayerGun : MonoBehaviour
             }
         }
 
+        if (!isAbilityOnCooldown)
+        {
+            superShotReadyImage.fillAmount = 1;
+        }
+        else
+        {
+            superShotReadyImage.fillAmount = 0;
+        }
+        
+         
         if (playerUpgrades.isAbilityUnlocked && Input.GetKeyDown(KeyCode.E) && !isAbilityOnCooldown)
         {
             StartCoroutine(ActivateAbility());
@@ -140,7 +157,7 @@ public class PlayerGun : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = firePoint.right * bulletSpeed;
-
+        GameManager.Instance.audioManager.PlaySFX("oozeShoot");
         var (damage, isCrit) = GetDamage();
         //Debug.Log($"Bullet Damage: {damage}, IsCrit: {isCrit}");
 

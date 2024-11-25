@@ -30,6 +30,8 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        
+        GameManager.Instance.audioManager.PlaySFX("buttonHover");
         if (buttonText != null)
         {
             buttonText.color = hoverColor;
@@ -59,6 +61,7 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
     
     public void OnButtonClick()
     {
+        GameManager.Instance.audioManager.PlaySFX("buttonSelect");
         if (buttonText != null)
         {
             buttonText.color = originalColor;

@@ -200,6 +200,14 @@ public class Enemy : MonoBehaviour
                 var (damage, isCrit) = playerGun.GetDamage();
                 Debug.Log($"Received Damage: {damage}, IsCrit: {isCrit}");
                 TakeDamage(damage, isCrit);
+                if (isCrit)
+                {
+                    GameManager.Instance.audioManager.PlaySFX("enemyCrit");
+                }
+                else
+                {
+                    GameManager.Instance.audioManager.PlaySFX("enemyHurt");
+                }
             }
 
             Vector2 pointOfImpact = collision.ClosestPoint(transform.position);
@@ -253,7 +261,7 @@ public class Enemy : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-
+        GameManager.Instance.audioManager.PlaySFX("enemyDeath");
         Debug.Log($"Enemy {gameObject.GetInstanceID()} died.");
         OnEnemyDeath?.Invoke();
 

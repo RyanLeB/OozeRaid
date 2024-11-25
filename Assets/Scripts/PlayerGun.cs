@@ -14,7 +14,9 @@ public class PlayerGun : MonoBehaviour
     public float fireRate = 0.2f; // ---- Time between shots ----
     private bool isFiring = false;
     private Coroutine firingCoroutine;
-
+    private bool isTempHoldToFireEnabled = false;
+    
+    
     // ---- Crit Values ----
     public float critChance = 0.1f; // ---- Base Chance of a critical hit ----
     public float critMultiplier = 2f; // ---- Multiplier for critical hits ----
@@ -76,7 +78,9 @@ public class PlayerGun : MonoBehaviour
     void Update()
     {
         Aim();
-        if (playerUpgrades.isHoldToClickUnlocked)
+        bool canHoldToFire = playerUpgrades.isHoldToClickUnlocked || isTempHoldToFireEnabled;
+
+        if (canHoldToFire)
         {
             if (Input.GetButtonDown("Fire1") && !isFiring)
             {
@@ -108,14 +112,18 @@ public class PlayerGun : MonoBehaviour
         {
             superShotReadyImage.fillAmount = 0;
         }
-        
-         
+
+        if (!playerUpgrades.isAbilityUnlocked)
+        {
+            superShotHUD.SetActive(false);
+        }
+
         if (playerUpgrades.isAbilityUnlocked && Input.GetKeyDown(KeyCode.E) && !isAbilityOnCooldown)
         {
             StartCoroutine(ActivateAbility());
         }
 
-        // ---- Update the cooldown slider ----
+        
         if (isAbilityOnCooldown && cooldownSlider != null)
         {
             cooldownSlider.value += Time.deltaTime;
@@ -202,18 +210,30 @@ public class PlayerGun : MonoBehaviour
     }
     
     // ---- Coroutine to activate the ability ----
-    IEnumerator ActivateAbility()
+    private IEnumerator ActivateAbility()
     {
         isAbilityActive = true;
         isAbilityOnCooldown = true;
+        isTempHoldToFireEnabled = true; 
+
         if (cooldownSlider != null)
         {
             cooldownSlider.value = 0;
         }
+
         yield return new WaitForSeconds(abilityDuration);
+
         isAbilityActive = false;
+        isTempHoldToFireEnabled = false; 
+        isFiring = false; 
+        if (firingCoroutine != null)
+        {
+            StopCoroutine(firingCoroutine);
+        }
+
         yield return new WaitForSeconds(abilityCooldown - abilityDuration);
         isAbilityOnCooldown = false;
+
         if (cooldownSlider != null)
         {
             cooldownSlider.value = abilityCooldown;

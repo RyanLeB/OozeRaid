@@ -218,6 +218,7 @@ public class GameManager : MonoBehaviour
     public void MainMenu()
     {
         LoadLevel("MainMenu");
+        audioManager.PlayMusic("MainMenu");
         player.SetActive(false);
         uIManager.gameState = UIManager.GameState.MainMenu;
         IsPaused = false;

@@ -116,6 +116,7 @@ public class PlayerUpgrades : MonoBehaviour
     {
         if (CanBuyHealthUpgrade())
         {
+            GameManager.Instance.audioManager.PlaySFX("UpgradeSelect");
             int cost = CalculateUpgradeCost(healthUpgradeCost, healthUpgradesBought);
             playerCurrency.AddCurrency(-cost);
             healthUpgradesBought++;
@@ -131,6 +132,7 @@ public class PlayerUpgrades : MonoBehaviour
     {
         if (CanBuySpeedUpgrade())
         {
+            GameManager.Instance.audioManager.PlaySFX("UpgradeSelect");
             int cost = CalculateUpgradeCost(speedUpgradeCost, speedUpgradesBought);
             playerCurrency.AddCurrency(-cost);
             speedUpgradesBought++;
@@ -146,6 +148,7 @@ public class PlayerUpgrades : MonoBehaviour
     {
         if (CanBuyDamageUpgrade())
         {
+            GameManager.Instance.audioManager.PlaySFX("UpgradeSelect");
             int cost = CalculateUpgradeCost(damageUpgradeCost, damageUpgradesBought);
             playerCurrency.AddCurrency(-cost);
             damageUpgradesBought++;
@@ -173,6 +176,7 @@ public class PlayerUpgrades : MonoBehaviour
     {
         if (CanBuyHoldToClickUpgrade())
         {
+            GameManager.Instance.audioManager.PlaySFX("UpgradeSelect");
             playerCurrency.AddCurrency(-holdToClickUpgradeCost);
             isHoldToClickUnlocked = true;
             SaveData();
@@ -183,6 +187,7 @@ public class PlayerUpgrades : MonoBehaviour
     {
         if (CanBuyAbilityUpgrade())
         {
+            GameManager.Instance.audioManager.PlaySFX("UpgradeSelect");
             playerCurrency.AddCurrency(-abilityUpgradeCost);
             isAbilityUnlocked = true;
             SaveData();
@@ -200,6 +205,7 @@ public class PlayerUpgrades : MonoBehaviour
         if (CanBuyCritRateUpgrade())
         {
             int cost = CalculateUpgradeCost(critRateUpgradeCost, critRateUpgradesBought);
+            GameManager.Instance.audioManager.PlaySFX("UpgradeSelect");
             playerCurrency.AddCurrency(-cost);
             critRateUpgradesBought++;
             IncrementUpgradesBought();

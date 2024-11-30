@@ -6,6 +6,8 @@ using TMPro;
 
 public class ResultsScreen : MonoBehaviour
 {
+    // ---- Text objects to display wave, time and currency ----
+    
     public TMP_Text waveText;
     public TMP_Text timeText;
     public TMP_Text currencyText;

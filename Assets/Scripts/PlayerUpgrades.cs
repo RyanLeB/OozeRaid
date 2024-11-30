@@ -5,7 +5,7 @@ using System.IO;
 
 public class PlayerUpgrades : MonoBehaviour
 {
-    // ---- Variables to keep track of upgrades ----
+    // ---- Organized with headers to improve readability in inspector ----
     [Header("Total Upgrades")]
     public int totalUpgrades = 10;
     public int upgradesBought = 0;

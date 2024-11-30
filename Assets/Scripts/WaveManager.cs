@@ -41,8 +41,7 @@ public class WaveManager : MonoBehaviour
     }
         
 
-        
-
+    // ---- Coroutine to start the next wave ----
     private IEnumerator StartNextWave()
     {
         while (true)

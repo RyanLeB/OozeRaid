@@ -118,6 +118,9 @@ public class DragonEnemy : MonoBehaviour
         }
     }
 
+    
+    // ---- Bullet Hell type patterns ----
+    
     private IEnumerator ShootRandomScatterPattern()
     {
         int numProjectiles = 20;
@@ -155,7 +158,7 @@ public class DragonEnemy : MonoBehaviour
         Vector3 position = projectile.transform.position;
         Destroy(projectile);
 
-        float[] angles = { 0f, 90f, 180f, 270f }; // Cross angles
+        float[] angles = { 0f, 90f, 180f, 270f }; 
 
         for (int i = 0; i < angles.Length; i++)
         {
@@ -177,7 +180,7 @@ public class DragonEnemy : MonoBehaviour
         Vector3 position = projectile.transform.position;
         Destroy(projectile);
 
-        float[] angles = { 0f, 90f, 180f, 270f }; // Cross angles
+        float[] angles = { 0f, 90f, 180f, 270f }; 
 
         for (int i = 0; i < angles.Length; i++)
         {

@@ -14,6 +14,8 @@ public class BlobCollect : MonoBehaviour
         StartCoroutine(AnimateBlob());
     }
 
+    
+    // ---- Coroutine to animate the blob, gives it a magnetic effect that goes to the player ----
     public IEnumerator AnimateBlob()
     {
          Vector3 originalPosition = transform.position;
@@ -35,8 +37,7 @@ public class BlobCollect : MonoBehaviour
              transform.position = Vector3.Lerp(moveAwayPosition, playerTransform.position, elapsedTime / returnDuration);
              elapsedTime += Time.deltaTime;
              yield return null;
-         }
-        GameManager.Instance.audioManager.PlaySFXWithRandomPitch("BlobPickup", 0.4f, 1.5f); // ---- Play the blob pickup sound ----
+         } GameManager.Instance.audioManager.PlaySFXWithRandomPitch("BlobPickup", 0.4f, 1.5f); // ---- Play the blob pickup sound ----
          // ---- Destroy the blob after reaching the player ----
          Destroy(gameObject);
      }

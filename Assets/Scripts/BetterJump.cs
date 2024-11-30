@@ -8,8 +8,6 @@ public class BetterJump : MonoBehaviour
     // to do this it simply adds a fall multiplier and a low jump mechanic ----
 
     
-    
-    
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
 

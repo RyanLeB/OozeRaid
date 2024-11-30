@@ -5,6 +5,8 @@ using TMPro;
 
 public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    // ---- Used for a pop / enlarge effect on the button text ----
+    
     public Color hoverColor = Color.green; // ---- Color when hovered over ----
     public float hoverScale = 1.2f; // ---- Scale factor when hovered over ----
     public float transitionDuration = 0.2f; // ---- Duration of the scale transition ----
@@ -16,6 +18,8 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
 
     void Start()
     {
+        // ---- Sets the original colors to the button text ----
+        
         buttonText = GetComponentInChildren<TMP_Text>();
         if (buttonText != null)
         {

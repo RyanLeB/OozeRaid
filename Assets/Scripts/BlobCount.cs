@@ -4,16 +4,16 @@ using TMPro;
 
 public class BlobCount : MonoBehaviour
 {
-    private PlayerCurrency playerCurrency; // ---- Reference to the PlayerCurrency script ----
-    public TMP_Text blobCountText; // ---- Reference to the UI Text element for displaying the blob count ----
-    public TMP_Text blobCollectedText; // ---- Reference to the UI Text element for displaying the "+ number of blobs" message ----
+    private PlayerCurrency playerCurrency; // ---- PlayerCurrency script ----
+    public TMP_Text blobCountText; // ---- UI Text element for displaying the blob count ----
+    public TMP_Text blobCollectedText; // ---- UI Text element for displaying the "+ number of blobs" message ----
 
     void Start()
     {
         GameObject player = GameManager.Instance.player; // ---- Access the player object through the GameManager singleton ----
         if (player != null)
         {
-            playerCurrency = player.GetComponent<PlayerCurrency>(); // ---- Get the PlayerCurrency component ----
+            playerCurrency = player.GetComponent<PlayerCurrency>(); 
         }
 
         if (playerCurrency == null)
@@ -33,8 +33,10 @@ public class BlobCount : MonoBehaviour
         }
     }
 
+
     public void OnBlobCollected(int amount)
     {
+        // ---- Add the collected blob amount to the player's currency ----
         if (playerCurrency != null)
         {
             playerCurrency.AddCurrency(amount);
@@ -45,6 +47,7 @@ public class BlobCount : MonoBehaviour
 
     void UpdateBlobCount()
     {
+        // ---- Update the UI text to display the current blob count ----
         if (playerCurrency != null)
         {
             blobCountText.text = "" + playerCurrency.GetCurrency();

@@ -4,18 +4,28 @@ using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
+    // ---- References to the audio sources ----
+    
     public AudioSource musicSource;
     public AudioSource sfxSource;
 
+    // ---- Lists of music and SFX clips ----
+    
     public List<AudioClip> musicClips;
     public List<AudioClip> sfxClips;
 
+    // ---- Sliders for music and SFX volume ----
+    
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
+    // ---- Dictionaries to store the music and SFX clips ----
+    
     private Dictionary<string, AudioClip> musicDictionary;
     private Dictionary<string, AudioClip> sfxDictionary;
 
+    // ---- Keys for PlayerPrefs ----
+    
     private const string MusicVolumeKey = "MusicVolume";
     private const string SFXVolumeKey = "SFXVolume";
 
@@ -31,13 +41,15 @@ public class AudioManager : MonoBehaviour
         float savedMusicVolume = PlayerPrefs.GetFloat(MusicVolumeKey, 1f);
         float savedSFXVolume = PlayerPrefs.GetFloat(SFXVolumeKey, 1f);
 
+        // ---- Set the MUSIC sliders to the saved volume values ----
         if (musicVolumeSlider != null)
         {
             musicVolumeSlider.value = savedMusicVolume;
             musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
         }
         SetMusicVolume(savedMusicVolume);
-
+        
+        // ---- Set the SOUNDFX sliders to the saved volume values ----
         if (sfxVolumeSlider != null)
         {
             sfxVolumeSlider.value = savedSFXVolume;
@@ -48,6 +60,8 @@ public class AudioManager : MonoBehaviour
 
     private void InitializeDictionaries()
     {
+        // ---- Initialize the music and SFX dictionaries ----
+        
         musicDictionary = new Dictionary<string, AudioClip>();
         foreach (var clip in musicClips)
         {
@@ -63,6 +77,8 @@ public class AudioManager : MonoBehaviour
 
     public void SetMusicVolume(float volume)
     {
+        // ---- Set the volume of the music source ----
+        
         if (musicSource != null)
         {
             musicSource.volume = volume;
@@ -71,6 +87,8 @@ public class AudioManager : MonoBehaviour
 
     public void SetSFXVolume(float volume)
     {
+        // ---- Set the volume of the SFX source ----
+        
         if (sfxSource != null)
         {
             sfxSource.volume = volume;
@@ -79,12 +97,14 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(string name)
     {
+        // ---- Checks if dictionary is null ----
         if (musicDictionary == null)
         {
             Debug.LogError("Music dictionary is not initialized.");
             return;
         }
 
+        // ---- Checks if the music clip exists in the dictionary ----
         if (musicDictionary.TryGetValue(name, out var clip))
         {
             Debug.Log($"Playing music: {name}");
@@ -99,6 +119,14 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(string name)
     {
+        // ---- Checks if dictionary is null ----
+        if (sfxDictionary == null)
+        {
+            Debug.LogError("SFX dictionary is not initialized.");
+            return;
+        }
+        
+        // ---- Checks if the SFX clip exists in the dictionary ----
         if (sfxDictionary.TryGetValue(name, out var clip))
         {
             Debug.Log($"Playing SFX: {name}");
@@ -110,6 +138,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    // ---- Random pitch method to play SFX like collecting currency ----
     public void PlaySFXWithRandomPitch(string name, float minPitch, float maxPitch)
     {
         if (sfxDictionary.TryGetValue(name, out var clip))

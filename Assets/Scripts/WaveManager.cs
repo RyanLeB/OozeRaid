@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using UnityEngine.Serialization;
 
 public class WaveManager : MonoBehaviour
@@ -26,6 +27,7 @@ public class WaveManager : MonoBehaviour
     public TMP_Text waveText;
     public TMP_Text waveCompleteText;
     public SpriteRenderer backgroundImage;
+    public Slider waveProgressSlider;
 
 
     public int currentWave = 0;
@@ -34,6 +36,8 @@ public class WaveManager : MonoBehaviour
     void Start()
     {
         waveCompleteText.gameObject.SetActive(false);
+        waveProgressSlider.maxValue = 15; 
+        waveProgressSlider.value = 1; 
         StartCoroutine(StartNextWave());
 
         StartCoroutine(CheckForAvailableSpawnPoints());
@@ -81,6 +85,11 @@ public class WaveManager : MonoBehaviour
             waveText.text = "Wave: " + currentWave + " / " + "15";
         }
 
+        if (waveProgressSlider != null)
+        {
+            StartCoroutine(AnimateSlider(waveProgressSlider.value, currentWave));
+        }
+        
         if (currentWave == 16)
         {
             waveText.text = "Wave: " + " ???";
@@ -260,4 +269,22 @@ public class WaveManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f); // ---- Checks for spawn every 0.5 seconds ----
         }
     }
+    
+    
+    private IEnumerator AnimateSlider(float startValue, float endValue)
+    {
+        float duration = 1f; 
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            waveProgressSlider.value = Mathf.Lerp(startValue, endValue, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        waveProgressSlider.value = endValue; 
+    }
+    
+    
 }

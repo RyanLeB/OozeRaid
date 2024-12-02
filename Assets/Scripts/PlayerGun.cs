@@ -257,6 +257,15 @@ public class PlayerGun : MonoBehaviour
         }
     }
     
+    public void StopShooting()
+    {
+        
+        isFiring = false;
+        if (firingCoroutine != null)
+        {
+            StopCoroutine(firingCoroutine);
+        }
+    }
     
     public void IncreaseDamage(int amount)
     {

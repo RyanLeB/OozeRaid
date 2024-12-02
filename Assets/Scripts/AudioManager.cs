@@ -107,7 +107,7 @@ public class AudioManager : MonoBehaviour
         // ---- Checks if the music clip exists in the dictionary ----
         if (musicDictionary.TryGetValue(name, out var clip))
         {
-            Debug.Log($"Playing music: {name}");
+            //Debug.Log($"Playing music: {name}");
             musicSource.clip = clip;
             musicSource.Play();
         }
@@ -129,7 +129,7 @@ public class AudioManager : MonoBehaviour
         // ---- Checks if the SFX clip exists in the dictionary ----
         if (sfxDictionary.TryGetValue(name, out var clip))
         {
-            Debug.Log($"Playing SFX: {name}");
+            //Debug.Log($"Playing SFX: {name}");
             sfxSource.PlayOneShot(clip);
         }
         else
@@ -144,7 +144,7 @@ public class AudioManager : MonoBehaviour
         if (sfxDictionary.TryGetValue(name, out var clip))
         {
             float randomPitch = Random.Range(minPitch, maxPitch);
-            Debug.Log($"Playing SFX with random pitch: {name}, Pitch: {randomPitch}");
+            //Debug.Log($"Playing SFX with random pitch: {name}, Pitch: {randomPitch}");
             sfxSource.pitch = randomPitch;
             sfxSource.PlayOneShot(clip);
             sfxSource.pitch = 1f;

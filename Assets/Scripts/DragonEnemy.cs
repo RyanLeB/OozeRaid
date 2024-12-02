@@ -69,7 +69,7 @@ public class DragonEnemy : MonoBehaviour
             originalSprite = spriteRenderer.sprite; // ---- Initialize originalSprite ----
         }
 
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
+        //Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
 
         // ---- Initialize the health slider ----
         if (healthSlider != null)
@@ -342,7 +342,7 @@ public class DragonEnemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            Debug.Log($"Enemy {gameObject.GetInstanceID()} hit by bullet.");
+            //Debug.Log($"Enemy {gameObject.GetInstanceID()} hit by bullet.");
             if (playerGun != null)
             {
                 var (damage, isCrit) = playerGun.GetDamage();
@@ -372,10 +372,10 @@ public class DragonEnemy : MonoBehaviour
 
     public void TakeDamage(int damage, bool isCrit)
     {
-        Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
+        //Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
 
         currentHealth -= damage;
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
+        //Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
 
         // ---- Update the health slider ----
         if (healthSlider != null)

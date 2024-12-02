@@ -62,7 +62,7 @@ public class FloatingEnemy : MonoBehaviour
             originalSprite = spriteRenderer.sprite; // ---- Initialize originalSprite ----
         }
 
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
+        //Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
 
         // ---- Start the shooting coroutine ----
         StartCoroutine(ShootAtPlayer());
@@ -93,7 +93,7 @@ public class FloatingEnemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            Debug.Log($"Enemy {gameObject.GetInstanceID()} hit by bullet.");
+            //Debug.Log($"Enemy {gameObject.GetInstanceID()} hit by bullet.");
             if (playerGun != null)
             {
                 var (damage, isCrit) = playerGun.GetDamage();
@@ -124,10 +124,10 @@ public class FloatingEnemy : MonoBehaviour
 
     public void TakeDamage(int damage, bool isCrit)
     {
-        Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
+        //Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
 
         currentHealth -= damage;
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
+        //Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
 
         ShowFloatingDamage(damage, transform.position, isCrit);
 
@@ -164,10 +164,10 @@ public class FloatingEnemy : MonoBehaviour
         isDead = true;
         GameManager.Instance.audioManager.PlaySFX("enemyDeath");
         
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} died.");
+        //Debug.Log($"Enemy {gameObject.GetInstanceID()} died.");
         if (OnEnemyDeath != null)
         {
-            Debug.Log($"Invoking OnEnemyDeath event for enemy {gameObject.GetInstanceID()}.");
+            //Debug.Log($"Invoking OnEnemyDeath event for enemy {gameObject.GetInstanceID()}.");
             OnEnemyDeath.Invoke();
         }
 

@@ -73,7 +73,7 @@ public class Enemy : MonoBehaviour
             originalSprite = spriteRenderer.sprite; // ---- Initialize originalSprite ----
         }
 
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
+        //Debug.Log($"Enemy {gameObject.GetInstanceID()} script started.");
     }
 
     private void Update()
@@ -198,7 +198,7 @@ public class Enemy : MonoBehaviour
             if (playerGun != null)
             {
                 var (damage, isCrit) = playerGun.GetDamage();
-                Debug.Log($"Received Damage: {damage}, IsCrit: {isCrit}");
+                //Debug.Log($"Received Damage: {damage}, IsCrit: {isCrit}");
                 TakeDamage(damage, isCrit);
                 if (isCrit)
                 {
@@ -225,10 +225,10 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage, bool isCrit)
     {
-        Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
+        //Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
 
         currentHealth -= damage;
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
+        //Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
 
         ShowFloatingDamage(damage, transform.position, isCrit);
 
@@ -262,7 +262,7 @@ public class Enemy : MonoBehaviour
         if (isDead) return;
         isDead = true;
         GameManager.Instance.audioManager.PlaySFX("enemyDeath");
-        Debug.Log($"Enemy {gameObject.GetInstanceID()} died.");
+        //Debug.Log($"Enemy {gameObject.GetInstanceID()} died.");
         OnEnemyDeath?.Invoke();
 
         // ---- Instantiate a blob at the enemy's position ----

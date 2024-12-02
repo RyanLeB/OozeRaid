@@ -15,7 +15,8 @@ public class WaveManager : MonoBehaviour
     public Transform[] spawnPoints;
     public Transform[] floatingEnemySpawnPoints;
     public Transform dragonSpawnPoint;
-
+    private bool isDragonFightStarted = false;
+    
     public float timeBetweenWaves = 2f;
     public int enemiesPerWave = 5;
     private int _spawnIndex = 0;
@@ -28,7 +29,7 @@ public class WaveManager : MonoBehaviour
     public TMP_Text waveCompleteText;
     public SpriteRenderer backgroundImage;
     public Slider waveProgressSlider;
-
+    public Image waveProgressFill;
 
     public int currentWave = 0;
     public int activeEnemies = 0;
@@ -54,14 +55,15 @@ public class WaveManager : MonoBehaviour
             UpdateWaveText();
             if (currentWave == 8 && currentWave <= 15)
             {
-                ChangeBackgroundColorToRed();
                 GameManager.Instance.audioManager.PlayMusic("SecondPhase");
-                
-                
+
+
                 for (int i = 0; i < floatingEnemySpawnPoints.Length; i++)
                 {
                     _availableFloatingEnemySpawnPoints.Add(i);
                 }
+                
+                StartCoroutine(SmoothTransitionToRed());
             }
             if (currentWave == 16)
             {
@@ -118,6 +120,8 @@ public class WaveManager : MonoBehaviour
         int enemiesToSpawn = enemiesPerWave * waveNumber;
         activeEnemies = enemiesToSpawn;
 
+        float spawnInterval = Mathf.Max(0.1f, 0.5f - (waveNumber * 0.02f)); 
+
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             SpawnEnemy();
@@ -125,15 +129,15 @@ public class WaveManager : MonoBehaviour
             {
                 SpawnFloatingEnemy();
             }
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 
     private void SpawnFloatingEnemy()
     {
-        if (_availableFloatingEnemySpawnPoints.Count == 0)
+        if (isDragonFightStarted || _availableFloatingEnemySpawnPoints.Count == 0)
         {
-            return;
+            return; // ---- Do not spawn floating enemies if the dragon fight has started or there are no available spawn points ----
         }
 
         int spawnIndex = _availableFloatingEnemySpawnPoints[Random.Range(0, _availableFloatingEnemySpawnPoints.Count)];
@@ -144,7 +148,6 @@ public class WaveManager : MonoBehaviour
         FloatingEnemy floatingEnemyScript = floatingEnemy.GetComponent<FloatingEnemy>();
         floatingEnemyScript.OnEnemyDeath += () => HandleFloatingEnemyDeath(spawnIndex);
         _activeFloatingEnemies.Add(floatingEnemyScript);
-        activeEnemies++;
     }
 
     private void SpawnDragonEnemy()
@@ -155,7 +158,15 @@ public class WaveManager : MonoBehaviour
             return;
         }
 
-        // Clear any existing bullets at the dragon's spawn point
+        foreach (var floatingEnemy in _activeFloatingEnemies)
+        {
+            if (floatingEnemy != null)
+            {
+                Destroy(floatingEnemy.gameObject);
+            }
+        }
+        _activeFloatingEnemies.Clear();
+        
         Collider2D[] colliders = Physics2D.OverlapCircleAll(dragonSpawnPoint.position, 1f);
         foreach (Collider2D collider in colliders)
         {
@@ -169,6 +180,7 @@ public class WaveManager : MonoBehaviour
         DragonEnemy dragonEnemyScript = dragonEnemy.GetComponent<DragonEnemy>();
         dragonEnemyScript.OnEnemyDeath += HandleDragonEnemyDeath;
         activeEnemies++;
+        isDragonFightStarted = true;
     }
 
     
@@ -250,7 +262,7 @@ public class WaveManager : MonoBehaviour
     private IEnumerator MakeSpawnPointAvailable(int spawnIndex, float delay)
     {
         yield return new WaitForSeconds(delay);
-        _availableFloatingEnemySpawnPoints.Add(spawnIndex); 
+        _availableFloatingEnemySpawnPoints.Add(spawnIndex);
     }
     
     private IEnumerator CheckForAvailableSpawnPoints()
@@ -271,10 +283,33 @@ public class WaveManager : MonoBehaviour
     }
     
     
+    private IEnumerator SmoothTransitionToRed()
+    {
+        float transitionDuration = 1f;
+        float elapsedTime = 0f;
+        Color initialColor = backgroundImage.color;
+        Color targetColor = Color.red;
+
+        while (elapsedTime < transitionDuration)
+        {
+            backgroundImage.color = Color.Lerp(initialColor, targetColor, elapsedTime / transitionDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        backgroundImage.color = targetColor;
+    }
+    
+    
     private IEnumerator AnimateSlider(float startValue, float endValue)
     {
-        float duration = 1f; 
+        float duration = 1f;
         float elapsedTime = 0f;
+
+        
+        Color fillColor = waveProgressFill.color;
+        fillColor.a = 1f;
+        waveProgressFill.color = fillColor;
 
         while (elapsedTime < duration)
         {
@@ -283,7 +318,11 @@ public class WaveManager : MonoBehaviour
             yield return null;
         }
 
-        waveProgressSlider.value = endValue; 
+        waveProgressSlider.value = endValue;
+
+        
+        fillColor.a = 0.5f;
+        waveProgressFill.color = fillColor;
     }
     
     

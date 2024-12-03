@@ -26,7 +26,6 @@ public class Enemy : MonoBehaviour
     // ---- Floating Damage Numbers ----
     [SerializeField] private GameObject floatingDamageNumberPrefab;
     
-    
     // ---- Event for enemy death ----
     public delegate void EnemyDeathHandler();
     public event EnemyDeathHandler OnEnemyDeath;
@@ -267,6 +266,8 @@ public class Enemy : MonoBehaviour
 
         // ---- Instantiate a blob at the enemy's position ----
         Instantiate(blobPrefab, transform.position, Quaternion.identity);
+        
+        
 
         Destroy(gameObject);
     }

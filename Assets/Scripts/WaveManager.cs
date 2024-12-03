@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.Serialization;
+using DG.Tweening;
+
 
 public class WaveManager : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class WaveManager : MonoBehaviour
     private List<FloatingEnemy> _activeFloatingEnemies = new List<FloatingEnemy>();
     public GameObject floatingEnemyPrefab;
     public GameObject dragonEnemyPrefab;
-
+    public GameObject explosionPrefab;
+    
+    
     public Transform[] spawnPoints;
     public Transform[] floatingEnemySpawnPoints;
     public Transform dragonSpawnPoint;
@@ -212,12 +215,25 @@ public class WaveManager : MonoBehaviour
         StartCoroutine(MakeSpawnPointAvailable(spawnIndex, 2f)); // ---- Make the spawn point available after 2 seconds ----
     }
 
+    
     private void HandleDragonEnemyDeath()
     {
         activeEnemies--;
         GameManager.Instance.isDragonDead = true;
-        
+
         GameManager.Instance.DestroyAllBullets();
+        StartCoroutine(TriggerCutsceneAndShowResults());
+    }
+    
+    private IEnumerator TriggerCutsceneAndShowResults()
+    {
+        // ---- Trigger particle effects ----
+        StartCoroutine(TriggerMultipleExplosions());
+
+        // ---- Wait for the cutscene duration ----
+        yield return new WaitForSeconds(5f);
+
+        // ---- Show results screen ----
         ResultsScreen results = GameManager.Instance.resultsScreen;
         PlayerCurrency playerCurrency = GameManager.Instance.player.GetComponent<PlayerCurrency>();
         if (results != null)
@@ -230,8 +246,7 @@ public class WaveManager : MonoBehaviour
         GameManager.Instance.player.GetComponent<PlayerHealth>().ResetSpriteColor();
         GameManager.Instance.player.GetComponent<PlayerMovement>().enabled = false;
         GameManager.Instance.player.GetComponentInChildren<PlayerGun>().enabled = false;
-        
-        
+
         Collider2D[] colliders = Physics2D.OverlapCircleAll(dragonSpawnPoint.position, 1f);
         foreach (Collider2D collider in colliders)
         {
@@ -242,6 +257,81 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    private void TriggerExplosiveEffects(List<Vector3> positions)
+    {
+        foreach (var position in positions)
+        {
+            GameObject explosionEffect = Instantiate(explosionPrefab, position, Quaternion.identity);
+            ParticleSystem particleSystem = explosionEffect.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                particleSystem.Play();
+                GameManager.Instance.audioManager.PlaySFX("enemyDeath");
+            }
+
+            Destroy(explosionEffect, particleSystem.main.duration);
+        }
+    }
+    
+    private IEnumerator TriggerMultipleExplosions()
+    {
+        List<Vector3> firstExplosionPositions = new List<Vector3>
+        {
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 0),
+            new Vector3(-1, -1, 0)
+        };
+
+        List<Vector3> secondExplosionPositions = new List<Vector3>
+        {
+            new Vector3(2, 2, 0),
+            new Vector3(-2, -2, 0),
+            new Vector3(3, 3, 0)
+        };
+
+        List<Vector3> thirdExplosionPositions = new List<Vector3>
+        {
+            new Vector3(1, 1, 0),
+            new Vector3(-3, -3, 0),
+            new Vector3(6, 3, 0)
+        };
+        
+        
+        TriggerExplosiveEffects(firstExplosionPositions);
+        yield return new WaitForSeconds(0.5f); 
+
+        
+        TriggerExplosiveEffects(secondExplosionPositions);
+        yield return new WaitForSeconds(0.5f); 
+
+        
+        TriggerExplosiveEffects(firstExplosionPositions);
+        yield return new WaitForSeconds(0.5f); 
+        
+        TriggerExplosiveEffects(secondExplosionPositions);
+        yield return new WaitForSeconds(0.5f); 
+        
+        TriggerExplosiveEffects(thirdExplosionPositions);
+        yield return new WaitForSeconds(0.5f);
+        
+        TriggerExplosiveEffects(secondExplosionPositions);
+        yield return new WaitForSeconds(0.5f); 
+        
+        
+        TriggerExplosiveEffects(firstExplosionPositions);
+        yield return new WaitForSeconds(0.5f); 
+        
+        
+        TriggerExplosiveEffects(thirdExplosionPositions);
+        yield return new WaitForSeconds(0.1f);
+        TriggerExplosiveEffects(firstExplosionPositions);
+        yield return new WaitForSeconds(0.1f);
+        TriggerExplosiveEffects(secondExplosionPositions);
+        yield return new WaitForSeconds(0.5f);
+
+    }
+    
+    
     private IEnumerator CheckWaveComplete()
     {
         while (activeEnemies > 0)
@@ -253,8 +343,25 @@ public class WaveManager : MonoBehaviour
         {
             waveCompleteText.gameObject.SetActive(true);
             waveCompleteText.text = "Wave " + currentWave + " Complete!";
-            yield return new WaitForSeconds(2f);
-            waveCompleteText.gameObject.SetActive(false);
+
+            GameManager.Instance.audioManager.PlaySFX("waveComplete");
+            
+            // ---- Reset the text scale and alpha ----
+            waveCompleteText.transform.localScale = Vector3.zero;
+            waveCompleteText.DOFade(0, 0);
+
+            // ---- Animate the text scale and alpha with a wave effect ----
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(waveCompleteText.transform.DOScale(Vector3.one * 3, 0.5f).SetEase(Ease.OutBounce));
+            sequence.Join(waveCompleteText.DOFade(1, 0.5f));
+            sequence.AppendInterval(1.5f);
+            sequence.Append(waveCompleteText.DOFade(0, 0.5f));
+            sequence.OnComplete(() => waveCompleteText.gameObject.SetActive(false));
+
+            // ---- Add wave effect ----
+            waveCompleteText.transform.DOShakePosition(1f, new Vector3(0, 10, 0), 10, 90, false, true);
+
+            yield return sequence.WaitForCompletion();
         }
     }
 

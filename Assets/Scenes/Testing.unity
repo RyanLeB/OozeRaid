@@ -5114,6 +5114,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 8082251529833164730, guid: 6ccb4cb8a8c39524da96a61100367c20, type: 3}
   floatingEnemyPrefab: {fileID: 8082251529833164730, guid: a1bd55eae68b4a04c8b4030e4893e480, type: 3}
   dragonEnemyPrefab: {fileID: 8082251529833164730, guid: 293f56380c6f5b447815e56d88bd35a1, type: 3}
+  explosionPrefab: {fileID: 5425811094396048835, guid: fcedaaaa360863947bf76ffc4645ce3a, type: 3}
   spawnPoints:
   - {fileID: 353850664}
   - {fileID: 1593490169}

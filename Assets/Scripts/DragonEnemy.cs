@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class DragonEnemy : MonoBehaviour
 {
@@ -12,6 +13,12 @@ public class DragonEnemy : MonoBehaviour
     public int maxHealth = 5000;
     private int currentHealth;
 
+    // ---- Variables for second phase ----
+    private bool isSecondPhase = false;
+    public float secondPhaseShootInterval = 1f; 
+    public int secondPhaseHealth = 20000;
+    
+    
     // ---- Variables for player references and enemy state ----
     private Transform playerTransform;
     private PlayerHealth playerHealth;
@@ -86,11 +93,14 @@ public class DragonEnemy : MonoBehaviour
 
     private IEnumerator ShootAtPlayer()
     {
+        float initialShootInterval = shootInterval;
+        float minShootInterval = 0.1f; // ---- Minimum interval between shots ----
+        float intervalDecreaseRate = 0.01f; // ---- Rate at which the interval decreases ----
+
         while (true)
         {
-            
             yield return new WaitForSeconds(shootInterval);
-            int pattern = Random.Range(0, 6); // ---- Randomly select a shooting pattern ----
+            int pattern = Random.Range(0, 6); // ---- Randomly selects a shooting pattern ----
             switch (pattern)
             {
                 case 0:
@@ -111,10 +121,11 @@ public class DragonEnemy : MonoBehaviour
                 case 5:
                     StartCoroutine(ShootRandomScatterPattern());
                     break;
-                
             }
             yield return new WaitForSeconds(0.1f);
-            
+
+            // ---- Decreases the shoot interval over time ----
+            shootInterval = Mathf.Max(minShootInterval, shootInterval - intervalDecreaseRate);
         }
     }
 
@@ -300,6 +311,10 @@ public class DragonEnemy : MonoBehaviour
     private IEnumerator ChangeColorOverTime(GameObject projectile)
     {
         SpriteRenderer sr = projectile.GetComponent<SpriteRenderer>();
+        if (sr == null)
+        {
+            yield break; // ---- Exit the coroutine if the SpriteRenderer is null, this helps with errors ----
+        }
         float duration = 1f;
         float elapsedTime = 0f;
         Color originalColor = sr.color;
@@ -307,11 +322,20 @@ public class DragonEnemy : MonoBehaviour
 
         while (elapsedTime < duration)
         {
+            
+            if (sr == null)
+            {
+                yield break; 
+            }
+            
             sr.color = Color.Lerp(originalColor, targetColor, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        sr.color = targetColor;
+        if (sr != null)
+        {
+            sr.color = targetColor;
+        }
     }
     
     private IEnumerator ShootZigzagPattern()
@@ -388,10 +412,39 @@ public class DragonEnemy : MonoBehaviour
         StartCoroutine(FlashWhite());
         if (currentHealth <= 0 && !isDead)
         {
-            Die();
+            if (!isSecondPhase)
+            {
+                EnterSecondPhase();
+                GameManager.Instance.audioManager.PlaySFX("dragonSpawn");
+            }
+            else
+            {
+                Die();
+            }
         }
     }
 
+    
+    private void EnterSecondPhase()
+    {
+        isSecondPhase = true;
+        
+        Camera.main.DOShakePosition(1f, new Vector3(1f, 1f, 0), 10, 90f, false, ShakeRandomnessMode.Full);
+        
+        currentHealth = secondPhaseHealth;
+        shootInterval = secondPhaseShootInterval;
+        spriteRenderer.color = Color.blue;
+        
+
+        
+        if (healthSlider != null)
+        {
+            healthSlider.maxValue = secondPhaseHealth;
+            healthSlider.value = currentHealth;
+        }
+    }
+    
+    
     
     public void ShowFloatingDamage(int damage, Vector3 position, bool isCrit)
     {

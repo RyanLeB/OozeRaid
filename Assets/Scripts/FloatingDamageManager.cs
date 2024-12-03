@@ -22,7 +22,7 @@ public class FloatingDamageManager : MonoBehaviour
 
     public void ShowFloatingDamage(int damage, Vector3 position, bool isCrit)
     {
-        Debug.Log($"ShowFloatingDamage called with damage: {damage}, position: {position}, isCrit: {isCrit}");
+        //Debug.Log($"ShowFloatingDamage called with damage: {damage}, position: {position}, isCrit: {isCrit}");
 
         if (floatingDamageNumberPrefab == null)
         {

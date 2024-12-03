@@ -652,6 +652,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 4125672754926652354, guid: 63204891026e4da4dae4cf376371d312, type: 3}
   shootInterval: 3
   maxHealth: 25000
+  secondPhaseShootInterval: 2
+  secondPhaseHealth: 20000
   flashDuration: 0.1
   floatingDamageNumberPrefab: {fileID: 7948968451385930361, guid: 3025ff5d7c1590d40b93720ee2821a25, type: 3}
   impactEffectPrefab: {fileID: 903128982715103230, guid: fb515ea5f72929b4d8d29f9f42a46d9c, type: 3}

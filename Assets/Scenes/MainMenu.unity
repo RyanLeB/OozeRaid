@@ -19900,7 +19900,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 92.8, y: -57}
+  m_AnchoredPosition: {x: 84.105, y: -57.3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1466839698
@@ -22253,7 +22253,7 @@ MonoBehaviour:
     are automatically collected
 
 
-    - Have fun'
+    - Have some fun!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 848abc34f1d18614fa45519440f99eff, type: 2}
   m_sharedMaterial: {fileID: -6951738235358541021, guid: 848abc34f1d18614fa45519440f99eff, type: 2}
@@ -26329,7 +26329,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: = BLOBS
+  m_text: = CURRENCY
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 848abc34f1d18614fa45519440f99eff, type: 2}
   m_sharedMaterial: {fileID: -6951738235358541021, guid: 848abc34f1d18614fa45519440f99eff, type: 2}
@@ -26950,7 +26950,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fed1aed2c96f8834a9719e97d234ea5d, type: 3}
   - {fileID: 8300000, guid: 44952960be8a6564b80e86ea4222ad94, type: 3}
   - {fileID: 8300000, guid: 83f31cccfa3e962448d63a6f40cd05ee, type: 3}
-  - {fileID: 8300000, guid: 99233b12436c0fb4b9c8e1e93f6758a5, type: 3}
+  - {fileID: 8300000, guid: 4cc5f2f93c231514987ce73b0148aa49, type: 3}
   - {fileID: 8300000, guid: e4b07d45a17c8044483231526f2557f9, type: 3}
   musicVolumeSlider: {fileID: 0}
   sfxVolumeSlider: {fileID: 0}

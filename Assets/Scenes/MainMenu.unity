@@ -2440,6 +2440,18 @@ MonoBehaviour:
           m_StringArgument: Testing
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 170442707}
+        m_TargetAssemblyTypeName: ButtonHoverTextEffect, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &170442709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15205,6 +15217,18 @@ MonoBehaviour:
           m_StringArgument: MainMenu
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 956704312}
+        m_TargetAssemblyTypeName: ButtonHoverTextEffect, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &956704314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27257,6 +27281,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 44c02a10a8bfb3844937f492a789cfd1, type: 3}
   - {fileID: 8300000, guid: da5b55762ec0a2a40911c469e513b395, type: 3}
   - {fileID: 8300000, guid: ea340701bf39c444e9d35b9ec691896b, type: 3}
+  - {fileID: 8300000, guid: 4799a17aab023794b826aa7d93cfb267, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: 7f8a42d9f5a61d940b238cc866ac076c, type: 3}
   - {fileID: 8300000, guid: d06b71a0cc15a9d458e859bbde1d8295, type: 3}
@@ -27271,6 +27296,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4cc5f2f93c231514987ce73b0148aa49, type: 3}
   - {fileID: 8300000, guid: e4b07d45a17c8044483231526f2557f9, type: 3}
   - {fileID: 8300000, guid: 7c31cedb51bb32f4db889b899c851c4d, type: 3}
+  - {fileID: 8300000, guid: e0bc9898551e21948bee81768d8c184b, type: 3}
+  - {fileID: 8300000, guid: a9bc1add61c27d74aa2ccee518d915f0, type: 3}
+  - {fileID: 8300000, guid: 46e7bc5aa365a05498bb3db705a0e274, type: 3}
   musicVolumeSlider: {fileID: 0}
   sfxVolumeSlider: {fileID: 0}
 --- !u!1 &2025019160

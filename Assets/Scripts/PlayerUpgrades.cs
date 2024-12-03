@@ -94,7 +94,7 @@ public class PlayerUpgrades : MonoBehaviour
         {
             return Mathf.RoundToInt(baseCost * discountFactor);
         }
-        return Mathf.RoundToInt(baseCost * Mathf.Pow(1.5f, currentTier));
+        return Mathf.RoundToInt(baseCost * Mathf.Pow(2.0f, currentTier));
     }
     
     // ---- Check if the player can buy an upgrade ----
@@ -362,7 +362,7 @@ public class PlayerUpgrades : MonoBehaviour
     
     
     // ---- Apply the upgrades to the player ----
-    private void ApplyUpgrades()
+    public void ApplyUpgrades()
     {
         PlayerHealth playerHealth = GetComponent<PlayerHealth>();
         PlayerMovement playerMovement = GetComponent<PlayerMovement>();
@@ -407,14 +407,17 @@ public class PlayerUpgrades : MonoBehaviour
         // ---- Clear PlayerPrefs ----
         PlayerPrefs.DeleteAll();
 
-        // ---- Save default data ----
+        // ---- Reload default player components ----
+        GameManager.Instance.ReloadPlayerComponents();
+        
+        
+        // ---- Save & Load default data ----
         SaveData();
+        LoadData();
 
-        // ---- Apply upgrades and update UI ----
-        ApplyUpgrades();
-        UpdateUpgradeTexts();
-        UpdateUpgradeImages();
-        UpdateUpgradePrices();
+        
+        
+        
     }
     
     

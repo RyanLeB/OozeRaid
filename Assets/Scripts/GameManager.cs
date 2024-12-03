@@ -147,6 +147,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ReloadPlayerComponents()
+    {
+        PlayerUpgrades playerUpgrades = FindObjectOfType<PlayerUpgrades>();
+        if (playerUpgrades != null)
+        {
+            playerUpgrades.ApplyUpgrades();
+            playerUpgrades.UpdateUpgradeTexts();
+            playerUpgrades.UpdateUpgradeImages();
+            playerUpgrades.UpdateUpgradePrices();
+        }
+
+        PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.ResetHealth();
+        }
+
+        PlayerMovement playerMovement = FindObjectOfType<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.ResetSpeed();
+        }
+
+        PlayerGun playerGun = FindObjectOfType<PlayerGun>();
+        if (playerGun != null)
+        {
+            playerGun.ResetDamage();
+            playerGun.ResetCritRate();
+        }
+    }
+    
+    
     public void ResetGame()
     {
         if (resultsScreen != null)
@@ -199,6 +231,10 @@ public class GameManager : MonoBehaviour
             StartGame(); // Start the game after hiding the panel
         }
     }
+    
+    
+    
+    
     
     
     

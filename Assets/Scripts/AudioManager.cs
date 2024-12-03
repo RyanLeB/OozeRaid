@@ -28,6 +28,10 @@ public class AudioManager : MonoBehaviour
     
     private const string MusicVolumeKey = "MusicVolume";
     private const string SFXVolumeKey = "SFXVolume";
+    
+    
+    private float previousMusicTime;
+    private AudioClip previousMusicClip;
 
     private void Awake()
     {
@@ -138,6 +142,25 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    
+    public void PauseMusic()
+    {
+        previousMusicTime = musicSource.time;
+        previousMusicClip = musicSource.clip;
+        musicSource.Pause();
+    }
+
+    public void ResumePreviousMusic()
+    {
+        if (previousMusicClip != null)
+        {
+            musicSource.clip = previousMusicClip;
+            musicSource.time = previousMusicTime;
+            musicSource.Play();
+        }
+    }
+    
+    
     // ---- Random pitch method to play SFX like collecting currency ----
     public void PlaySFXWithRandomPitch(string name, float minPitch, float maxPitch)
     {

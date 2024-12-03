@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     // ---- Movement values ----
     public float speed;
+    public float baseSpeedValue = 6f;
     public float jump;
     
     float moveVelocity;
@@ -96,6 +97,11 @@ public class PlayerMovement : MonoBehaviour
     public void IncreaseSpeed(float amount)
     {
         speed += amount;
+    }
+    
+    public void ResetSpeed()
+    {
+        speed = baseSpeedValue; 
     }
 
 

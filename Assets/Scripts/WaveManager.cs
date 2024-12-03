@@ -15,6 +15,9 @@ public class WaveManager : MonoBehaviour
     public GameObject explosionPrefab;
     
     
+    public GameObject chestPrefab;
+    public Transform chestSpawnPoint;
+    
     public Transform[] spawnPoints;
     public Transform[] floatingEnemySpawnPoints;
     public Transform dragonSpawnPoint;
@@ -23,7 +26,11 @@ public class WaveManager : MonoBehaviour
     public float timeBetweenWaves = 2f;
     public int enemiesPerWave = 5;
     private int _spawnIndex = 0;
+    private bool isSpawningPaused = false;
     private bool gameCompleted = false;
+    
+    // ---- Variables to check if the chest is dropped in wave 4 and 12----
+    private bool isChestDropped = false;
     
     
     private List<int> _availableFloatingEnemySpawnPoints = new List<int>(); // ---- List of available spawn points for floating enemies ----
@@ -36,13 +43,14 @@ public class WaveManager : MonoBehaviour
 
     public int currentWave = 0;
     public int activeEnemies = 0;
-
+    private Coroutine waveCoroutine;
+    
     void Start()
     {
         waveCompleteText.gameObject.SetActive(false);
         waveProgressSlider.maxValue = 15; 
         waveProgressSlider.value = 1; 
-        StartCoroutine(StartNextWave());
+        waveCoroutine = StartCoroutine(StartNextWave());
 
         StartCoroutine(CheckForAvailableSpawnPoints());
         
@@ -54,8 +62,23 @@ public class WaveManager : MonoBehaviour
     {
         while (true)
         {
+            if (isSpawningPaused)
+            {
+                yield return new WaitUntil(() => !isSpawningPaused);
+            }
+            
             currentWave++;
             UpdateWaveText();
+            if ((currentWave == 4 || currentWave == 12) && !isChestDropped)
+            {
+                PauseEnemySpawning();
+                DropChest();
+                isChestDropped = true;
+                UpdateWaveText();
+                yield return new WaitUntil(() => isChestDropped == false);
+            }
+            
+            
             if (currentWave == 8 && currentWave <= 15)
             {
                 GameManager.Instance.audioManager.PlayMusic("SecondPhase");
@@ -123,6 +146,7 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    
     private void SpawnFloatingEnemy()
     {
         if (isDragonFightStarted || _availableFloatingEnemySpawnPoints.Count == 0)
@@ -398,6 +422,35 @@ public class WaveManager : MonoBehaviour
             }
             yield return new WaitForSeconds(0.5f); // ---- Checks for spawn every 0.5 seconds ----
         }
+    }
+    
+    void DropChest()
+    {
+        GameManager.Instance.audioManager.PauseMusic();
+        GameManager.Instance.audioManager.PlayMusic("chestMusic");
+
+        GameObject chest = Instantiate(chestPrefab, chestSpawnPoint.position, Quaternion.identity);
+        chest.transform.localScale = Vector3.zero;
+        chest.transform.DOScale(new Vector3(2, 2, 1), 1f).SetEase(Ease.OutBounce);
+        GameManager.Instance.audioManager.PlaySFX("chestAppear");
+    }
+
+    public void OnChestOpened()
+    {
+        GameManager.Instance.audioManager.ResumePreviousMusic();
+
+        ResumeEnemySpawning();
+        isChestDropped = false;
+    }
+    
+    void ResumeEnemySpawning()
+    {
+        isSpawningPaused = false;
+    }
+    
+    void PauseEnemySpawning()
+    {
+        isSpawningPaused = true;
     }
     
     

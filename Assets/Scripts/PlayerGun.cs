@@ -9,7 +9,8 @@ public class PlayerGun : MonoBehaviour
     public Transform firePoint;
     public float bulletSpeed = 20f;
     public float radius = 0.5f; // ---- Radius of the arc around the player ----
-    public int damage = 10;
+    public int damage = 5;
+    public int baseDamage = 5;
     public float bulletLifetime = 5f; // ---- Lifetime of the bullet in seconds ----
     public float fireRate = 0.2f; // ---- Time between shots ----
     private bool isFiring = false;
@@ -20,7 +21,7 @@ public class PlayerGun : MonoBehaviour
     // ---- Crit Values ----
     public float critChance = 0.1f; // ---- Base Chance of a critical hit ----
     public float critMultiplier = 2f; // ---- Multiplier for critical hits ----
-    
+    public float baseCritChance = 0.1f; // ---- Base crit chance value ----
     
     // ---- Ability variables ----
     public float abilityFireRate = 0.05f; // ---- Fire rate during ability ----
@@ -209,6 +210,11 @@ public class PlayerGun : MonoBehaviour
         critChance += amount;
     }
     
+    public void ResetCritRate()
+    {
+        critChance = baseCritChance; 
+    }
+    
     // ---- Coroutine to activate the ability ----
     private IEnumerator ActivateAbility()
     {
@@ -270,6 +276,12 @@ public class PlayerGun : MonoBehaviour
     public void IncreaseDamage(int amount)
     {
         damage += amount;
+    }
+    
+    
+    public void ResetDamage()
+    {
+        damage = baseDamage; 
     }
 
     // ---- Getter method for the damage value ----

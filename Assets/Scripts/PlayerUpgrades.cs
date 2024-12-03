@@ -89,6 +89,11 @@ public class PlayerUpgrades : MonoBehaviour
     
     public int CalculateUpgradeCost(int baseCost, int currentTier)
     {
+        float discountFactor = 0.3f; // ---- 30% discount for the first upgrade ----
+        if (currentTier == 0)
+        {
+            return Mathf.RoundToInt(baseCost * discountFactor);
+        }
         return Mathf.RoundToInt(baseCost * Mathf.Pow(1.5f, currentTier));
     }
     
@@ -383,7 +388,34 @@ public class PlayerUpgrades : MonoBehaviour
         }
     }
     
-    
+    public void ResetData()
+    {
+        // ---- Reset upgrades ----
+        healthUpgradesBought = 0;
+        speedUpgradesBought = 0;
+        damageUpgradesBought = 0;
+        critRateUpgradesBought = 0;
+        upgradesBought = 0;
+
+        // ---- Reset abilities ----
+        isHoldToClickUnlocked = false;
+        isAbilityUnlocked = false;
+
+        // ---- Reset currency ----
+        GetComponent<PlayerCurrency>().currency = 0;
+
+        // ---- Clear PlayerPrefs ----
+        PlayerPrefs.DeleteAll();
+
+        // ---- Save default data ----
+        SaveData();
+
+        // ---- Apply upgrades and update UI ----
+        ApplyUpgrades();
+        UpdateUpgradeTexts();
+        UpdateUpgradeImages();
+        UpdateUpgradePrices();
+    }
     
     
 }

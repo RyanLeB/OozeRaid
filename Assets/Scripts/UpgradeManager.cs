@@ -13,14 +13,20 @@ public class UpgradeManager : MonoBehaviour
     public Button holdToClickUpgradeButton;
     public Button abilityUpgradeButton;
     public Button critRateUpgradeButton;
-
+    public Button resetDataButton;
+    
+    
     public TMP_Text hoverMessageText;
-
+    public TMP_Text resetButtonText;
+    
+    
     public GameObject upgradePanel;
     
     // ---- References to other scripts ----
     public PlayerUpgrades playerUpgrades;
 
+    private bool isResetConfirmationNeeded = false;
+    
     void Start()
     {
         // ---- Add listeners to the buttons ----
@@ -30,6 +36,7 @@ public class UpgradeManager : MonoBehaviour
         holdToClickUpgradeButton.onClick.AddListener(OnHoldToClickUpgradeButtonClicked);
         abilityUpgradeButton.onClick.AddListener(OnAbilityUpgradeButtonClicked);
         critRateUpgradeButton.onClick.AddListener(OnCritRateUpgradeButtonClicked);
+        resetDataButton.onClick.AddListener(OnResetDataButtonClicked);
     }
 
     
@@ -43,9 +50,6 @@ public class UpgradeManager : MonoBehaviour
             UpdateUpgradePrices();
         }
     }
-    
-    
-    
     
     public void OnHealthUpgradeButtonClicked()
     {
@@ -195,4 +199,50 @@ public class UpgradeManager : MonoBehaviour
         }
     }
     
+    // ---- Method to handle the reset data button click ----
+    public void OnResetDataButtonClicked()
+    {
+        Debug.Log("Reset button clicked. Confirmation needed: " + isResetConfirmationNeeded);
+        if (isResetConfirmationNeeded)
+        {
+            playerUpgrades.ResetData();
+            GameManager.Instance.audioManager.PlaySFX("dataReset");
+            resetButtonText.text = "SUCCESSFUL";
+            isResetConfirmationNeeded = false;
+            Debug.Log("Data reset.");
+            StartCoroutine(ResetButtonTextAfterDelay("RESET DATA", 1.5f)); 
+        }
+        else
+        {
+            resetButtonText.text = "ARE YOU SURE?";
+            isResetConfirmationNeeded = true;
+            resetDataButton.interactable = false; 
+            Debug.Log("Confirmation needed.");
+            StartCoroutine(ResetConfirmationTimeout());
+            StartCoroutine(ReenableResetButton());
+        }
+    }
+
+    private IEnumerator ReenableResetButton()
+    {
+        yield return new WaitForSeconds(0.5f); 
+        resetDataButton.interactable = true; 
+    }
+
+    private IEnumerator ResetButtonTextAfterDelay(string text, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        resetButtonText.text = text;
+    }
+    
+    private IEnumerator ResetConfirmationTimeout()
+    {
+        yield return new WaitForSeconds(3f);
+        if (isResetConfirmationNeeded)
+        {
+            resetButtonText.text = "RESET DATA";
+            isResetConfirmationNeeded = false;
+            Debug.Log("Confirmation timeout.");
+        }
+    }
 }

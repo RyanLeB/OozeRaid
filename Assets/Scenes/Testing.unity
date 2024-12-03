@@ -5129,7 +5129,7 @@ MonoBehaviour:
   backgroundImage: {fileID: 641499740}
   waveProgressSlider: {fileID: 135567712}
   waveProgressFill: {fileID: 1537405750}
-  currentWave: 15
+  currentWave: 0
   activeEnemies: 0
 --- !u!1 &2140469921
 GameObject:

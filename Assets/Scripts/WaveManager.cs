@@ -70,7 +70,7 @@ public class WaveManager : MonoBehaviour
             }
             if (currentWave == 16)
             {
-                ChangeBackgroundColorToPurple();
+                StartCoroutine(SmoothTransitionToPurple());
                 GameManager.Instance.audioManager.PlayMusic("ThirdPhase");
                 
                 SpawnDragonEnemy();
@@ -102,21 +102,8 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    private void ChangeBackgroundColorToRed()
-    {
-        if (backgroundImage != null)
-        {
-            backgroundImage.color = Color.red;
-        }
-    }
+    
 
-    private void ChangeBackgroundColorToPurple()
-    {
-        if (backgroundImage != null)
-        {
-            backgroundImage.color = Color.magenta;
-        }
-    }
 
     private IEnumerator SpawnWave(int waveNumber)
     {
@@ -151,6 +138,20 @@ public class WaveManager : MonoBehaviour
         FloatingEnemy floatingEnemyScript = floatingEnemy.GetComponent<FloatingEnemy>();
         floatingEnemyScript.OnEnemyDeath += () => HandleFloatingEnemyDeath(spawnIndex);
         _activeFloatingEnemies.Add(floatingEnemyScript);
+        
+        // ---- Scaling animation ----
+        floatingEnemy.transform.localScale = Vector3.zero;
+        floatingEnemy.transform.DOScale(new Vector3(3, 3, 1), 1f).SetEase(Ease.OutBounce);
+
+        // ---- Particle effects ----
+        GameObject spawnEffect = Instantiate(explosionPrefab, spawnPoint.position, Quaternion.identity);
+        ParticleSystem particleSystem = spawnEffect.GetComponent<ParticleSystem>();
+        if (particleSystem != null)
+        {
+            particleSystem.Play();
+            GameManager.Instance.audioManager.PlaySFX("wizardSpawn");
+        }
+        Destroy(spawnEffect, particleSystem.main.duration);
     }
 
     private void SpawnDragonEnemy()
@@ -184,6 +185,16 @@ public class WaveManager : MonoBehaviour
         dragonEnemyScript.OnEnemyDeath += HandleDragonEnemyDeath;
         activeEnemies++;
         isDragonFightStarted = true;
+
+        // ---- Particle effects ----
+        GameObject spawnEffect = Instantiate(explosionPrefab, dragonSpawnPoint.position, Quaternion.identity);
+        ParticleSystem particleSystem = spawnEffect.GetComponent<ParticleSystem>();
+        if (particleSystem != null)
+        {
+            particleSystem.Play();
+            GameManager.Instance.audioManager.PlaySFX("dragonSpawn");
+        }
+        Destroy(spawnEffect, particleSystem.main.duration);
     }
 
     
@@ -396,6 +407,22 @@ public class WaveManager : MonoBehaviour
         float elapsedTime = 0f;
         Color initialColor = backgroundImage.color;
         Color targetColor = Color.red;
+
+        while (elapsedTime < transitionDuration)
+        {
+            backgroundImage.color = Color.Lerp(initialColor, targetColor, elapsedTime / transitionDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        backgroundImage.color = targetColor;
+    }
+    private IEnumerator SmoothTransitionToPurple()
+    {
+        float transitionDuration = 1f;
+        float elapsedTime = 0f;
+        Color initialColor = backgroundImage.color;
+        Color targetColor = Color.magenta;
 
         while (elapsedTime < transitionDuration)
         {

@@ -327,7 +327,8 @@ public class PlayerUpgrades : MonoBehaviour
             currency = GetComponent<PlayerCurrency>().currency,
             isHoldToClickUnlocked = isHoldToClickUnlocked,
             isAbilityUnlocked = isAbilityUnlocked, 
-            critRateUpgradesBought = critRateUpgradesBought
+            critRateUpgradesBought = critRateUpgradesBought,
+            isExtremeModeUnlocked = GameManager.Instance.isExtremeModeUnlocked
         };
 
         string json = JsonUtility.ToJson(data);
@@ -351,6 +352,7 @@ public class PlayerUpgrades : MonoBehaviour
             isHoldToClickUnlocked = data.isHoldToClickUnlocked;
             isAbilityUnlocked = data.isAbilityUnlocked;
             critRateUpgradesBought = data.critRateUpgradesBought;
+            GameManager.Instance.isExtremeModeUnlocked = data.isExtremeModeUnlocked;
             ApplyUpgrades();
             
             
@@ -400,20 +402,38 @@ public class PlayerUpgrades : MonoBehaviour
         // ---- Reset abilities ----
         isHoldToClickUnlocked = false;
         isAbilityUnlocked = false;
-
+        GameManager.Instance.isExtremeModeUnlocked = false;
+        
         // ---- Reset currency ----
         GetComponent<PlayerCurrency>().currency = 0;
 
         // ---- Clear PlayerPrefs ----
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteKey("FirstTimePlaying");
+        PlayerPrefs.DeleteKey("FirstTimePlayingEx");
 
-        // ---- Reload default player components ----
-        GameManager.Instance.ReloadPlayerComponents();
+        
+        // ---- Reset player speed and damage ----
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.ResetSpeed();
+        }
+
+        PlayerGun playerGun = GetComponentInChildren<PlayerGun>();
+        if (playerGun != null)
+        {
+            playerGun.ResetDamage();
+            playerGun.ResetCritRate();
+        }
+        
+        ApplyUpgrades();
         
         
         // ---- Save & Load default data ----
         SaveData();
         LoadData();
+        
+        GameManager.Instance.ResetGame();
 
         
         

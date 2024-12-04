@@ -12,4 +12,5 @@
         public bool isHoldToClickUnlocked;
         public bool isAbilityUnlocked;
         public int critRateUpgradesBought;
+        public bool isExtremeModeUnlocked;
     }

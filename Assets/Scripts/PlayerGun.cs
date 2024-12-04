@@ -13,7 +13,7 @@ public class PlayerGun : MonoBehaviour
     public int baseDamage = 5;
     public float bulletLifetime = 5f; // ---- Lifetime of the bullet in seconds ----
     public float fireRate = 0.2f; // ---- Time between shots ----
-    private bool isFiring = false;
+    public bool isFiring = false;
     private Coroutine firingCoroutine;
     private bool isTempHoldToFireEnabled = false;
     

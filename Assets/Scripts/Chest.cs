@@ -9,7 +9,7 @@ public class Chest : MonoBehaviour
     public int numberOfBlobs = 5; 
     private WaveManager waveManager; 
     private PlayerGun playerGun;
-    
+    private bool isChestDestroyed = false;
     
     
     [SerializeField] private GameObject impactEffectPrefab;
@@ -26,7 +26,7 @@ public class Chest : MonoBehaviour
         }
 
         playerGun = GameManager.Instance.player.GetComponentInChildren<PlayerGun>();
-        
+        playerGun.isFiring = false;
         currentHealth = maxHealth;
         
         
@@ -65,7 +65,7 @@ public class Chest : MonoBehaviour
     
     public void TakeDamage(int damage, bool isCrit)
     {
-        //Debug.Log($"TakeDamage called with damage: {damage}, isCrit: {isCrit}");
+        if (isChestDestroyed) return;
 
         currentHealth -= damage;
         //Debug.Log($"Enemy {gameObject.GetInstanceID()} took {damage} damage. IsCrit: {isCrit}. Current health: {currentHealth}");
@@ -95,6 +95,13 @@ public class Chest : MonoBehaviour
     
     void OpenChest()
     {
+        isChestDestroyed = true;
+        
+        if (waveManager.currentWave == 12)
+        {
+            numberOfBlobs *= 3; 
+        }
+        
         DropBlobs();
         GameManager.Instance.audioManager.PlaySFX("enemyDeath");
         PlayExplosionEffect(); 
@@ -112,10 +119,16 @@ public class Chest : MonoBehaviour
     private IEnumerator DestroyChestAfterDelay(float delay)
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        CircleCollider2D circleCollider2D = GetComponent<CircleCollider2D>();
         if (spriteRenderer != null)
         {
             spriteRenderer.enabled = false; 
         }
+        if (circleCollider2D != null)
+        {
+            circleCollider2D.enabled = false; 
+        }
+        
         yield return new WaitForSeconds(delay);
         waveManager.OnChestOpened();
         Destroy(gameObject); 

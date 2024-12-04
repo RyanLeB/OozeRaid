@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 using TMPro;
+using UnityEngine.UI;
 
 public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -15,12 +16,14 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
     private Vector3 originalScale; // ---- Original scale of the text ----
     private TMP_Text buttonText; // ---- Text component of the button ----
     private Coroutine scaleCoroutine; // ---- Coroutine for scaling ----
-
+    private Button button;
+    
     void Start()
     {
         // ---- Sets the original colors to the button text ----
         
         buttonText = GetComponentInChildren<TMP_Text>();
+        button = GetComponent<Button>();
         if (buttonText != null)
         {
             originalColor = buttonText.color;
@@ -34,6 +37,7 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (button != null && !button.interactable) return;
         
         GameManager.Instance.audioManager.PlaySFX("buttonHover");
         if (buttonText != null)
@@ -50,6 +54,8 @@ public class ButtonHoverTextEffect : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (button != null && !button.interactable) return;
+        
         if (buttonText != null)
         {
             buttonText.color = originalColor;

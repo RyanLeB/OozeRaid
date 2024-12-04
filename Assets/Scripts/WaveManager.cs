@@ -60,6 +60,13 @@ public class WaveManager : MonoBehaviour
     // ---- Coroutine to start the next wave ----
     private IEnumerator StartNextWave()
     {
+        if (GameManager.Instance.isExtremeModeActive)
+        {
+            HideProgressBar();
+            HideWaveText();
+        }
+        
+        
         while (true)
         {
             if (isSpawningPaused)
@@ -103,6 +110,12 @@ public class WaveManager : MonoBehaviour
             yield return StartCoroutine(SpawnWave(currentWave));
             yield return StartCoroutine(CheckWaveComplete());
             yield return new WaitForSeconds(timeBetweenWaves);
+            
+            if (GameManager.Instance.isExtremeModeActive && currentWave == 15)
+            {
+                currentWave = 0;
+            }
+            
         }
     }
 
@@ -125,8 +138,23 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    
+    private void HideProgressBar()
+    {
+        if (waveProgressSlider != null)
+        {
+            waveProgressSlider.gameObject.SetActive(false);
+        }
+    }
 
+    
+    private void HideWaveText()
+    {
+        if (waveText != null)
+        {
+            waveText.gameObject.SetActive(false);
+        }
+    }
+    
 
     private IEnumerator SpawnWave(int waveNumber)
     {
@@ -235,6 +263,12 @@ public class WaveManager : MonoBehaviour
 
         GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
         Enemy enemyScript = enemy.GetComponent<Enemy>();
+        
+        if (GameManager.Instance.isExtremeModeActive)
+        {
+            enemyScript.maxHealth *= 2; // ---- Double the health ----
+            enemyScript.speed *= 1.5f; // ---- Increase speed by 50% ----
+        }
         enemyScript.OnEnemyDeath += HandleRegularEnemyDeath;
     }
 
@@ -255,7 +289,7 @@ public class WaveManager : MonoBehaviour
     {
         activeEnemies--;
         GameManager.Instance.isDragonDead = true;
-
+        GameManager.Instance.UnlockExtremeMode();
         GameManager.Instance.DestroyAllBullets();
         StartCoroutine(TriggerCutsceneAndShowResults());
     }
@@ -374,6 +408,11 @@ public class WaveManager : MonoBehaviour
             yield return null;
         }
 
+        if (GameManager.Instance.isExtremeModeActive)
+        {
+            yield break; // ---- Exit if the game is in extreme mode ----
+        }
+        
         if (waveCompleteText != null)
         {
             waveCompleteText.gameObject.SetActive(true);

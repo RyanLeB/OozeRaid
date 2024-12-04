@@ -14,7 +14,7 @@ public class UpgradeManager : MonoBehaviour
     public Button abilityUpgradeButton;
     public Button critRateUpgradeButton;
     public Button resetDataButton;
-    
+    public Button extremeModeButton;
     
     public TMP_Text hoverMessageText;
     public TMP_Text resetButtonText;
@@ -37,6 +37,7 @@ public class UpgradeManager : MonoBehaviour
         abilityUpgradeButton.onClick.AddListener(OnAbilityUpgradeButtonClicked);
         critRateUpgradeButton.onClick.AddListener(OnCritRateUpgradeButtonClicked);
         resetDataButton.onClick.AddListener(OnResetDataButtonClicked);
+        UpdateExtremeModeButton();
     }
 
     
@@ -48,8 +49,27 @@ public class UpgradeManager : MonoBehaviour
             UpdateUpgradeTexts();
             UpdateUpgradeImages();
             UpdateUpgradePrices();
+            
+            UpdateExtremeModeButton();
         }
     }
+    
+    
+    
+    void UpdateExtremeModeButton()
+    {
+        if (GameManager.Instance.isExtremeModeUnlocked)
+        {
+            extremeModeButton.interactable = true;
+            extremeModeButton.GetComponentInChildren<TMP_Text>().color = Color.red; 
+        }
+        else
+        {
+            extremeModeButton.interactable = false;
+            extremeModeButton.GetComponentInChildren<TMP_Text>().color = Color.gray; 
+        }
+    }
+    
     
     public void OnHealthUpgradeButtonClicked()
     {

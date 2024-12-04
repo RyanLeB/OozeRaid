@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,11 +19,12 @@ public class GameManager : MonoBehaviour
     public ResultsScreen resultsScreen;
     public GameObject player;
     public GameObject tutorialPanel;
-    
-    
+    public GameObject extremePanel;
+    private bool wasExtremeModeActive = false;
     
     public bool isDragonDead = false;
-    
+    public bool isExtremeModeActive = false;
+    public bool isExtremeModeUnlocked = false;
     
     // ---- Singleton pattern to ensure only one instance of the GameManager ----
     void Awake()
@@ -147,36 +149,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ReloadPlayerComponents()
-    {
-        PlayerUpgrades playerUpgrades = FindObjectOfType<PlayerUpgrades>();
-        if (playerUpgrades != null)
-        {
-            playerUpgrades.ApplyUpgrades();
-            playerUpgrades.UpdateUpgradeTexts();
-            playerUpgrades.UpdateUpgradeImages();
-            playerUpgrades.UpdateUpgradePrices();
-        }
-
-        PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
-        if (playerHealth != null)
-        {
-            playerHealth.ResetHealth();
-        }
-
-        PlayerMovement playerMovement = FindObjectOfType<PlayerMovement>();
-        if (playerMovement != null)
-        {
-            playerMovement.ResetSpeed();
-        }
-
-        PlayerGun playerGun = FindObjectOfType<PlayerGun>();
-        if (playerGun != null)
-        {
-            playerGun.ResetDamage();
-            playerGun.ResetCritRate();
-        }
-    }
     
     
     public void ResetGame()
@@ -188,6 +160,7 @@ public class GameManager : MonoBehaviour
         }
         Time.timeScale = 1f; // ---- Resume the game ----
         IsPaused = false;
+        
 
         // ---- Reset player health ----
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
@@ -228,14 +201,54 @@ public class GameManager : MonoBehaviour
         if (tutorialPanel != null)
         {
             tutorialPanel.SetActive(false);
-            StartGame(); // Start the game after hiding the panel
+            StartGame(); 
+        }
+    }
+    
+    // ---- Extreme Mode ----
+    
+    public void EnableExtremeMode()
+    {
+        isExtremeModeActive = true;
+    }
+
+
+    public void UnlockExtremeMode()
+    {
+        isExtremeModeUnlocked = true;
+    }
+    
+    void ShowExtremePanel()
+    {
+        if (extremePanel != null)
+        { 
+            extremePanel.SetActive(true);
+        }
+    }
+
+    public void HideExtremePanel()
+    {
+        if (tutorialPanel != null)
+        {
+            extremePanel.SetActive(false);
+            StartGame(); 
         }
     }
     
     
-    
-    
-    
+    public void PlayAgain()
+    {
+        if (PlayerPrefs.GetInt("FirstTimePlaying", 1) == 1)
+        {
+            ShowTutorialPanel();
+            PlayerPrefs.SetInt("FirstTimePlaying", 0); 
+        }
+        else
+        {
+            isExtremeModeActive = wasExtremeModeActive; 
+            StartGame();
+        }
+    }
     
     
     public void PlayGame()
@@ -247,10 +260,25 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            isExtremeModeActive = false;
             StartGame();
         }
     }
 
+    public void PlayExtremeMode()
+    {
+        if (PlayerPrefs.GetInt("FirstTimePlayingEx", 1) == 1)
+        {
+            ShowExtremePanel();
+            PlayerPrefs.SetInt("FirstTimePlayingEx", 0);
+        }
+        else
+        {
+            isExtremeModeActive = true;
+            StartGame();
+        }
+    }
+    
     public void MainMenu()
     {
         LoadLevel("MainMenu");
@@ -283,6 +311,7 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         ResetGame();
+        
         LoadLevel("Testing");
         uIManager.gameState = UIManager.GameState.Game;
         audioManager.PlayMusic("FirstPhase");
@@ -328,6 +357,7 @@ public class GameManager : MonoBehaviour
     
     public void ShowUpgrades()
     {
+        wasExtremeModeActive = isExtremeModeActive;
         LoadLevel("Upgrades");
         resultsScreen.gameObject.SetActive(false);
         IsUpgrades = true;

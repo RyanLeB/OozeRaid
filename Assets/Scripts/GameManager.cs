@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public AudioManager audioManager;
     public LoadingScreen loadingScreen;
     
+    
     public static GameManager Instance { get; private set; }
     private bool IsPaused;
     private bool IsUpgrades;
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         loadingScreen = FindObjectOfType<LoadingScreen>();
         
+        
 
         if (uIManager == null)
         {
@@ -59,6 +61,12 @@ public class GameManager : MonoBehaviour
         }
 
         audioManager.PlayMusic("MainMenu");
+        
+        if (PlayerPrefs.GetInt("ExtremeModeUnlocked", 0) == 1)
+        {
+            isExtremeModeUnlocked = true;
+        }
+        
     }
 
     void Update()
@@ -216,6 +224,8 @@ public class GameManager : MonoBehaviour
     public void UnlockExtremeMode()
     {
         isExtremeModeUnlocked = true;
+        PlayerPrefs.SetInt("ExtremeModeUnlocked", 1);
+        PlayerPrefs.Save();
     }
     
     void ShowExtremePanel()

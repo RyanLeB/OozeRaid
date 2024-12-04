@@ -410,6 +410,7 @@ public class PlayerUpgrades : MonoBehaviour
         // ---- Clear PlayerPrefs ----
         PlayerPrefs.DeleteKey("FirstTimePlaying");
         PlayerPrefs.DeleteKey("FirstTimePlayingEx");
+        PlayerPrefs.DeleteKey("ExtremeModeUnlocked");
 
         
         // ---- Reset player speed and damage ----

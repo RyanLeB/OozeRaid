@@ -37,7 +37,7 @@ public class UpgradeManager : MonoBehaviour
         abilityUpgradeButton.onClick.AddListener(OnAbilityUpgradeButtonClicked);
         critRateUpgradeButton.onClick.AddListener(OnCritRateUpgradeButtonClicked);
         resetDataButton.onClick.AddListener(OnResetDataButtonClicked);
-        UpdateExtremeModeButton();
+        //UpdateExtremeModeButton();
     }
 
     
@@ -50,25 +50,25 @@ public class UpgradeManager : MonoBehaviour
             UpdateUpgradeImages();
             UpdateUpgradePrices();
             
-            UpdateExtremeModeButton();
+            //UpdateExtremeModeButton();
         }
     }
     
     
     
-    void UpdateExtremeModeButton()
-    {
-        if (GameManager.Instance.isExtremeModeUnlocked)
-        {
-            extremeModeButton.interactable = true;
-            extremeModeButton.GetComponentInChildren<TMP_Text>().color = Color.red; 
-        }
-        else
-        {
-            extremeModeButton.interactable = false;
-            extremeModeButton.GetComponentInChildren<TMP_Text>().color = Color.gray; 
-        }
-    }
+    // void UpdateExtremeModeButton()
+    // {
+    //     if (GameManager.Instance.isExtremeModeUnlocked)
+    //     {
+    //         extremeModeButton.interactable = true;
+    //         extremeModeButton.GetComponentInChildren<TMP_Text>().color = Color.red; 
+    //     }
+    //     else
+    //     {
+    //         extremeModeButton.interactable = false;
+    //         extremeModeButton.GetComponentInChildren<TMP_Text>().color = Color.gray; 
+    //     }
+    // }
     
     
     public void OnHealthUpgradeButtonClicked()

@@ -272,6 +272,9 @@ public class WaveManager : MonoBehaviour
         enemyScript.OnEnemyDeath += HandleRegularEnemyDeath;
     }
 
+    
+    // ---- Enemy death handlers ----
+    
     private void HandleRegularEnemyDeath()
     {
         activeEnemies--;
@@ -293,6 +296,9 @@ public class WaveManager : MonoBehaviour
         GameManager.Instance.DestroyAllBullets();
         StartCoroutine(TriggerCutsceneAndShowResults());
     }
+    
+    
+    // ---- Cutscene and results screen ----
     
     private IEnumerator TriggerCutsceneAndShowResults()
     {
@@ -341,6 +347,8 @@ public class WaveManager : MonoBehaviour
             Destroy(explosionEffect, particleSystem.main.duration);
         }
     }
+    
+    // ---- Coroutine to trigger multiple explosions ----
     
     private IEnumerator TriggerMultipleExplosions()
     {
@@ -400,6 +408,7 @@ public class WaveManager : MonoBehaviour
 
     }
     
+    // ---- Check if the wave is complete ----
     
     private IEnumerator CheckWaveComplete()
     {
@@ -440,6 +449,8 @@ public class WaveManager : MonoBehaviour
     }
 
     
+    // ---- Make the spawn point available after a delay ----
+    
     private IEnumerator MakeSpawnPointAvailable(int spawnIndex, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -463,6 +474,9 @@ public class WaveManager : MonoBehaviour
         }
     }
     
+    
+    // ---- Drop the chest ----
+    
     void DropChest()
     {
         GameManager.Instance.audioManager.PauseMusic();
@@ -470,10 +484,13 @@ public class WaveManager : MonoBehaviour
 
         GameObject chest = Instantiate(chestPrefab, chestSpawnPoint.position, Quaternion.identity);
         chest.transform.localScale = Vector3.zero;
-        chest.transform.DOScale(new Vector3(2, 2, 1), 1f).SetEase(Ease.OutBounce);
+        chest.transform.DOScale(new Vector3(5, 5, 1), 1f).SetEase(Ease.OutBounce);
         GameManager.Instance.audioManager.PlaySFX("chestAppear");
     }
 
+    
+    // ---- Handle the chest opened event ----
+    
     public void OnChestOpened()
     {
         GameManager.Instance.audioManager.ResumePreviousMusic();
@@ -481,6 +498,8 @@ public class WaveManager : MonoBehaviour
         ResumeEnemySpawning();
         isChestDropped = false;
     }
+    
+    // ---- Pause and resume enemy spawning ----
     
     void ResumeEnemySpawning()
     {
@@ -492,6 +511,7 @@ public class WaveManager : MonoBehaviour
         isSpawningPaused = true;
     }
     
+    // ---- Smooth transitions for background----
     
     private IEnumerator SmoothTransitionToRed()
     {
@@ -526,6 +546,7 @@ public class WaveManager : MonoBehaviour
         backgroundImage.color = targetColor;
     }
     
+    // ---- Animate the wave progress slider ----
     
     private IEnumerator AnimateSlider(float startValue, float endValue)
     {

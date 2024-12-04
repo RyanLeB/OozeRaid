@@ -14,7 +14,7 @@ public class UpgradeManager : MonoBehaviour
     public Button abilityUpgradeButton;
     public Button critRateUpgradeButton;
     public Button resetDataButton;
-    public Button extremeModeButton;
+    //public Button extremeModeButton;
     
     public TMP_Text hoverMessageText;
     public TMP_Text resetButtonText;
@@ -70,6 +70,8 @@ public class UpgradeManager : MonoBehaviour
     //     }
     // }
     
+    
+    // ---- Methods to handle the upgrade button clicks ----
     
     public void OnHealthUpgradeButtonClicked()
     {
@@ -167,6 +169,9 @@ public class UpgradeManager : MonoBehaviour
         hoverMessageText.text = "";
     }
     
+    
+    // ---- Updates the text on the upgrade buttons ----
+    
     private void UpdateButtonTexts()
     {
         if (playerUpgrades.healthUpgradesBought >= playerUpgrades.maxHealthUpgrades)
@@ -195,6 +200,8 @@ public class UpgradeManager : MonoBehaviour
         }
     }
     
+    // ---- Updates the text on the upgrade panel ----
+    
     private void UpdateUpgradeTexts()
     {
         if (playerUpgrades != null)
@@ -203,6 +210,8 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
+    // ---- Updates the images on the upgrade panel ----
+    
     private void UpdateUpgradeImages()
     {
         if (playerUpgrades != null)
@@ -211,6 +220,8 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
+    // ---- Updates the prices on the upgrade panel ----
+    
     private void UpdateUpgradePrices()
     {
         if (playerUpgrades != null)
@@ -243,6 +254,8 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
+    // ---- Reset button coroutines ----
+    
     private IEnumerator ReenableResetButton()
     {
         yield return new WaitForSeconds(0.5f); 

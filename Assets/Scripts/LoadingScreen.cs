@@ -12,7 +12,7 @@ public class LoadingScreen : MonoBehaviour
 
     void Start()
     {
-        loadingScreen.SetActive(false); 
+        loadingScreen.SetActive(false);
     }
 
     public void LoadScene(string sceneName, System.Action onComplete = null)
@@ -23,7 +23,6 @@ public class LoadingScreen : MonoBehaviour
     private IEnumerator LoadSceneAsync(string sceneName, System.Action onComplete)
     {
         loadingScreen.SetActive(true);
-
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         while (!operation.isDone)
         {
@@ -34,7 +33,11 @@ public class LoadingScreen : MonoBehaviour
             yield return null;
         }
 
+
+
+
         loadingScreen.SetActive(false);
         onComplete?.Invoke();
     }
+
 }

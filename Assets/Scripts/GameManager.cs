@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f; // ---- Resume the game ----
     }
 
+    
     public void BackToMainMenu()
     {
         IsControls = false;
@@ -364,6 +365,8 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    
+    // ---- Shows the upgrades screen ----
     
     public void ShowUpgrades()
     {

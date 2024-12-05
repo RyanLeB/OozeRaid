@@ -172,7 +172,7 @@ public class UpgradeManager : MonoBehaviour
     
     // ---- Updates the text on the upgrade buttons ----
     
-    private void UpdateButtonTexts()
+    public void UpdateButtonTexts()
     {
         if (playerUpgrades.healthUpgradesBought >= playerUpgrades.maxHealthUpgrades)
         {

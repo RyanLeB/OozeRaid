@@ -77,6 +77,18 @@ public class PlayerUpgrades : MonoBehaviour
         UpdateUpgradePrices();
     }
 
+    
+    
+    void Update()
+    {
+        // ---- Unlock all upgrades for testing purposes ----
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
+        {
+            UnlockAllUpgrades();
+        }
+    }
+    
+    
     public void IncrementUpgradesBought()
     {
         if (upgradesBought < totalUpgrades)
@@ -196,6 +208,19 @@ public class PlayerUpgrades : MonoBehaviour
             playerCurrency.AddCurrency(-abilityUpgradeCost);
             isAbilityUnlocked = true;
             SaveData();
+            
+            
+            UpdateUpgradeTexts();
+            UpdateUpgradeImages();
+            UpdateUpgradePrices();
+
+            
+            PlayerGun playerGun = GetComponentInChildren<PlayerGun>();
+            if (playerGun != null)
+            {
+                playerGun.superShotHUD.SetActive(true);
+                playerGun.superShotReadyImage.fillAmount = 1;
+            }
         }
     }
     
@@ -390,6 +415,33 @@ public class PlayerUpgrades : MonoBehaviour
         }
     }
     
+    
+    public void UnlockAllUpgrades()
+    {
+        healthUpgradesBought = maxHealthUpgrades;
+        speedUpgradesBought = maxSpeedUpgrades;
+        damageUpgradesBought = maxDamageUpgrades;
+        critRateUpgradesBought = maxCritRateUpgrades;
+        isHoldToClickUnlocked = true;
+        isAbilityUnlocked = true;
+
+        GameManager.Instance.audioManager.PlaySFX("UpgradeSelect");
+        
+        PlayerGun playerGun = GetComponentInChildren<PlayerGun>();
+        if (playerGun != null)
+        {
+            playerGun.superShotHUD.SetActive(true);
+            playerGun.superShotReadyImage.fillAmount = 1;
+        }
+        ApplyUpgrades();
+        UpdateUpgradeTexts();
+        UpdateUpgradeImages();
+        UpdateUpgradePrices();
+        SaveData();
+    }
+    
+    
+    
     public void ResetData()
     {
         // ---- Reset upgrades ----
@@ -420,6 +472,14 @@ public class PlayerUpgrades : MonoBehaviour
             playerMovement.ResetSpeed();
         }
 
+        // ---- Reset player health ----
+        PlayerHealth playerHealth = GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.ResetHealth();
+        }
+        
+        
         PlayerGun playerGun = GetComponentInChildren<PlayerGun>();
         if (playerGun != null)
         {
@@ -427,6 +487,10 @@ public class PlayerUpgrades : MonoBehaviour
             playerGun.ResetCritRate();
         }
         
+        
+        UpdateUpgradeTexts();
+        UpdateUpgradeImages();
+        UpdateUpgradePrices();
         ApplyUpgrades();
         
         
@@ -436,6 +500,12 @@ public class PlayerUpgrades : MonoBehaviour
         
         GameManager.Instance.ResetGame();
 
+        
+        UpgradeManager upgradeManager = FindObjectOfType<UpgradeManager>();
+        if (upgradeManager != null)
+        {
+            upgradeManager.UpdateButtonTexts();
+        }
         
         
         

@@ -11426,6 +11426,7 @@ MonoBehaviour:
   isDead: 0
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   hitEffectDuration: 0.1
+  explosionPrefab: {fileID: 5425811094396048835, guid: fcedaaaa360863947bf76ffc4645ce3a, type: 3}
 --- !u!50 &635616206
 Rigidbody2D:
   serializedVersion: 4
@@ -29728,6 +29729,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e0bc9898551e21948bee81768d8c184b, type: 3}
   - {fileID: 8300000, guid: a9bc1add61c27d74aa2ccee518d915f0, type: 3}
   - {fileID: 8300000, guid: 46e7bc5aa365a05498bb3db705a0e274, type: 3}
+  - {fileID: 8300000, guid: 4ccd7d4a62dbc0840acc82c652b2a21d, type: 3}
+  - {fileID: 8300000, guid: 297afc95b3be33c448f436d3ce370182, type: 3}
   musicVolumeSlider: {fileID: 0}
   sfxVolumeSlider: {fileID: 0}
 --- !u!1 &2025019160

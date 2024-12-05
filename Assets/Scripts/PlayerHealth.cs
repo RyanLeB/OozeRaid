@@ -26,7 +26,9 @@ public class PlayerHealth : MonoBehaviour
     public Color hitColor = Color.red;
     public float hitEffectDuration = 0.1f;
     private Color originalColor;
-
+    public GameObject explosionPrefab;
+    
+    
     void Start()
     {
         currentHealth = maxHealth;
@@ -150,6 +152,14 @@ public class PlayerHealth : MonoBehaviour
         // ---- Handle player death ----
         Debug.Log("Player Died");
 
+        // ---- Disable player gun ----
+        PlayerGun playerGun = GetComponentInChildren<PlayerGun>();
+        if (playerGun != null)
+        {
+            playerGun.enabled = false;
+        }
+        
+        
         // ---- Show results screen ----
         ResultsScreen results = GameManager.Instance.resultsScreen;
         if (results != null)
@@ -158,13 +168,8 @@ public class PlayerHealth : MonoBehaviour
             int wave = FindObjectOfType<WaveManager>().currentWave; // ---- Get the current wave ----
             float time = Time.timeSinceLevelLoad; // ---- Get the elapsed time since the level started ----
             int currency = playerCurrency.currency; // ---- Amount of blobs collected ----
-            
+
             results.ShowResults(wave, time, currency);
-            Debug.Log("Results screen shown");
-            
-            
-            DisablePlayerScripts(); // ---- Disable player scripts to prevent further input ----
-             
         }
     }
 
@@ -186,6 +191,8 @@ public class PlayerHealth : MonoBehaviour
             spriteRenderer.color = originalColor; // ---- Reset the sprite color to the original color ----
         }
     }
+    
+    
     
     
 }

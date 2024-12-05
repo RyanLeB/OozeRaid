@@ -13,6 +13,8 @@ public class ResultsScreen : MonoBehaviour
     public TMP_Text currencyText;
     public CanvasGroup canvasGroup;
 
+    // ---- Explosion prefab reference ----
+    public GameObject explosionPrefab;
 
 
     void Start()
@@ -44,7 +46,7 @@ public class ResultsScreen : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.5f);
 
-        Time.timeScale = 0f;
+        Time.timeScale = 1f;
 
         GameManager.Instance.DeactivateAllEnemies();
 
@@ -62,6 +64,24 @@ public class ResultsScreen : MonoBehaviour
             playerGun.GetComponent<SpriteRenderer>().enabled = false;
         }
 
+        // ---- Trigger explosion effect if the player is dead ----
+        PlayerHealth playerHealth = GameManager.Instance.player.GetComponent<PlayerHealth>();
+        if (playerHealth != null && playerHealth.isDead)
+        {
+            GameObject explosionEffect = Instantiate(explosionPrefab, GameManager.Instance.player.transform.position, Quaternion.identity);
+            ParticleSystem particleSystem = explosionEffect.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                particleSystem.Play();
+                GameManager.Instance.audioManager.PlaySFX("playerExplode");
+                GameManager.Instance.audioManager.PlaySFX("playerDeath");
+            }
+            Destroy(explosionEffect, particleSystem.main.duration);
+        }
+        
+        
+        
+        
         gameObject.SetActive(true);
         if (GameManager.Instance.isDragonDead)
         {

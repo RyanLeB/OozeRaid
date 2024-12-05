@@ -175,6 +175,7 @@ public class GameManager : MonoBehaviour
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
+            playerHealth.healthSlider.gameObject.SetActive(true);
             playerHealth.ResetHealth();
             playerHealth.ResetSpriteColor();
         }
@@ -183,6 +184,7 @@ public class GameManager : MonoBehaviour
         PlayerGun playerGun = player.GetComponentInChildren<PlayerGun>();
         if (playerGun != null)
         {
+            playerGun.enabled = true;
             playerGun.ResetAbility();
             playerGun.GetComponent<SpriteRenderer>().enabled = true;
         }

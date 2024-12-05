@@ -159,6 +159,12 @@ public class PlayerHealth : MonoBehaviour
             playerGun.enabled = false;
         }
         
+        // ---- Hide health bar ----
+        if (healthSlider != null)
+        {
+            healthSlider.gameObject.SetActive(false);
+        }
+        
         
         // ---- Show results screen ----
         ResultsScreen results = GameManager.Instance.resultsScreen;

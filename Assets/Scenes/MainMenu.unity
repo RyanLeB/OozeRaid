@@ -14017,6 +14017,7 @@ MonoBehaviour:
   timeText: {fileID: 1879688089}
   currencyText: {fileID: 93104716}
   canvasGroup: {fileID: 798361367}
+  explosionPrefab: {fileID: 5425811094396048835, guid: fcedaaaa360863947bf76ffc4645ce3a, type: 3}
 --- !u!114 &798361369
 MonoBehaviour:
   m_ObjectHideFlags: 0
